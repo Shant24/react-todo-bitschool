@@ -24,3 +24,8 @@ yarn-error.log*
 
 # user settings
 # /video-lessons
+
+data
+
+.idea
+.vscode
