@@ -1,0 +1,58 @@
+.header {
+  width: 80%;
+  height: 80px;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-bottom: 1px solid white;
+}
+
+.header .logoLink {
+  padding: 0 20px;
+  text-decoration: none;
+  color: white;
+}
+
+.header .logoLink:hover {
+  color: #4b00ff;
+}
+
+.header .logoLink .svg {
+  width: 67px;
+  height: 60px;
+}
+
+.header .logoLink .svg path {
+  fill: #61dafb;
+}
+
+.header .logoLink .svg:hover path {
+  fill: #4b00ff;
+}
+
+.header .menuLink {
+  padding: 10px 20px;
+  text-decoration: none;
+  color: white;
+  border-left: 1px solid white;
+}
+
+.header .menuLink:first-child {
+  border: none;
+}
+
+.header .menuLink.active {
+  color: #4b00ff;
+}
+
+.header .menuLink:hover {
+  color: #4b00ff;
+}
+/*# sourceMappingURL=header.module.css.map */
