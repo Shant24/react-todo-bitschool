@@ -2,21 +2,24 @@ import React from "react";
 import s from "./price.module.scss";
 
 export default class Price extends React.Component {
-  state = {
-    price: this.props.price,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      price: props.price,
+      rate: props.rate,
+    };
+  }
 
   handleChangeClick = () => {
-    let { price } = this.state;
+    let { price, rate } = this.state;
 
-    const amountOfPrice = price
-      .split("")
-      .splice(0, price.length - 1)
-      .join("");
+    console.log(price);
+    console.log(rate);
 
     price[price.length - 1] === "$"
-      ? (price = `${amountOfPrice * this.props.currency}֏`)
-      : (price = `${amountOfPrice / this.props.currency}$`);
+      ? (price = `${parseFloat(price) * rate}֏`)
+      : (price = `${parseFloat(price) / rate}$`);
 
     this.setState({ price });
   };

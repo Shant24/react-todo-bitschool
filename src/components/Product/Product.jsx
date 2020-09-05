@@ -6,12 +6,14 @@ import s from "./product.module.scss";
 
 export default class Product extends React.Component {
   render() {
+    const { name, price, rate, description } = this.props;
+
     return (
       <div className={s.productContainer}>
         <div className={s.box}>
-          <Name name={this.props.name} />
-          <Price price={this.props.price} currency={this.props.currency} />
-          <Description description={this.props.description} />
+          <Name name={name} />
+          <Price price={price} rate={rate} />
+          <Description description={description} />
         </div>
       </div>
     );
