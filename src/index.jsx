@@ -4,7 +4,7 @@ import * as serviceWorker from "./serviceWorker";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import "typeface-roboto";
-import "./index.module.css";
+import "./index.module.scss";
 
 ReactDOM.render(
   <React.StrictMode>

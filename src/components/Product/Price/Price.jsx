@@ -1,5 +1,5 @@
 import React from "react";
-import s from "./price.module.css";
+import s from "./price.module.scss";
 
 export default class Price extends React.Component {
   state = {

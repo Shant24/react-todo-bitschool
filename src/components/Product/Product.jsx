@@ -2,7 +2,7 @@ import React from "react";
 import Name from "./Name/Name";
 import Price from "./Price/Price";
 import Description from "./Description/Description";
-import s from "./product.module.css";
+import s from "./product.module.scss";
 
 export default class Product extends React.Component {
   render() {

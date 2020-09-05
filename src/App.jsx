@@ -1,9 +1,11 @@
 import React from "react";
-import Product from "./components/Product/Product";
-// import Counter from "./components/Product/Counter/Counter";
+
 // import Header from "./components/Header/Header";
 // import Main from "./components/Main/Main";
 // import Footer from "./components/Footer/Footer";
+
+import Product from "./components/Product/Product";
+// import Counter from "./components/Product/Counter/Counter";
 
 const App = () => {
   return (

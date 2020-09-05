@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import s from "./header.module.css";
+import s from "./header.module.scss";
 import ReactIcon from "../../assets/images/svg/ReactIcon";
 
 const Header = () => {
