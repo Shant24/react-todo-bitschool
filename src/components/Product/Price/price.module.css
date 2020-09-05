@@ -1,0 +1,17 @@
+.priceContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.priceContainer .price {
+  margin: 0;
+}
+
+.priceContainer button {
+  margin-left: 30px;
+}
+/*# sourceMappingURL=price.module.css.map */

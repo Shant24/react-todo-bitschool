@@ -10,16 +10,16 @@ const Header = () => {
         <ReactIcon classNameToProps={s.svg} />
       </NavLink>
       <nav>
-        <NavLink className={s.menuLink} exact to="/">
+        <NavLink className={s.menuLink} activeClassName={s.active} exact to="/">
           Home
         </NavLink>
-        <NavLink className={s.menuLink} to="/about">
+        <NavLink className={s.menuLink} activeClassName={s.active} to="/about">
           About
         </NavLink>
-        <NavLink className={s.menuLink} to="/product">
+        <NavLink className={s.menuLink} activeClassName={s.active} to="/product">
           Product
         </NavLink>
-        <NavLink className={s.menuLink} to="/contact-us">
+        <NavLink className={s.menuLink} activeClassName={s.active} to="/contact-us">
           Contact us
         </NavLink>
       </nav>

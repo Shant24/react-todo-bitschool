@@ -1,0 +1,12 @@
+.priceContainer {
+  display: flex;
+  align-items: center;
+
+  .price {
+    margin: 0;
+  }
+
+  button {
+    margin-left: 30px;
+  }
+}
