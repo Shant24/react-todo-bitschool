@@ -10,7 +10,7 @@ export default class Product extends React.Component {
       <div className={s.productContainer}>
         <div className={s.box}>
           <Name name={this.props.name} />
-          <Price price={this.props.price} />
+          <Price price={this.props.price} currency={this.props.currency} />
           <Description description={this.props.description} />
         </div>
       </div>

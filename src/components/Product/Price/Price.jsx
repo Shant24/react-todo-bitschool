@@ -9,19 +9,14 @@ export default class Price extends React.Component {
   handleChangeClick = () => {
     let { price } = this.state;
 
+    const amountOfPrice = price
+      .split("")
+      .splice(0, price.length - 1)
+      .join("");
+
     price[price.length - 1] === "$"
-      ? (price = `${
-          price
-            .split("")
-            .splice(0, price.length - 1)
-            .join("") * 487
-        }֏`)
-      : (price = `${
-          price
-            .split("")
-            .splice(0, price.length - 1)
-            .join("") / 487
-        }$`);
+      ? (price = `${amountOfPrice * this.props.currency}֏`)
+      : (price = `${amountOfPrice / this.props.currency}$`);
 
     this.setState({ price });
   };
@@ -30,7 +25,9 @@ export default class Price extends React.Component {
     return (
       <div className={s.priceContainer}>
         <div className={s.price}>{this.state.price}</div>
-        <button onClick={this.handleChangeClick}>Change the currency</button>
+        <button className={s.button} onClick={this.handleChangeClick}>
+          Change the currency
+        </button>
       </div>
     );
   }
