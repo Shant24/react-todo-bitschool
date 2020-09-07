@@ -27,16 +27,18 @@ class Task extends React.Component {
   }
 
   render() {
+    const { isDone, number, text, handleCheckboxChange, handleRemoveTask } = this.props;
+
     return (
-      <div className={`${s.taskContainer} ${this.props.isDone && s.done}`}>
+      <div className={`${s.taskContainer} ${isDone && s.done}`}>
         <input
           type="checkbox"
           ref={this.checkBox}
           onChange={() => {}}
-          onClick={this.props.handleCheckboxChange}
+          onClick={handleCheckboxChange}
         />
-        <p>{`${this.props.number}. ${this.props.text}`}</p>
-        <button onClick={this.props.handleRemoveTask}>
+        <p>{`${number}. ${text}`}</p>
+        <button onClick={handleRemoveTask}>
           <FontAwesomeIcon className={s.fontIcon} icon="trash" />
         </button>
       </div>

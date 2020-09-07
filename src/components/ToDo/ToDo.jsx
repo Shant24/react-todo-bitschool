@@ -10,6 +10,8 @@ export default class ToDo extends Component {
 
   handleChangeInput = (e) => this.setState({ inputValue: e.target.value });
 
+  handleEnterKeyDown = (e) => e.key === "Enter" && this.handleAddToDoClick();
+
   handleAddToDoClick = () => {
     const { tasks, inputValue } = this.state;
 
@@ -54,7 +56,9 @@ export default class ToDo extends Component {
   };
 
   render() {
-    const toDoTasks = this.state.tasks.map((e, i) => {
+    const { inputValue, tasks } = this.state;
+
+    const toDoTasks = tasks.map((e, i) => {
       return (
         <Task
           key={i * 100}
@@ -75,11 +79,11 @@ export default class ToDo extends Component {
           </div>
           <div className={s.addToDoContainer}>
             <input
-              onChange={this.handleChangeInput}
               type="text"
               placeholder="Type your task"
-              value={this.state.inputValue}
-              onKeyDown={(e) => e.key === "Enter" && this.handleAddToDoClick()}
+              value={inputValue}
+              onChange={this.handleChangeInput}
+              onKeyDown={(e) => this.handleEnterKeyDown(e)}
             />
             <button onClick={this.handleAddToDoClick}>Add</button>
           </div>
