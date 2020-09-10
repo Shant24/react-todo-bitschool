@@ -1,101 +1,93 @@
-import React, { Component } from "react";
-import s from "./todo.module.scss";
-import Task from "../Task/Task";
+import React, { Component } from 'react';
+import {
+  Container,
+  Row,
+  Col,
+  InputGroup,
+  FormControl,
+  Button,
+  Card,
+} from 'react-bootstrap';
+import idGenerator from '../helpers/idGenerator';
 
-export default class ToDo extends Component {
+class ToDo extends Component {
   state = {
+    inputValue: '',
     tasks: [],
-    inputValue: "",
   };
 
-  handleChangeInput = (e) => this.setState({ inputValue: e.target.value });
-
-  handleEnterKeyDown = (e) => e.key === "Enter" && this.handleAddToDoClick();
-
-  handleAddToDoClick = () => {
-    const { tasks, inputValue } = this.state;
-
-    inputValue &&
-      this.setState({
-        tasks: [
-          ...tasks,
-          {
-            id: tasks.length,
-            text: inputValue,
-            isDone: false,
-          },
-        ],
-        inputValue: "",
-      });
+  handleInputChange = (e) => {
+    this.setState({
+      inputValue: e.target.value,
+    });
   };
 
-  handleRemoveTask = (index) => {
-    const { tasks } = this.state;
+  addTask = () => {
+    const { inputValue } = this.state;
 
-    const filteredTasks = tasks.filter((e, i) => i !== index);
+    const tasks = [...this.state.tasks];
+    // tasks.push(inputValue);
+
+    const newTask = {
+      id: idGenerator(),
+      text: inputValue,
+    };
+
+    tasks.unshift(newTask);
 
     this.setState({
-      tasks: [...filteredTasks],
+      inputValue: '',
+      tasks,
     });
   };
 
-  handleCheckboxChange = (index) => {
-    const { tasks } = this.state;
-
-    const changedTasks = tasks.map((e, i) => {
-      return {
-        id: e.id,
-        text: e.text,
-        isDone: i === index ? !e.isDone : e.isDone,
-      };
-    });
-
-    this.setState({
-      tasks: [...changedTasks],
-    });
+  handleKeyDown = (e) => {
+    e.key === 'Enter' && this.addTask();
   };
 
   render() {
-    const { inputValue, tasks } = this.state;
-
-    const toDoTasks = tasks.map((e, i) => {
+    const tasksComponents = this.state.tasks.map((task) => {
       return (
-        <Task
-          key={i * 100}
-          number={i + 1}
-          text={e.text}
-          isDone={e.isDone}
-          handleRemoveTask={() => this.handleRemoveTask(i)}
-          handleCheckboxChange={() => this.handleCheckboxChange(i)}
-        />
+        <Col key={idGenerator()}>
+          <Card style={{ width: '18rem' }}>
+            <Card.Body>
+              <Card.Title>Task</Card.Title>
+              <Card.Text>{task.text}</Card.Text>
+              <Button variant="primary">Remove</Button>
+            </Card.Body>
+          </Card>
+        </Col>
       );
     });
 
     return (
-      <div className={s.toDoContainer}>
-        <div className={s.toDoWrapper}>
-          <div className={s.toDoHeader}>
+      <Container fluid>
+        <Row>
+          <Col md={2}>
             <h1>ToDo App</h1>
-          </div>
-          <div className={s.addToDoContainer}>
-            <input
-              type="text"
-              placeholder="Type your task"
-              value={inputValue}
-              onChange={this.handleChangeInput}
-              onKeyDown={(e) => this.handleEnterKeyDown(e)}
-            />
-            <button onClick={this.handleAddToDoClick}>Add</button>
-          </div>
-          <div className={s.tasksContainer}>
-            {toDoTasks.length > 0 ? (
-              toDoTasks
-            ) : (
-              <div className={s.noTaskWarning}>No tasks. Add your first task!</div>
-            )}
-          </div>
-        </div>
-      </div>
+          </Col>
+          <Col md={{ span: 6, offset: 1 }}>
+            <InputGroup className="my-3">
+              <FormControl
+                placeholder="Input task"
+                aria-label="Input task"
+                aria-describedby="basic-addon2"
+                value={this.state.inputValue}
+                onChange={this.handleInputChange}
+                onKeyDown={this.handleKeyDown}
+              />
+              <InputGroup.Append>
+                <Button onClick={this.addTask} variant="outline-primary">
+                  Add task
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+          </Col>
+        </Row>
+        <Row>{tasksComponents}</Row>
+      </Container>
     );
   }
 }
+
+export default ToDo;
