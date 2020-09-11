@@ -1,0 +1,32 @@
+.h1 {
+  white-space: nowrap;
+
+  @media (max-width: 992px) {
+    text-align: center;
+  }
+}
+
+.card {
+  width: 20rem;
+  margin: 0 auto;
+
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+
+  .textarea {
+    resize: none;
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+
+    .taskButtons {
+      width: 44%;
+      span {
+        margin-left: 20px;
+      }
+    }
+  }
+}

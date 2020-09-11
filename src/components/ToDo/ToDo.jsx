@@ -1,32 +1,17 @@
 import React, { Component } from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  InputGroup,
-  FormControl,
-  Button,
-  Card,
-} from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import idGenerator from '../helpers/idGenerator';
+import NewTask from './NewTask';
+import Task from './Task';
+import classes from './todo.module.scss';
 
 class ToDo extends Component {
   state = {
-    inputValue: '',
     tasks: [],
   };
 
-  handleInputChange = (e) => {
-    this.setState({
-      inputValue: e.target.value,
-    });
-  };
-
-  addTask = () => {
-    const { inputValue } = this.state;
-
+  addTask = (inputValue) => {
     const tasks = [...this.state.tasks];
-    // tasks.push(inputValue);
 
     const newTask = {
       id: idGenerator(),
@@ -36,55 +21,61 @@ class ToDo extends Component {
     tasks.unshift(newTask);
 
     this.setState({
-      inputValue: '',
       tasks,
     });
   };
 
-  handleKeyDown = (e) => {
-    e.key === 'Enter' && this.addTask();
+  removeTask = (taskId) => () => {
+    const newTasks = this.state.tasks.filter((task) => taskId !== task.id);
+    this.setState({
+      tasks: newTasks,
+    });
+  };
+
+  editTask = (taskId, newText) => {
+    // TODO: accept 'alt + enter' on the text
+
+    const changedTask = this.state.tasks.map((task) => {
+      return task.id === taskId
+        ? {
+            id: task.id,
+            text: newText,
+          }
+        : task;
+    });
+
+    this.setState({
+      tasks: changedTask,
+    });
   };
 
   render() {
     const tasksComponents = this.state.tasks.map((task) => {
       return (
-        <Col key={idGenerator()}>
-          <Card style={{ width: '18rem' }}>
-            <Card.Body>
-              <Card.Title>Task</Card.Title>
-              <Card.Text>{task.text}</Card.Text>
-              <Button variant="primary">Remove</Button>
-            </Card.Body>
-          </Card>
+        <Col key={task.id} className="mb-3" xl={3} lg={4} md={5}>
+          <Task task={task} editTask={this.editTask} removeTask={this.removeTask} />
         </Col>
       );
     });
 
     return (
       <Container fluid>
-        <Row>
-          <Col md={2}>
-            <h1>ToDo App</h1>
+        <Row className="my-4 align-items-center">
+          <Col
+            lg={{ span: 2, offset: 0 }}
+            md={{ span: 4, offset: 4 }}
+            sm={{ span: 2, offset: 4 }}
+            className="justify-content-center"
+          >
+            <h1 className={classes.h1}>ToDo App</h1>
           </Col>
-          <Col md={{ span: 6, offset: 1 }}>
-            <InputGroup className="my-3">
-              <FormControl
-                placeholder="Input task"
-                aria-label="Input task"
-                aria-describedby="basic-addon2"
-                value={this.state.inputValue}
-                onChange={this.handleInputChange}
-                onKeyDown={this.handleKeyDown}
-              />
-              <InputGroup.Append>
-                <Button onClick={this.addTask} variant="outline-primary">
-                  Add task
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
+
+          <Col lg={{ span: 6, offset: 1 }} sm={{ span: 10, offset: 1 }}>
+            <NewTask onAdd={this.addTask} />
           </Col>
         </Row>
-        <Row>{tasksComponents}</Row>
+
+        <Row className="justify-content-between">{tasksComponents}</Row>
       </Container>
     );
   }
