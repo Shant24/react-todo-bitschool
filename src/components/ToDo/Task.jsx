@@ -1,20 +1,21 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Card, Button, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, faCheck } from '@fortawesome/free-solid-svg-icons';
 import classes from './todo.module.scss';
 
-class componentName extends Component {
+class componentName extends PureComponent {
   state = {
+    propsText: this.props.task.text,
     taskTextValue: this.props.task.text,
     isEditMode: false,
   };
 
   handelToggleEditMode = () => {
-    const { isEditMode, taskTextValue } = this.state;
+    const { isEditMode, taskTextValue, propsText } = this.state;
     const { editTask, task } = this.props;
 
-    isEditMode && editTask(task.id, taskTextValue);
+    isEditMode && propsText !== taskTextValue && editTask(task.id, taskTextValue);
 
     this.setState({
       isEditMode: !isEditMode,

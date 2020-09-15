@@ -75,7 +75,7 @@ class ToDo extends Component {
           </Col>
         </Row>
 
-        <Row className="justify-content-between">{tasksComponents}</Row>
+        <Row>{tasksComponents}</Row>
       </Container>
     );
   }
