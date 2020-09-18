@@ -2,13 +2,14 @@ import React, { PureComponent } from 'react';
 import { Card, Button, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, faCheck } from '@fortawesome/free-solid-svg-icons';
-import classes from './todo.module.scss';
+import classes from './task.module.scss';
 
 class componentName extends PureComponent {
   state = {
     propsText: this.props.task.text,
     taskTextValue: this.props.task.text,
     isEditMode: false,
+    checked: false,
   };
 
   handelToggleEditMode = () => {
@@ -28,12 +29,25 @@ class componentName extends PureComponent {
     });
   };
 
+  toggleCheckbox = () => {
+    this.setState({
+      checked: !this.state.checked,
+    });
+
+    this.props.onCheck();
+  };
+
+  handleOnCheck = (taskId) => () => {
+    console.log(taskId);
+  };
+
   render() {
     const { task, removeTask } = this.props;
-    const { isEditMode, taskTextValue } = this.state;
+    const { isEditMode, taskTextValue, checked } = this.state;
 
     return (
-      <Card className={classes.card}>
+      <Card className={`${classes.card} ${checked ? classes.checked : ''}`}>
+        <input type="checkbox" className={classes.checkbox} onClick={this.toggleCheckbox} />
         <Card.Body>
           <Card.Title>Task</Card.Title>
           <Card.Text>
@@ -59,11 +73,7 @@ class componentName extends PureComponent {
               <span>{isEditMode ? 'Save' : 'Edit'}</span>
             </Button>
 
-            <Button
-              className={classes.taskButtons}
-              variant="danger"
-              onClick={removeTask(task.id)}
-            >
+            <Button className={classes.taskButtons} variant="danger" onClick={removeTask(task.id)}>
               <FontAwesomeIcon icon={faTrash} />
               <span>Delete</span>
             </Button>
