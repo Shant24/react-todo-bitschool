@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 
 const Confirm = (props) => {
@@ -6,7 +7,6 @@ const Confirm = (props) => {
 
   return (
     <Modal
-      {...props}
       size="md"
       aria-labelledby="contained-modal-title-vcenter"
       show={true}
@@ -23,12 +23,19 @@ const Confirm = (props) => {
         <Button onClick={onSubmit} variant="danger">
           Remove
         </Button>
+
         <Button onClick={onCancel} variant="secondary">
           Close
         </Button>
       </Modal.Footer>
     </Modal>
   );
+};
+
+Confirm.propTypes = {
+  count: PropTypes.number.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
 export default Confirm;

@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import idGenerator from '../helpers/idGenerator';
-import classes from './todo.module.scss';
+import styles from './todo.module.scss';
 
 import Confirm from './Confirm/Confirm';
 import NewTask from './NewTask/NewTask';
 import Task from './Task/Task';
+import Modal from './Modal/Modal';
 
 class ToDo extends Component {
   state = {
     tasks: [],
     checkedTasks: new Set(),
     showConfirm: false,
+    editTask: null,
   };
 
   addTask = (inputValue) => {
@@ -24,42 +26,21 @@ class ToDo extends Component {
 
     tasks.unshift(newTask);
 
-    this.setState({
-      tasks,
-    });
+    this.setState({ tasks });
   };
 
   removeTask = (taskId) => () => {
     const newTasks = this.state.tasks.filter((task) => taskId !== task.id);
 
-    this.setState({
-      tasks: newTasks,
-    });
+    this.setState({ tasks: newTasks });
   };
 
-  editTask = (taskId, newText) => {
-    const changedTask = this.state.tasks.map((task) => {
-      return task.id === taskId
-        ? {
-            id: task.id,
-            text: newText,
-          }
-        : task;
-    });
-
-    this.setState({
-      tasks: changedTask,
-    });
-  };
-
-  handleOnCheck = (taskId) => () => {
+  handleCheck = (taskId) => () => {
     const checkedTasks = new Set(this.state.checkedTasks);
 
     checkedTasks.has(taskId) ? checkedTasks.delete(taskId) : checkedTasks.add(taskId);
 
-    this.setState({
-      checkedTasks,
-    });
+    this.setState({ checkedTasks });
   };
 
   handleRemoveSelected = () => {
@@ -67,9 +48,7 @@ class ToDo extends Component {
 
     let tasks = [...this.state.tasks];
 
-    checkedTasks.forEach((taskId) => {
-      tasks = tasks.filter((task) => task.id !== taskId);
-    });
+    checkedTasks.forEach((taskId) => (tasks = tasks.filter((task) => task.id !== taskId)));
 
     checkedTasks.clear();
 
@@ -80,21 +59,31 @@ class ToDo extends Component {
     });
   };
 
-  toggleConfirm = () => {
-    this.setState({ showConfirm: !this.state.showConfirm });
+  toggleConfirm = () => this.setState({ showConfirm: !this.state.showConfirm });
+
+  handleEdit = (task) => () => this.setState({ editTask: task });
+
+  handleSave = (taskId, value) => {
+    const tasks = [...this.state.tasks];
+
+    const taskIndex = tasks.findIndex((task) => task.id === taskId);
+
+    tasks[taskIndex] = { ...tasks[taskIndex], text: value };
+
+    this.setState({ tasks, editTask: null });
   };
 
   render() {
-    const { checkedTasks, tasks, showConfirm } = this.state;
+    const { checkedTasks, tasks, showConfirm, editTask } = this.state;
 
     const tasksComponents = tasks.map((task) => {
       return (
         <Col key={task.id} xl={3} lg={4} md={6}>
           <Task
             task={task}
-            editTask={this.editTask}
             removeTask={this.removeTask}
-            onCheck={this.handleOnCheck(task.id)}
+            onCheck={this.handleCheck(task.id)}
+            onEdit={this.handleEdit(task)}
           />
         </Col>
       );
@@ -109,7 +98,7 @@ class ToDo extends Component {
             sm={{ span: 2, offset: 4 }}
             className="justify-content-center"
           >
-            <h1 className={classes.h1}>ToDo App</h1>
+            <h1 className={styles.h1}>ToDo App</h1>
           </Col>
 
           <Col lg={{ span: 6, offset: 1 }} md={{ span: 10, offset: 1 }} sm={12}>
@@ -118,9 +107,10 @@ class ToDo extends Component {
         </Row>
 
         <Row>{tasksComponents}</Row>
+
         <Row className="justify-content-center">
           <Button
-            className={classes.taskButtons}
+            className={styles.taskButtons}
             variant="danger"
             disabled={checkedTasks.size ? false : true}
             onClick={this.toggleConfirm}
@@ -135,6 +125,10 @@ class ToDo extends Component {
             onSubmit={this.handleRemoveSelected}
             onCancel={this.toggleConfirm}
           />
+        )}
+
+        {!!editTask && (
+          <Modal value={editTask} onSave={this.handleSave} onCancel={this.handleEdit(null)} />
         )}
       </Container>
     );

@@ -1,79 +1,44 @@
 import React, { PureComponent } from 'react';
-import { Card, Button, Form } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import { Card, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPen, faCheck } from '@fortawesome/free-solid-svg-icons';
-import classes from './task.module.scss';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import cx from 'classnames';
+import styles from './task.module.scss';
 
-class componentName extends PureComponent {
+class Task extends PureComponent {
   state = {
-    propsText: this.props.task.text,
-    taskTextValue: this.props.task.text,
-    isEditMode: false,
     checked: false,
   };
 
-  handelToggleEditMode = () => {
-    const { isEditMode, taskTextValue, propsText } = this.state;
-    const { editTask, task } = this.props;
-
-    isEditMode && propsText !== taskTextValue && editTask(task.id, taskTextValue);
-
-    this.setState({
-      isEditMode: !isEditMode,
-    });
-  };
-
-  handleChangeText = (e) => {
-    this.setState({
-      taskTextValue: e.target.value,
-    });
-  };
-
   toggleCheckbox = () => {
-    this.setState({
-      checked: !this.state.checked,
-    });
+    this.setState({ checked: !this.state.checked });
 
     this.props.onCheck();
   };
 
-  handleOnCheck = (taskId) => () => {
-    console.log(taskId);
-  };
+  toggleModal = () => this.setState({ showModal: !this.state.showModal });
 
   render() {
-    const { task, removeTask } = this.props;
-    const { isEditMode, taskTextValue, checked } = this.state;
+    const { task, removeTask, onEdit } = this.props;
+    const { checked } = this.state;
 
     return (
-      <Card className={`${classes.card} ${checked ? classes.checked : ''}`}>
-        <input type="checkbox" className={classes.checkbox} onClick={this.toggleCheckbox} />
+      <Card className={cx(styles.card, { [styles.checked]: checked })}>
+        <input type="checkbox" className={styles.checkbox} onClick={this.toggleCheckbox} />
+
         <Card.Body>
           <Card.Title>Task</Card.Title>
-          <Card.Text>
-            {isEditMode ? (
-              <Form.Control
-                className={classes.textarea}
-                onChange={this.handleChangeText}
-                as="textarea"
-                rows="5"
-                value={taskTextValue}
-              />
-            ) : (
-              taskTextValue
-            )}
-          </Card.Text>
-          <div className={classes.buttonContainer}>
-            <Button
-              className={classes.taskButtons}
-              variant={isEditMode ? 'primary' : 'success'}
-              onClick={this.handelToggleEditMode}
-            >
-              <FontAwesomeIcon icon={isEditMode ? faCheck : faPen} />
-              <span>{isEditMode ? 'Save' : 'Edit'}</span>
+
+          <Card.Text>{task.text}</Card.Text>
+
+          <div className={styles.buttonContainer}>
+            <Button onClick={onEdit} className={styles.taskButtons} variant="info">
+              <FontAwesomeIcon icon={faEdit} />
+              <span>Edit</span>
             </Button>
 
-            <Button className={classes.taskButtons} variant="danger" onClick={removeTask(task.id)}>
+            <Button onClick={removeTask(task.id)} className={styles.taskButtons} variant="danger">
               <FontAwesomeIcon icon={faTrash} />
               <span>Delete</span>
             </Button>
@@ -84,4 +49,11 @@ class componentName extends PureComponent {
   }
 }
 
-export default componentName;
+Task.propTypes = {
+  task: PropTypes.object.isRequired,
+  removeTask: PropTypes.func.isRequired,
+  onCheck: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+};
+
+export default Task;
