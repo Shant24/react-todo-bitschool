@@ -20,7 +20,7 @@ class Task extends PureComponent {
   toggleModal = () => this.setState({ showModal: !this.state.showModal });
 
   render() {
-    const { task, removeTask, onEdit } = this.props;
+    const { task, removeTask, onEdit, disabled } = this.props;
     const { checked } = this.state;
 
     return (
@@ -33,12 +33,22 @@ class Task extends PureComponent {
           <Card.Text>{task.text}</Card.Text>
 
           <div className={styles.buttonContainer}>
-            <Button onClick={onEdit} className={styles.taskButtons} variant="info">
+            <Button
+              onClick={onEdit}
+              className={styles.taskButtons}
+              variant="info"
+              disabled={disabled}
+            >
               <FontAwesomeIcon icon={faEdit} />
               <span>Edit</span>
             </Button>
 
-            <Button onClick={removeTask(task.id)} className={styles.taskButtons} variant="danger">
+            <Button
+              onClick={removeTask(task.id)}
+              className={styles.taskButtons}
+              variant="danger"
+              disabled={disabled}
+            >
               <FontAwesomeIcon icon={faTrash} />
               <span>Delete</span>
             </Button>
@@ -54,6 +64,7 @@ Task.propTypes = {
   removeTask: PropTypes.func.isRequired,
   onCheck: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default Task;

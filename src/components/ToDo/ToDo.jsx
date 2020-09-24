@@ -14,6 +14,22 @@ class ToDo extends Component {
     checkedTasks: new Set(),
     showConfirm: false,
     editTask: null,
+    serverTasks: [],
+  };
+
+  componentDidMount() {
+    this.getServerTasks();
+  }
+
+  getServerTasks = async () => {
+    const { serverTasks } = this.state;
+
+    await fetch('http://localhost:3001/task')
+      .then((res) => res.json())
+      .then((res) => this.setState({ serverTasks: [...serverTasks, ...res] }))
+      .catch((err) => console.log(err));
+
+    console.log(serverTasks);
   };
 
   addTask = (inputValue) => {
@@ -84,6 +100,7 @@ class ToDo extends Component {
             removeTask={this.removeTask}
             onCheck={this.handleCheck(task.id)}
             onEdit={this.handleEdit(task)}
+            disabled={!!checkedTasks.size}
           />
         </Col>
       );
@@ -102,7 +119,7 @@ class ToDo extends Component {
           </Col>
 
           <Col lg={{ span: 6, offset: 1 }} md={{ span: 10, offset: 1 }} sm={12}>
-            <NewTask onAdd={this.addTask} />
+            <NewTask onAdd={this.addTask} disabled={!!checkedTasks.size} />
           </Col>
         </Row>
 
@@ -112,7 +129,7 @@ class ToDo extends Component {
           <Button
             className={styles.taskButtons}
             variant="danger"
-            disabled={checkedTasks.size ? false : true}
+            disabled={!checkedTasks.size}
             onClick={this.toggleConfirm}
           >
             <span>Remove selected</span>

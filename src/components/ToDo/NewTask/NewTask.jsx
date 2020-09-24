@@ -23,6 +23,18 @@ class NewTask extends PureComponent {
     this.setState({
       inputValue: '',
     });
+
+    console.log(JSON.stringify({ title: 'Task', description: inputValue, date: `${new Date()}` }));
+
+    fetch('http://localhost:3001/task', {
+      method: 'POST',
+      // headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: {
+        title: 'Task',
+        description: inputValue,
+        date: `${new Date()}`,
+      },
+    }).catch((err) => console.log(err));
   };
 
   handleKeyDown = (e) => {
@@ -32,6 +44,8 @@ class NewTask extends PureComponent {
   };
 
   render() {
+    const { disabled } = this.props;
+
     return (
       <InputGroup>
         <FormControl
@@ -41,9 +55,10 @@ class NewTask extends PureComponent {
           value={this.state.inputValue}
           onChange={this.handleInputChange}
           onKeyDown={this.handleKeyDown}
+          disabled={disabled}
         />
         <InputGroup.Append>
-          <Button onClick={this.sendValue} variant="outline-primary">
+          <Button onClick={this.sendValue} variant="outline-primary" disabled={disabled}>
             Add task
           </Button>
         </InputGroup.Append>
@@ -54,6 +69,7 @@ class NewTask extends PureComponent {
 
 NewTask.propTypes = {
   onAdd: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default NewTask;
