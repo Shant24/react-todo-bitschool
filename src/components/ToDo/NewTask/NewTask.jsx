@@ -23,18 +23,6 @@ class NewTask extends PureComponent {
     this.setState({
       inputValue: '',
     });
-
-    console.log(JSON.stringify({ title: 'Task', description: inputValue, date: `${new Date()}` }));
-
-    fetch('http://localhost:3001/task', {
-      method: 'POST',
-      // headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      body: {
-        title: 'Task',
-        description: inputValue,
-        date: `${new Date()}`,
-      },
-    }).catch((err) => console.log(err));
   };
 
   handleKeyDown = (e) => {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import idGenerator from '../helpers/idGenerator';
+// import idGenerator from '../helpers/idGenerator';
 import styles from './todo.module.scss';
 
 import Confirm from './Confirm/Confirm';
@@ -14,39 +14,48 @@ class ToDo extends Component {
     checkedTasks: new Set(),
     showConfirm: false,
     editTask: null,
-    serverTasks: [],
   };
 
   componentDidMount() {
     this.getServerTasks();
   }
 
-  getServerTasks = async () => {
-    const { serverTasks } = this.state;
-
-    await fetch('http://localhost:3001/task')
+  getServerTasks = () => {
+    fetch('http://localhost:3001/task')
       .then((res) => res.json())
-      .then((res) => this.setState({ serverTasks: [...serverTasks, ...res] }))
-      .catch((err) => console.log(err));
+      .then((task) => {
+        if (task.error) {
+          throw task.error;
+        }
 
-    console.log(serverTasks);
+        this.setState({ tasks: task.reverse() });
+      })
+      .catch((err) => console.log(err));
   };
 
-  addTask = (inputValue) => {
-    const tasks = [...this.state.tasks];
-
-    const newTask = {
-      id: idGenerator(),
-      text: inputValue,
+  addTask = async (inputValue) => {
+    const data = {
+      title: inputValue,
     };
 
-    tasks.unshift(newTask);
+    fetch('http://localhost:3001/task', {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((task) => {
+        if (task.error) {
+          throw task.error;
+        }
 
-    this.setState({ tasks });
+        this.setState({ tasks: [task, ...this.state.tasks] });
+      })
+      .catch((err) => console.log(err));
   };
 
   removeTask = (taskId) => () => {
-    const newTasks = this.state.tasks.filter((task) => taskId !== task.id);
+    const newTasks = this.state.tasks.filter((task) => taskId !== task._id);
 
     this.setState({ tasks: newTasks });
   };
@@ -82,7 +91,7 @@ class ToDo extends Component {
   handleSave = (taskId, value) => {
     const tasks = [...this.state.tasks];
 
-    const taskIndex = tasks.findIndex((task) => task.id === taskId);
+    const taskIndex = tasks.findIndex((task) => task._id === taskId);
 
     tasks[taskIndex] = { ...tasks[taskIndex], text: value };
 
@@ -94,11 +103,11 @@ class ToDo extends Component {
 
     const tasksComponents = tasks.map((task) => {
       return (
-        <Col key={task.id} xl={3} lg={4} md={6}>
+        <Col key={task._id} xl={3} lg={4} md={6}>
           <Task
             task={task}
             removeTask={this.removeTask}
-            onCheck={this.handleCheck(task.id)}
+            onCheck={this.handleCheck(task._id)}
             onEdit={this.handleEdit(task)}
             disabled={!!checkedTasks.size}
           />
