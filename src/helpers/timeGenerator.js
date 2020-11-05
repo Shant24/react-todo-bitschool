@@ -14,9 +14,7 @@ const months = [
   'December',
 ];
 
-export default (value) => {
-  !value && (value = new Date());
-
+export default (value = new Date()) => {
   const date = new Date(value);
   const year = date.getFullYear();
   const month = months[date.getMonth()];
@@ -27,17 +25,18 @@ export default (value) => {
   const minute = date.getMinutes();
   const second = date.getSeconds();
 
-  const pushZeroToStart = (date) => ('0' + date).slice(-2);
+  // const pushZeroToStart = (date) => ('0' + date).slice(-2);
+  const pushZeroToStart = (date) => (date.length < 10 ? `0${date}` : date);
 
   return {
-    year: year,
-    month: month,
+    year,
+    month,
     monthNumber: pushZeroToStart(monthNumber),
-    week: week,
-    day: day,
+    week,
+    day,
     hour: pushZeroToStart(hour),
     minute: pushZeroToStart(minute),
-    second: second,
+    second: pushZeroToStart(second),
     data: {
       months,
       weekDays,

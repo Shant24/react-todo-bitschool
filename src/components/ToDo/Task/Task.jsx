@@ -28,9 +28,9 @@ class Task extends PureComponent {
         <input type="checkbox" className={styles.checkbox} onClick={this.toggleCheckbox} />
 
         <Card.Body>
-          <Card.Title>Task</Card.Title>
+          <Card.Title>{task.title}</Card.Title>
 
-          <Card.Text>{task.text}</Card.Text>
+          <Card.Text>{task.description}</Card.Text>
 
           <div className={styles.buttonContainer}>
             <Button
@@ -44,7 +44,7 @@ class Task extends PureComponent {
             </Button>
 
             <Button
-              onClick={removeTask(task.id)}
+              onClick={removeTask(task._id)}
               className={styles.taskButtons}
               variant="danger"
               disabled={disabled}
