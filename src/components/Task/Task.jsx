@@ -20,17 +20,29 @@ class Task extends PureComponent {
   toggleModal = () => this.setState({ showModal: !this.state.showModal });
 
   render() {
-    const { task, removeTask, onEdit, disabled } = this.props;
+    const { task, onRemove, onEdit, disabled } = this.props;
     const { checked } = this.state;
 
     return (
       <Card className={cx(styles.card, { [styles.checked]: checked })}>
-        <input type="checkbox" className={styles.checkbox} onClick={this.toggleCheckbox} />
+        <input
+          type="checkbox"
+          className={styles.checkbox}
+          onClick={this.toggleCheckbox}
+        />
 
         <Card.Body>
-          <Card.Title>{task.title}</Card.Title>
+          <Card.Title>
+            <h3>{task.title}</h3>
+          </Card.Title>
 
-          <Card.Text>{task.description}</Card.Text>
+          <Card.Text>
+            <b>Description:</b> {task.description}
+          </Card.Text>
+
+          <Card.Text>
+            <b>Date:</b> {task.date ? task.date.slice(0, 10) : 'none'}
+          </Card.Text>
 
           <div className={styles.buttonContainer}>
             <Button
@@ -44,7 +56,7 @@ class Task extends PureComponent {
             </Button>
 
             <Button
-              onClick={removeTask(task._id)}
+              onClick={onRemove(task._id)}
               className={styles.taskButtons}
               variant="danger"
               disabled={disabled}
@@ -61,7 +73,7 @@ class Task extends PureComponent {
 
 Task.propTypes = {
   task: PropTypes.object.isRequired,
-  removeTask: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
   onCheck: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,

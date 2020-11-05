@@ -33,11 +33,7 @@ class ToDo extends Component {
       .catch((err) => console.log(err));
   };
 
-  addTask = async (inputValue) => {
-    const data = {
-      title: inputValue,
-    };
-
+  addTask = async (data) => {
     fetch('http://localhost:3001/task', {
       method: 'POST',
       headers: {
@@ -61,9 +57,20 @@ class ToDo extends Component {
   };
 
   removeTask = (taskId) => () => {
-    const newTasks = this.state.tasks.filter((task) => taskId !== task._id);
+    fetch(`http://localhost:3001/task/${taskId}`, {
+      method: 'DELETE',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          throw data.error;
+        }
 
-    this.setState({ tasks: newTasks });
+        const newTasks = this.state.tasks.filter((task) => taskId !== task._id);
+
+        this.setState({ tasks: newTasks });
+      })
+      .catch((err) => console.log(err));
   };
 
   handleCheck = (taskId) => () => {
@@ -76,22 +83,38 @@ class ToDo extends Component {
     this.setState({ checkedTasks });
   };
 
-  handleRemoveSelected = () => {
+  onRemoveSelected = () => {
     const checkedTasks = new Set(this.state.checkedTasks);
 
-    let tasks = [...this.state.tasks];
+    fetch('http://localhost:3001/task/', {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ tasks: [...checkedTasks] }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          throw data.error;
+        }
 
-    checkedTasks.forEach(
-      (taskId) => (tasks = tasks.filter((task) => task.id !== taskId))
-    );
+        let tasks = [...this.state.tasks];
 
-    checkedTasks.clear();
+        checkedTasks.forEach(
+          (taskId) => (tasks = tasks.filter((task) => task._id !== taskId))
+        );
 
-    this.setState({
-      tasks,
-      checkedTasks,
-      showConfirm: false,
-    });
+        checkedTasks.clear();
+
+        this.setState({
+          tasks,
+          checkedTasks,
+          showConfirm: false,
+        });
+      })
+      .catch((err) => console.log(err));
   };
 
   toggleConfirm = () => this.setState({ showConfirm: !this.state.showConfirm });
@@ -128,7 +151,7 @@ class ToDo extends Component {
         <Col key={task._id} xl={3} lg={4} md={6}>
           <Task
             task={task}
-            removeTask={this.removeTask}
+            onRemove={this.removeTask}
             onCheck={this.handleCheck(task._id)}
             onEdit={this.handleEdit(task)}
             disabled={!!checkedTasks.size}
@@ -179,7 +202,7 @@ class ToDo extends Component {
         {showConfirm && (
           <Confirm
             count={checkedTasks.size}
-            onSubmit={this.handleRemoveSelected}
+            onSubmit={this.onRemoveSelected}
             onCancel={this.toggleConfirm}
           />
         )}
