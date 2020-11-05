@@ -1,0 +1,42 @@
+.taskContainer {
+  padding: 5px 30px 5px 10px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  font-size: 18px;
+  border: 1px solid white;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  &:last-child {
+    margin: 0;
+  }
+
+  &.done {
+    text-decoration: line-through;
+  }
+
+  input {
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  p {
+    font-size: 18px;
+  }
+
+  button {
+    position: absolute;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    .fontIcon {
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+}

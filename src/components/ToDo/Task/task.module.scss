@@ -1,0 +1,33 @@
+.card {
+  width: 20rem;
+  margin: 0 auto 20px;
+  border-radius: 10px;
+
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+
+  .checkbox {
+    margin: 10px 10px 0;
+  }
+
+  &.checked {
+    border: 1px solid red;
+  }
+
+  .textarea {
+    resize: none;
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+
+    .taskButtons {
+      width: 44%;
+      span {
+        margin-left: 20px;
+      }
+    }
+  }
+}
