@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-// import idGenerator from '../helpers/idGenerator';
 import styles from './todo.module.scss';
 
-import Confirm from './Confirm/Confirm';
-import NewTask from './NewTask/NewTask';
-import Task from './Task/Task';
-import Modal from './Modal/Modal';
+import Confirm from '../Confirm/Confirm';
+import NewTask from '../NewTask/NewTask';
+import Task from '../Task/Task';
+import Modal from '../Modal/Modal';
 
 class ToDo extends Component {
   state = {
@@ -14,6 +13,7 @@ class ToDo extends Component {
     checkedTasks: new Set(),
     showConfirm: false,
     editTask: null,
+    openNewTaskModal: false,
   };
 
   componentDidMount() {
@@ -40,7 +40,10 @@ class ToDo extends Component {
 
     fetch('http://localhost:3001/task', {
       method: 'POST',
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
@@ -49,7 +52,10 @@ class ToDo extends Component {
           throw task.error;
         }
 
-        this.setState({ tasks: [task, ...this.state.tasks] });
+        this.setState({
+          tasks: [task, ...this.state.tasks],
+          openNewTaskModal: false,
+        });
       })
       .catch((err) => console.log(err));
   };
@@ -63,7 +69,9 @@ class ToDo extends Component {
   handleCheck = (taskId) => () => {
     const checkedTasks = new Set(this.state.checkedTasks);
 
-    checkedTasks.has(taskId) ? checkedTasks.delete(taskId) : checkedTasks.add(taskId);
+    checkedTasks.has(taskId)
+      ? checkedTasks.delete(taskId)
+      : checkedTasks.add(taskId);
 
     this.setState({ checkedTasks });
   };
@@ -73,7 +81,9 @@ class ToDo extends Component {
 
     let tasks = [...this.state.tasks];
 
-    checkedTasks.forEach((taskId) => (tasks = tasks.filter((task) => task.id !== taskId)));
+    checkedTasks.forEach(
+      (taskId) => (tasks = tasks.filter((task) => task.id !== taskId))
+    );
 
     checkedTasks.clear();
 
@@ -98,8 +108,20 @@ class ToDo extends Component {
     this.setState({ tasks, editTask: null });
   };
 
+  toggleNewTaskModal = () => {
+    this.setState({
+      openNewTaskModal: !this.state.openNewTaskModal,
+    });
+  };
+
   render() {
-    const { checkedTasks, tasks, showConfirm, editTask } = this.state;
+    const {
+      checkedTasks,
+      tasks,
+      showConfirm,
+      editTask,
+      openNewTaskModal,
+    } = this.state;
 
     const tasksComponents = tasks.map((task) => {
       return (
@@ -116,19 +138,28 @@ class ToDo extends Component {
     });
 
     return (
-      <Container fluid>
-        <Row className="my-4 align-items-center">
+      <Container fluid className="pt-4">
+        <Row className="mb-4 align-items-center">
           <Col
-            lg={{ span: 2, offset: 0 }}
-            md={{ span: 4, offset: 4 }}
-            sm={{ span: 2, offset: 4 }}
-            className="justify-content-center"
+            sm={2}
+            xs={12}
+            className="d-flex justify-content-sm-start justify-content-center"
           >
             <h1 className={styles.h1}>ToDo App</h1>
           </Col>
 
-          <Col lg={{ span: 6, offset: 1 }} md={{ span: 10, offset: 1 }} sm={12}>
-            <NewTask onAdd={this.addTask} disabled={!!checkedTasks.size} />
+          <Col
+            sm={10}
+            xs={12}
+            className="d-flex justify-content-sm-end justify-content-center"
+          >
+            <Button
+              onClick={this.toggleNewTaskModal}
+              variant="primary"
+              disabled={checkedTasks.size}
+            >
+              Add new Task
+            </Button>
           </Col>
         </Row>
 
@@ -136,7 +167,7 @@ class ToDo extends Component {
 
         <Row className="justify-content-center">
           <Button
-            className={styles.taskButtons}
+            className={styles.taskButton + ' mb-4'}
             variant="danger"
             disabled={!checkedTasks.size}
             onClick={this.toggleConfirm}
@@ -154,7 +185,15 @@ class ToDo extends Component {
         )}
 
         {!!editTask && (
-          <Modal value={editTask} onSave={this.handleSave} onCancel={this.handleEdit(null)} />
+          <Modal
+            value={editTask}
+            onSave={this.handleSave}
+            onCancel={this.handleEdit(null)}
+          />
+        )}
+
+        {openNewTaskModal && (
+          <NewTask onAdd={this.addTask} onCancel={this.toggleNewTaskModal} />
         )}
       </Container>
     );
