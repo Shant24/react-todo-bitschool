@@ -81,10 +81,17 @@ class NewTask extends PureComponent {
 
         <Modal.Body>
           <Form.Group>
-            <Form.Label className={errorMessage && 'text-danger'}>
-              {errorMessage ? errorMessage : <b>Title</b>}
+            <Form.Label
+              for="newTaskTitle"
+              className="d-flex justify-content-between"
+            >
+              <b>Title</b>
+              {errorMessage && (
+                <span className={'text-danger'}>{errorMessage}</span>
+              )}
             </Form.Label>
             <FormControl
+              id="newTaskTitle"
               className={!valid && styles.invalid}
               placeholder="Title"
               aria-label="Title"
@@ -97,14 +104,15 @@ class NewTask extends PureComponent {
           </Form.Group>
 
           <Form.Group className="my-3">
-            <Form.Label>
+            <Form.Label for="newTaskDescription">
               <b>Description</b>
             </Form.Label>
             <Form.Control
+              id="newTaskDescription"
+              className={styles.textarea}
               as="textarea"
               rows={4}
               placeholder="Description"
-              className={styles.textarea}
               value={description}
               onChange={(event) =>
                 this.handleChange('description', event.target.value)
@@ -112,11 +120,12 @@ class NewTask extends PureComponent {
             />
           </Form.Group>
 
-          <Form.Group className={styles.datePicker + ' d-flex flex-column'}>
-            <Form.Label>
-              <b>Date</b>
+          <Form.Group className={styles.datePicker}>
+            <Form.Label for="newTaskDate">
+              <div className={styles.date}>Date</div>
             </Form.Label>
             <DatePicker
+              id="newTaskDate"
               selected={date}
               minDate={new Date()}
               onChange={(date) => this.handleChange('date', date)}
