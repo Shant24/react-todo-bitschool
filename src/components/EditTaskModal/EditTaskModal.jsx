@@ -3,16 +3,18 @@ import PropTypes from 'prop-types';
 import { Button, Form, FormControl, Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import styles from './newTask.module.scss';
+import styles from '../NewTask/newTask.module.scss';
 
 class NewTask extends PureComponent {
-  state = {
-    title: '',
-    description: '',
-    date: new Date(),
-    valid: true,
-    validationType: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...props.data,
+      date: new Date(props.data.date),
+      valid: true,
+      validationType: null,
+    };
+  }
 
   validationErrors = {
     requiredError: 'The field is required!',
@@ -36,7 +38,7 @@ class NewTask extends PureComponent {
   };
 
   handleSave = () => {
-    let { title, description, date } = this.state;
+    let { title, description, date, _id } = this.state;
 
     title = title.trim();
 
@@ -53,7 +55,7 @@ class NewTask extends PureComponent {
     };
 
     if (title) {
-      this.props.onAdd(data);
+      this.props.onSave(_id, data);
     }
   };
 
@@ -75,7 +77,7 @@ class NewTask extends PureComponent {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Add new task
+            Edit Task
           </Modal.Title>
         </Modal.Header>
 
@@ -120,7 +122,7 @@ class NewTask extends PureComponent {
             />
           </Form.Group>
 
-          <Form.Group className={styles.datePicker}>
+          <Form.Group className={styles.datePicker + ' d-flex flex-column'}>
             <Form.Label for="newTaskDate">
               <div className={styles.date}>Date</div>
             </Form.Label>
@@ -136,7 +138,7 @@ class NewTask extends PureComponent {
 
         <Modal.Footer>
           <Button onClick={this.handleSave} variant="success">
-            Add
+            Save
           </Button>
 
           <Button onClick={this.props.onCancel} variant="secondary">
@@ -149,7 +151,8 @@ class NewTask extends PureComponent {
 }
 
 NewTask.propTypes = {
-  onAdd: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
+  onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 

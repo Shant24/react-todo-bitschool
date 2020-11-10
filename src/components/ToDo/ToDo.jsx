@@ -5,7 +5,7 @@ import styles from './todo.module.scss';
 import Confirm from '../Confirm/Confirm';
 import NewTask from '../NewTask/NewTask';
 import Task from '../Task/Task';
-import Modal from '../Modal/Modal';
+import EditTaskModal from '../EditTaskModal/EditTaskModal';
 
 class ToDo extends Component {
   state = {
@@ -121,14 +121,32 @@ class ToDo extends Component {
 
   handleEdit = (task) => () => this.setState({ editTask: task });
 
-  handleSave = (taskId, value) => {
-    const tasks = [...this.state.tasks];
+  handleSave = (taskId, data) => {
+    fetch(`http://localhost:3001/task/${taskId}`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((editedTask) => {
+        if (editedTask.error) {
+          throw editedTask.error;
+        }
 
-    const taskIndex = tasks.findIndex((task) => task._id === taskId);
+        const tasks = [...this.state.tasks];
 
-    tasks[taskIndex] = { ...tasks[taskIndex], text: value };
+        const findIndex = tasks.findIndex(
+          (task) => task._id === editedTask._id
+        );
 
-    this.setState({ tasks, editTask: null });
+        tasks[findIndex] = editedTask;
+
+        this.setState({ tasks, editTask: null });
+      })
+      .catch((err) => console.log(err));
   };
 
   toggleNewTaskModal = () => {
@@ -208,8 +226,9 @@ class ToDo extends Component {
         )}
 
         {!!editTask && (
-          <Modal
-            value={editTask}
+          <EditTaskModal
+            // value={editTask}
+            data={editTask}
             onSave={this.handleSave}
             onCancel={this.handleEdit(null)}
           />

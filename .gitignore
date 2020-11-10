@@ -31,3 +31,4 @@ data
 .vscode
 
 yarn.lock
+*.log
