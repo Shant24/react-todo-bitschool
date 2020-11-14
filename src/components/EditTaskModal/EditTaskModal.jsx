@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../NewTask/newTask.module.scss';
 
-class NewTask extends PureComponent {
+class EditTaskModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,7 +44,6 @@ class NewTask extends PureComponent {
 
     if (!title) {
       this.setState({ valid: false, validationType: 'requiredError' });
-
       return;
     }
 
@@ -84,7 +83,7 @@ class NewTask extends PureComponent {
         <Modal.Body>
           <Form.Group>
             <Form.Label
-              for="newTaskTitle"
+              htmlFor="newTaskTitle"
               className="d-flex justify-content-between"
             >
               <b>Title</b>
@@ -106,7 +105,7 @@ class NewTask extends PureComponent {
           </Form.Group>
 
           <Form.Group className="my-3">
-            <Form.Label for="newTaskDescription">
+            <Form.Label htmlFor="newTaskDescription">
               <b>Description</b>
             </Form.Label>
             <Form.Control
@@ -123,7 +122,7 @@ class NewTask extends PureComponent {
           </Form.Group>
 
           <Form.Group className={styles.datePicker + ' d-flex flex-column'}>
-            <Form.Label for="newTaskDate">
+            <Form.Label htmlFor="newTaskDate">
               <div className={styles.date}>Date</div>
             </Form.Label>
             <DatePicker
@@ -150,10 +149,10 @@ class NewTask extends PureComponent {
   }
 }
 
-NewTask.propTypes = {
+EditTaskModal.propTypes = {
   data: PropTypes.object.isRequired,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
-export default NewTask;
+export default EditTaskModal;

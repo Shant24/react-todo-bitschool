@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import styles from './task.module.scss';
 
@@ -33,11 +34,16 @@ class Task extends PureComponent {
 
         <Card.Body>
           <Card.Title>
-            <h3>{task.title}</h3>
+            <Link to={`/task/${task._id}`} className={styles.titleLink}>
+              <h3>{task.title}</h3>
+            </Link>
           </Card.Title>
 
           <Card.Text>
-            <b>Description:</b> {task.description}
+            <b>Description:</b>{' '}
+            {task.description.length > 100
+              ? task.description.slice(0, 100) + '...'
+              : task.description}
           </Card.Text>
 
           <Card.Text>

@@ -82,7 +82,7 @@ class NewTask extends PureComponent {
         <Modal.Body>
           <Form.Group>
             <Form.Label
-              for="newTaskTitle"
+              htmlFor="newTaskTitle"
               className="d-flex justify-content-between"
             >
               <b>Title</b>
@@ -104,7 +104,7 @@ class NewTask extends PureComponent {
           </Form.Group>
 
           <Form.Group className="my-3">
-            <Form.Label for="newTaskDescription">
+            <Form.Label htmlFor="newTaskDescription">
               <b>Description</b>
             </Form.Label>
             <Form.Control
@@ -121,7 +121,7 @@ class NewTask extends PureComponent {
           </Form.Group>
 
           <Form.Group className={styles.datePicker}>
-            <Form.Label for="newTaskDate">
+            <Form.Label htmlFor="newTaskDate">
               <div className={styles.date}>Date</div>
             </Form.Label>
             <DatePicker

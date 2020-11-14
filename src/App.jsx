@@ -13,7 +13,7 @@ const App = () => {
       <NavMenu />
       <Switch>
         <Route path="/" exact component={ToDo} />
-        <Route path="/task/:taskId?" component={SingleTask} />
+        <Route path="/task/:taskId" component={SingleTask} />
         <Route path="/not-found" exact component={NotFound} />
         <Redirect to="/not-found" />
       </Switch>
