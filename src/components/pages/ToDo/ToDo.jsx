@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import styles from './todo.module.scss';
-
 import Confirm from '../../Confirm/Confirm';
 import NewTask from '../../NewTask/NewTask';
 import Task from '../../Task/Task';
 import EditTaskModal from '../../EditTaskModal/EditTaskModal';
+import Spinner from '../../Spinner/Spinner';
 
 class ToDo extends Component {
   state = {
-    tasks: [],
+    tasks: null,
     checkedTasks: new Set(),
     showConfirm: false,
     editTask: null,
@@ -163,6 +163,10 @@ class ToDo extends Component {
       editTask,
       openNewTaskModal,
     } = this.state;
+
+    if (!tasks) {
+      return <Spinner />;
+    }
 
     const tasksComponents = tasks.map((task) => {
       return (
