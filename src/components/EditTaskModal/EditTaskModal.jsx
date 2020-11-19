@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, FormControl, Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../NewTask/newTask.module.scss';
 
-class EditTaskModal extends PureComponent {
+class EditTaskModal extends Component {
   constructor(props) {
     super(props);
     this.state = {

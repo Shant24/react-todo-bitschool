@@ -18,8 +18,6 @@ class Task extends PureComponent {
     this.props.onCheck();
   };
 
-  toggleModal = () => this.setState({ showModal: !this.state.showModal });
-
   render() {
     const { task, onRemove, onEdit, disabled } = this.props;
     const { checked } = this.state;
@@ -33,11 +31,17 @@ class Task extends PureComponent {
         />
 
         <Card.Body>
-          <Card.Title>
-            <Link to={`/task/${task._id}`} className={styles.titleLink}>
+          {disabled ? (
+            <Card.Title>
               <h3>{task.title}</h3>
+            </Card.Title>
+          ) : (
+            <Link to={`/task/${task._id}`} className={styles.titleLink}>
+              <Card.Title>
+                <h3>{task.title}</h3>
+              </Card.Title>
             </Link>
-          </Card.Title>
+          )}
 
           <Card.Text>
             <b>Description:</b>{' '}
