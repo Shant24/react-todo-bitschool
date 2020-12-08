@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import DatePicker from 'react-datepicker';
-import { Button, Form, FormControl, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { Button, Form, FormControl, Modal } from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './newTask.module.scss';
 import { addTask } from '../../store/actions/taskActions';
@@ -39,11 +39,13 @@ class NewTask extends PureComponent {
 
   handleSave = () => {
     let { title, description, date } = this.state;
+    const { addTask } = this.props;
 
     title = title.trim();
 
     if (!title) {
       this.setState({ valid: false, validationType: 'requiredError' });
+
       return;
     }
 
@@ -53,7 +55,7 @@ class NewTask extends PureComponent {
       date: date.toISOString().slice(0, 10),
     };
 
-    this.props.addTask(data);
+    title && addTask(data);
   };
 
   render() {

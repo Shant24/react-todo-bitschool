@@ -14,7 +14,7 @@ export const getSingleTask = (taskId) => (dispatch) => {
 
   request(`http://localhost:3001/task/${taskId}`)
     .then((task) =>
-      dispatch({ type: actionTypes.GET_SINGLE_TASK_SUCCESS, task })
+      dispatch({ type: actionTypes.GET_SINGLE_PAGE_TASK_SUCCESS, task })
     )
     .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
 };
@@ -25,7 +25,10 @@ export const editTask = (taskId, data, fromSingleTask) => (dispatch) => {
   request(`http://localhost:3001/task/${taskId}`, 'PUT', data)
     .then((editedTask) => {
       fromSingleTask
-        ? dispatch({ type: actionTypes.EDIT_SINGLE_TASK_SUCCESS, editedTask })
+        ? dispatch({
+            type: actionTypes.EDIT_SINGLE_PAGE_TASK_SUCCESS,
+            editedTask,
+          })
         : dispatch({ type: actionTypes.EDIT_TASK_SUCCESS, editedTask });
     })
     .catch((err) => {

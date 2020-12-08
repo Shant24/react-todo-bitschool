@@ -98,7 +98,7 @@ const taskReducer = (state = defaultState, action) => {
         removeTasksSuccess: true,
       };
 
-    case actionTypes.GET_SINGLE_TASK_SUCCESS:
+    case actionTypes.GET_SINGLE_PAGE_TASK_SUCCESS:
       return {
         ...state,
         task: action.task,
@@ -106,7 +106,7 @@ const taskReducer = (state = defaultState, action) => {
         removeSingleTaskSuccessMessage: null,
       };
 
-    case actionTypes.EDIT_SINGLE_TASK_SUCCESS:
+    case actionTypes.EDIT_SINGLE_PAGE_TASK_SUCCESS:
       return {
         ...state,
         task: action.editedTask,

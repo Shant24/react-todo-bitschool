@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styles from './todo.module.scss';
 import Confirm from '../../Confirm/Confirm';
 import NewTask from '../../NewTask/NewTask';
@@ -137,11 +137,7 @@ class ToDo extends PureComponent {
         )}
 
         {!!editTask && (
-          <EditTaskModal
-            data={editTask}
-            onSave={this.handleEditSave}
-            onCancel={this.handleEdit(null)}
-          />
+          <EditTaskModal data={editTask} onCancel={this.handleEdit(null)} />
         )}
 
         {openNewTaskModal && <NewTask onCancel={this.toggleNewTaskModal} />}

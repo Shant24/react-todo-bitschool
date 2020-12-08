@@ -2,8 +2,8 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 //Middlewares
-import loggerMiddleware from 'redux-logger';
-import thunkMiddleware from 'redux-thunk';
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
 
 //Reducers
 import taskReducer from './reducers/taskReducer';
@@ -14,7 +14,7 @@ const reducers = combineReducers({
   auth: authReducer,
 });
 
-const middlewares = applyMiddleware(thunkMiddleware, loggerMiddleware);
+const middlewares = applyMiddleware(thunk, logger);
 
 const store = createStore(reducers, composeWithDevTools(middlewares));
 

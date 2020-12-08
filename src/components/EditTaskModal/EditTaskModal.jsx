@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Button, Form, FormControl, Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../NewTask/newTask.module.scss';
-import { connect } from 'react-redux';
 import { editTask } from '../../store/actions/taskActions';
 
 class EditTaskModal extends PureComponent {
@@ -41,7 +41,7 @@ class EditTaskModal extends PureComponent {
 
   handleSave = () => {
     let { title, description, date, _id } = this.state;
-    const { editTask } = this.props;
+    const { editTask, fromSingleTask } = this.props;
 
     title = title.trim();
 
@@ -56,9 +56,7 @@ class EditTaskModal extends PureComponent {
       date: date.toISOString().slice(0, 10),
     };
 
-    if (title) {
-      editTask(_id, data, this.props.fromSingleTask);
-    }
+    title && editTask(_id, data, fromSingleTask);
   };
 
   render() {
@@ -154,8 +152,9 @@ class EditTaskModal extends PureComponent {
 
 EditTaskModal.propTypes = {
   data: PropTypes.object.isRequired,
-  onCancel: PropTypes.func.isRequired,
   fromSingleTask: PropTypes.bool,
+  editTask: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {
