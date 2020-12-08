@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Card, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import styles from './task.module.scss';
+import { removeTask } from '../../store/actions/taskActions';
 
 class Task extends PureComponent {
   state = {
@@ -19,7 +21,7 @@ class Task extends PureComponent {
   };
 
   render() {
-    const { task, onRemove, onEdit, disabled } = this.props;
+    const { task, disabled, onEdit, removeTask } = this.props;
     const { checked } = this.state;
 
     return (
@@ -66,7 +68,7 @@ class Task extends PureComponent {
             </Button>
 
             <Button
-              onClick={onRemove(task._id)}
+              onClick={removeTask(task._id, task)}
               className={styles.taskButtons}
               variant="danger"
               disabled={disabled}
@@ -83,10 +85,13 @@ class Task extends PureComponent {
 
 Task.propTypes = {
   task: PropTypes.object.isRequired,
-  onRemove: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onCheck: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
 };
 
-export default Task;
+const mapDispatchToProps = {
+  removeTask,
+};
+
+export default connect(null, mapDispatchToProps)(Task);

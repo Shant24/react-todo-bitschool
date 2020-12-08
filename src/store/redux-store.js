@@ -1,4 +1,5 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 //Middlewares
 import loggerMiddleware from 'redux-logger';
@@ -13,10 +14,8 @@ const reducers = combineReducers({
   auth: authReducer,
 });
 
-const middlewares = applyMiddleware(loggerMiddleware, thunkMiddleware);
+const middlewares = applyMiddleware(thunkMiddleware, loggerMiddleware);
 
-const store = createStore(reducers, middlewares);
-
-window.store = store;
+const store = createStore(reducers, composeWithDevTools(middlewares));
 
 export default store;
