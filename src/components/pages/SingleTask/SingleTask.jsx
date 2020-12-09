@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -93,20 +92,6 @@ class SingleTask extends Component {
     );
   }
 }
-
-SingleTask.propTypes = {
-  task: PropTypes.oneOfType([
-    PropTypes.object.isRequired,
-    PropTypes.oneOf([null]).isRequired,
-  ]),
-  editSingleTaskSuccess: PropTypes.bool.isRequired,
-  removeSingleTaskSuccessMessage: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.oneOf([null]).isRequired,
-  ]),
-  getSingleTask: PropTypes.func.isRequired,
-  removeTask: PropTypes.func.isRequired,
-};
 
 const mapStateToProps = (state) => ({
   task: state.task.task,

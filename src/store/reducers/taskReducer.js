@@ -44,7 +44,7 @@ const taskReducer = (state = defaultState, action) => {
         tasks: [action.task, ...state.tasks],
         loading: false,
         addTaskSuccess: true,
-        successMessage: 'Task added successfully!',
+        successMessage: 'Task created successfully!',
       };
 
     case actionTypes.EDIT_TASK_SUCCESS:

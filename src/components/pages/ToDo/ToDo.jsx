@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styles from './todo.module.scss';
 import Confirm from '../../Confirm/Confirm';
@@ -145,15 +144,6 @@ class ToDo extends PureComponent {
     );
   }
 }
-
-ToDo.propTypes = {
-  tasks: PropTypes.array.isRequired,
-  addTaskSuccess: PropTypes.bool.isRequired,
-  editTaskSuccess: PropTypes.bool.isRequired,
-  removeTasksSuccess: PropTypes.bool.isRequired,
-  getTasks: PropTypes.func.isRequired,
-  removeSelectedTasks: PropTypes.func.isRequired,
-};
 
 const mapStateToProps = (state) => ({
   tasks: state.task.tasks,

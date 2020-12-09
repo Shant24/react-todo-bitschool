@@ -4,6 +4,13 @@
   "private": true,
   "description": "Project for teaching React.js",
   "author": "Shant Sargsyan",
+  "scripts": {
+    "start": "react-scripts start",
+    "api": "cd ../todo-list-api && yarn start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-regular-svg-icons": "^5.14.0",
@@ -18,6 +25,7 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.4.0",
     "react-datepicker": "^3.3.0",
+    "react-device-detect": "^1.14.0",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
     "react-router": "^5.2.0",
@@ -25,19 +33,13 @@
     "react-scripts": "3.4.3",
     "react-toastify": "^6.1.0",
     "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.8",
-    "redux-form": "^8.3.6",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "sass": "^1.30.0",
     "typeface-roboto": "^0.0.75"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "api": "cd ../todo-list-api && yarn start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.8",
+    "sass": "^1.30.0"
   },
   "eslintConfig": {
     "extends": "react-app"
