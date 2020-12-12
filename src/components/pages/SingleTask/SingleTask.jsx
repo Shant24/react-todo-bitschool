@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import styles from './singleTask.module.scss';
 import EditTaskModal from '../../EditTaskModal/EditTaskModal';
 import { getSingleTask, removeTask } from '../../../store/actions/taskActions';
+import { formatDate } from '../../../helpers/utils';
 
 class SingleTask extends Component {
   state = {
@@ -17,14 +18,11 @@ class SingleTask extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      !prevProps.removeSingleTaskSuccessMessage &&
-      this.props.removeSingleTaskSuccessMessage
-    ) {
+    if (!prevProps.removeTaskSuccess && this.props.removeTaskSuccess) {
       this.props.history.push('/');
     }
 
-    if (!prevProps.editSingleTaskSuccess && this.props.editSingleTaskSuccess) {
+    if (!prevProps.editTaskSuccess && this.props.editTaskSuccess) {
       this.setState({
         isEdit: false,
       });
@@ -41,12 +39,17 @@ class SingleTask extends Component {
 
     return (
       <>
-        {task && (
+        {task ? (
           <div className={styles.singleTaskContainer}>
             <div className={styles.dateAndButtons}>
               <div className={styles.dateContainer}>
                 <b>Date: </b>
-                <div>{task.date?.slice(0, 10)}</div>
+                <div>{formatDate(task.date, 10)}</div>
+              </div>
+
+              <div className={styles.dateContainer}>
+                <b>Created: </b>
+                <div>{formatDate(task.created_at, 10)}</div>
               </div>
 
               <div>
@@ -61,7 +64,7 @@ class SingleTask extends Component {
                 <Button
                   className={styles.taskButtons}
                   variant="danger"
-                  onClick={removeTask(task._id)}
+                  onClick={removeTask(task._id, 'single')}
                 >
                   <FontAwesomeIcon icon={faTrash} />
                   <span>Delete</span>
@@ -83,10 +86,12 @@ class SingleTask extends Component {
               <EditTaskModal
                 data={task}
                 onCancel={this.toggleEditModal}
-                fromSingleTask={true}
+                from="single"
               />
             )}
           </div>
+        ) : (
+          <div className={styles.noTask}>This task not found!</div>
         )}
       </>
     );
@@ -95,8 +100,8 @@ class SingleTask extends Component {
 
 const mapStateToProps = (state) => ({
   task: state.task.task,
-  editSingleTaskSuccess: state.task.editSingleTaskSuccess,
-  removeSingleTaskSuccessMessage: state.task.removeSingleTaskSuccessMessage,
+  editTaskSuccess: state.task.editTaskSuccess,
+  removeTaskSuccess: state.task.removeTaskSuccess,
 });
 
 const mapDispatchToProps = { getSingleTask, removeTask };

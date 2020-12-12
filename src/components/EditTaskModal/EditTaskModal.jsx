@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../NewTask/newTask.module.scss';
 import { editTask } from '../../store/actions/taskActions';
+import { formatDate } from '../../helpers/utils';
 
 class EditTaskModal extends PureComponent {
   constructor(props) {
@@ -41,7 +42,7 @@ class EditTaskModal extends PureComponent {
 
   handleSave = () => {
     let { title, description, date, _id } = this.state;
-    const { editTask, fromSingleTask } = this.props;
+    const { editTask, from } = this.props;
 
     title = title.trim();
 
@@ -53,10 +54,10 @@ class EditTaskModal extends PureComponent {
     const data = {
       title,
       description: description.trim(),
-      date: date.toISOString().slice(0, 10),
+      date: formatDate(date.toISOString(), 10),
     };
 
-    title && editTask(_id, data, fromSingleTask);
+    title && editTask(_id, data, from);
   };
 
   render() {
@@ -152,8 +153,8 @@ class EditTaskModal extends PureComponent {
 
 EditTaskModal.propTypes = {
   data: PropTypes.object.isRequired,
-  fromSingleTask: PropTypes.bool,
   onCancel: PropTypes.func.isRequired,
+  from: PropTypes.oneOf(['single', 'task', '']),
 };
 
 const mapDispatchToProps = {
