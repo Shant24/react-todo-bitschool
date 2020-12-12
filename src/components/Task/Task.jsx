@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card, Button } from 'react-bootstrap';
@@ -88,4 +88,4 @@ const mapDispatchToProps = {
   removeTask,
 };
 
-export default connect(null, mapDispatchToProps)(Task);
+export default connect(null, mapDispatchToProps)(memo(Task));
