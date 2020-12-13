@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Button, Form, FormControl, Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './newTask.module.scss';
+import { addTask } from '../../store/actions/taskActions';
 
 class NewTask extends PureComponent {
   state = {
@@ -37,6 +39,7 @@ class NewTask extends PureComponent {
 
   handleSave = () => {
     let { title, description, date } = this.state;
+    const { addTask } = this.props;
 
     title = title.trim();
 
@@ -48,13 +51,11 @@ class NewTask extends PureComponent {
 
     const data = {
       title,
-      description,
+      description: description.trim(),
       date: date.toISOString().slice(0, 10),
     };
 
-    if (title) {
-      this.props.onAdd(data);
-    }
+    title && addTask(data);
   };
 
   render() {
@@ -149,8 +150,11 @@ class NewTask extends PureComponent {
 }
 
 NewTask.propTypes = {
-  onAdd: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
-export default NewTask;
+const mapDispatchToProps = {
+  addTask,
+};
+
+export default connect(null, mapDispatchToProps)(NewTask);

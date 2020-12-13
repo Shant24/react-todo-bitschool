@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Button, Form, FormControl, Modal } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../NewTask/newTask.module.scss';
+import { editTask } from '../../store/actions/taskActions';
 
-class EditTaskModal extends Component {
+class EditTaskModal extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,6 +41,7 @@ class EditTaskModal extends Component {
 
   handleSave = () => {
     let { title, description, date, _id } = this.state;
+    const { editTask, fromSingleTask } = this.props;
 
     title = title.trim();
 
@@ -49,13 +52,11 @@ class EditTaskModal extends Component {
 
     const data = {
       title,
-      description,
+      description: description.trim(),
       date: date.toISOString().slice(0, 10),
     };
 
-    if (title) {
-      this.props.onSave(_id, data);
-    }
+    title && editTask(_id, data, fromSingleTask);
   };
 
   render() {
@@ -151,8 +152,12 @@ class EditTaskModal extends Component {
 
 EditTaskModal.propTypes = {
   data: PropTypes.object.isRequired,
-  onSave: PropTypes.func.isRequired,
+  fromSingleTask: PropTypes.bool,
   onCancel: PropTypes.func.isRequired,
 };
 
-export default EditTaskModal;
+const mapDispatchToProps = {
+  editTask,
+};
+
+export default connect(null, mapDispatchToProps)(EditTaskModal);
