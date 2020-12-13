@@ -13,21 +13,10 @@ import Spinner from './components/Spinner/Spinner';
 
 class App extends PureComponent {
   componentDidUpdate(prevProps) {
-    const {
-      successMessage,
-      errorMessage,
-      removeSingleTaskSuccessMessage,
-    } = this.props;
+    const { successMessage, errorMessage } = this.props;
 
     successMessage && toast.success(successMessage);
     errorMessage && toast.error(errorMessage);
-
-    if (
-      !prevProps.removeSingleTaskSuccessMessage &&
-      removeSingleTaskSuccessMessage
-    ) {
-      toast.success(removeSingleTaskSuccessMessage);
-    }
   }
 
   render() {
@@ -64,7 +53,6 @@ class App extends PureComponent {
 const mapStateToProps = (state) => ({
   errorMessage: state.task.errorMessage,
   successMessage: state.task.successMessage,
-  removeSingleTaskSuccessMessage: state.task.removeSingleTaskSuccessMessage,
   showSpinner: state.task.loading,
 });
 

@@ -62,12 +62,12 @@ class ToDo extends PureComponent {
     this.setState({ showConfirm: !this.state.showConfirm });
   };
 
-  handleRemoveSelectedTasks = () => {
-    this.props.removeSelectedTasks(this.state.checkedTasks);
+  handleUnselect = () => {
+    this.setState({ checkedTasks: new Set() });
   };
 
   render() {
-    const { tasks } = this.props;
+    const { tasks, removeSelectedTasks } = this.props;
     const {
       editTask,
       openNewTaskModal,
@@ -83,6 +83,7 @@ class ToDo extends PureComponent {
             onCheck={this.handleCheckTaskForDelete(task._id)}
             onEdit={this.handleEdit(task)}
             disabled={!!checkedTasks.size}
+            checked={checkedTasks.has(task._id)}
           />
         </Col>
       );
@@ -104,19 +105,31 @@ class ToDo extends PureComponent {
             xs={12}
             className="d-flex justify-content-sm-end justify-content-center"
           >
-            <Button
-              onClick={this.toggleNewTaskModal}
-              variant="primary"
-              disabled={checkedTasks.size}
-            >
-              Add new Task
-            </Button>
+            {checkedTasks.size ? (
+              <div>
+                <Button
+                  className="mr-2"
+                  onClick={this.handleUnselect}
+                  variant="primary"
+                >
+                  Unselect all
+                </Button>
+
+                <Button onClick={this.toggleConfirmForRemove} variant="danger">
+                  Remove selected
+                </Button>
+              </div>
+            ) : (
+              <Button onClick={this.toggleNewTaskModal} variant="primary">
+                Add new Task
+              </Button>
+            )}
           </Col>
         </Row>
 
         <Row>{tasksComponents}</Row>
 
-        <Row className="justify-content-center">
+        {/* <Row className="justify-content-center">
           <Button
             className={styles.taskButton + ' mb-4'}
             variant="danger"
@@ -125,12 +138,12 @@ class ToDo extends PureComponent {
           >
             <span>Remove selected</span>
           </Button>
-        </Row>
+        </Row> */}
 
         {showConfirm && (
           <Confirm
             count={checkedTasks.size}
-            onSubmit={this.handleRemoveSelectedTasks}
+            onSubmit={removeSelectedTasks(checkedTasks)}
             onCancel={this.toggleConfirmForRemove}
           />
         )}
