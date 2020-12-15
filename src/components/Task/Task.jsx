@@ -15,35 +15,36 @@ const Task = (props) => {
 
   return (
     <Card className={cx(styles.card, { [styles.checked]: checked })}>
-      <input
-        type="checkbox"
-        className={styles.checkbox}
-        onChange={onCheck}
-        checked={checked}
-      />
-
-      <Card.Body>
-        {disabled ? (
+      <Card.Body className={styles.cardBody}>
+        <div className={styles.titleAndCheckbox}>
           <Card.Title>
-            <h3>{task.title}</h3>
-          </Card.Title>
-        ) : (
-          <Link to={`/task/${task._id}`} className={styles.titleLink}>
-            <Card.Title>
+            {disabled ? (
               <h3>{task.title}</h3>
-            </Card.Title>
-          </Link>
-        )}
+            ) : (
+              <Link to={`/task/${task._id}`} className={styles.titleLink}>
+                <h3>{task.title}</h3>
+              </Link>
+            )}
+          </Card.Title>
+
+          <div className={styles.selectContainer}>
+            <label htmlFor={task._id}>Select</label>
+            <input
+              id={task._id}
+              className={styles.checkbox}
+              type="checkbox"
+              onChange={onCheck}
+              checked={checked}
+            />
+          </div>
+        </div>
 
         <Card.Text>
-          <b>Description:</b>{' '}
-          {task.description.length > 25
-            ? shortStr(task.description, 25)
-            : task.description}
+          <b>Description:</b> {shortStr(task.description, 25)}
         </Card.Text>
 
         <Card.Text>
-          <b>Date:</b> {formatDate(task.date, 10)}
+          <b className={styles.date}>Date:</b> {formatDate(task.date, 10)}
         </Card.Text>
 
         <Card.Text>

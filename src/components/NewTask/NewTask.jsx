@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, FormControl, Modal } from 'react-bootstrap';
@@ -8,13 +8,23 @@ import styles from './newTask.module.scss';
 import { addTask } from '../../store/actions/taskActions';
 
 class NewTask extends PureComponent {
-  state = {
-    title: '',
-    description: '',
-    date: new Date(),
-    valid: true,
-    validationType: null,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      title: '',
+      description: '',
+      date: new Date(),
+      valid: true,
+      validationType: null,
+    };
+
+    this.titleRef = createRef();
+  }
+
+  componentDidMount() {
+    this.titleRef.current.focus();
+  }
 
   validationErrors = {
     requiredError: 'The field is required!',
@@ -58,6 +68,13 @@ class NewTask extends PureComponent {
     title && addTask(data);
   };
 
+  handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.handleSave();
+    }
+  };
+
   render() {
     const { title, description, date, valid, validationType } = this.state;
 
@@ -93,14 +110,14 @@ class NewTask extends PureComponent {
             </Form.Label>
             <FormControl
               id="newTaskTitle"
+              ref={this.titleRef}
               className={!valid && styles.invalid}
               placeholder="Title"
               aria-label="Title"
               aria-describedby="basic-addon2"
               value={title}
-              onChange={(event) =>
-                this.handleChange('title', event.target.value)
-              }
+              onChange={(e) => this.handleChange('title', e.target.value)}
+              onKeyDown={this.handleKeyDown}
             />
           </Form.Group>
 
