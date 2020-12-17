@@ -11,6 +11,7 @@ import {
   removeSelectedTasks,
 } from '../../../store/actions/taskActions';
 import { Redirect } from 'react-router';
+import Search from '../../Search/Search';
 
 class ToDo extends PureComponent {
   state = {
@@ -95,7 +96,11 @@ class ToDo extends PureComponent {
         {!isAuth && <Redirect to="/sign-in" />}
 
         <Container fluid className="pt-3">
-          <Row className="mb-4 align-items-center">
+          <Row className="mb-4 flex-column">
+            <Col className="mb-3">
+              <Search />
+            </Col>
+
             <Col className="d-flex justify-content-center">
               {checkedTasks.size ? (
                 <div className={styles.buttonsContainerThenTaskSelected}>

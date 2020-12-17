@@ -32,7 +32,7 @@ const taskReducer = (state = defaultState, action) => {
     case actionTypes.GET_TASKS_SUCCESS:
       return {
         ...state,
-        tasks: action.tasks.reverse(),
+        tasks: action.tasks,
         task: {},
         loading: false,
       };
