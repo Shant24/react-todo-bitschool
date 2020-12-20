@@ -62,19 +62,19 @@ const sortOptions = [
 
 const dateOptions = [
   {
-    label: 'Creation lte',
+    label: 'Creation before',
     value: 'create_lte',
   },
   {
-    label: 'Creation gte',
+    label: 'Creation after',
     value: 'create_gte',
   },
   {
-    label: 'Completion lte',
+    label: 'Completion before',
     value: 'complete_lte',
   },
   {
-    label: 'Completion gte',
+    label: 'Completion after',
     value: 'complete_gte',
   },
 ];

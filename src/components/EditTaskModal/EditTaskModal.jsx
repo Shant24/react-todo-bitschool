@@ -6,7 +6,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../NewTask/newTask.module.scss';
 import { editTask } from '../../store/actions/taskActions';
-import { formatDate } from '../../helpers/utils';
 
 class EditTaskModal extends PureComponent {
   constructor(props) {
@@ -57,10 +56,12 @@ class EditTaskModal extends PureComponent {
       return;
     }
 
+    date = date || new Date();
+
     const data = {
       title,
       description: description.trim(),
-      date: formatDate(date.toISOString(), 10),
+      date: date.toISOString().slice(0, 10),
     };
 
     title && editTask(_id, data, from);

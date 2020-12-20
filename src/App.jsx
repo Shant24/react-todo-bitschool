@@ -6,7 +6,7 @@ import ToDo from './components/pages/ToDo/ToDo';
 import SingleTask from './components/pages/SingleTask/SingleTask';
 import NotFound from './components/pages/NotFound/NotFound';
 import NavMenu from './components/NavMenu/NavMenu';
-import Spinner from './components/Spinner/Spinner';
+import Loading from './components/Loading/Loading';
 import SignIn from './components/pages/SignIn/SignIn';
 
 class App extends PureComponent {
@@ -48,7 +48,7 @@ class App extends PureComponent {
           pauseOnHover
         />
 
-        {showSpinner && <Spinner />}
+        {showSpinner && <Loading />}
       </>
     );
   }

@@ -13,6 +13,24 @@ const defaultState = {
 };
 
 const taskReducer = (state = defaultState, action) => {
+  const replaceEditedTask = (params) => {
+    if (action.from === 'single') {
+      return {
+        ...params,
+        task: action.editedTask,
+      };
+    } else {
+      const newTasks = state.tasks.map((task) =>
+        task._id === action.editedTask._id ? action.editedTask : task
+      );
+
+      return {
+        ...params,
+        tasks: newTasks,
+      };
+    }
+  };
+
   switch (action.type) {
     case actionTypes.LOADING:
       return {
@@ -61,21 +79,19 @@ const taskReducer = (state = defaultState, action) => {
         successMessage: 'Task edited successfully!',
       };
 
-      if (action.from === 'single') {
-        return {
-          ...editParams,
-          task: action.editedTask,
-        };
-      } else {
-        const newTasks = state.tasks.map((task) =>
-          task._id === action.editedTask._id ? action.editedTask : task
-        );
+      return replaceEditedTask(editParams);
 
-        return {
-          ...editParams,
-          tasks: newTasks,
-        };
-      }
+    case actionTypes.CHANGE_TASK_STATUS_SUCCESS:
+      const changeParams = {
+        ...state,
+        loading: false,
+        successMessage:
+          action.editedTask.status === 'done'
+            ? 'Congratulations, you have completed the task 🎉!!!'
+            : 'The task is active now!!!',
+      };
+
+      return replaceEditedTask(changeParams);
 
     case actionTypes.REMOVE_TASK_SUCCESS:
       const removeParams = {
