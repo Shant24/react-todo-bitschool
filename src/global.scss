@@ -10,6 +10,17 @@ body {
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url(assets/images/todo-background.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+main {
+  padding: 62px 0 10px;
+  width: 100%;
+  min-height: 100vh;
 }
 
 // ::-webkit-scrollbar {

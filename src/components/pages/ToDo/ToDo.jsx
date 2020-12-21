@@ -10,6 +10,7 @@ import {
   getTasks,
   removeSelectedTasks,
 } from '../../../store/actions/taskActions';
+import { Redirect } from 'react-router';
 
 class ToDo extends PureComponent {
   state = {
@@ -67,7 +68,7 @@ class ToDo extends PureComponent {
   };
 
   render() {
-    const { tasks, removeSelectedTasks } = this.props;
+    const { tasks, removeSelectedTasks, isAuth } = this.props;
     const {
       editTask,
       openNewTaskModal,
@@ -77,7 +78,7 @@ class ToDo extends PureComponent {
 
     const tasksComponents = tasks.map((task) => {
       return (
-        <Col key={task._id} xl={3} lg={4} md={6}>
+        <Col key={task._id} xl={3} lg={4} md={6} className={styles.task}>
           <Task
             task={task}
             onCheck={this.handleCheckTaskForDelete(task._id)}
@@ -90,70 +91,59 @@ class ToDo extends PureComponent {
     });
 
     return (
-      <Container fluid className="pt-4">
-        <Row className="mb-4 align-items-center">
-          <Col
-            sm={2}
-            xs={12}
-            className="d-flex justify-content-sm-start justify-content-center"
-          >
-            <h1 className={styles.h1}>ToDo App</h1>
-          </Col>
+      <>
+        {!isAuth && <Redirect to="/sign-in" />}
 
-          <Col
-            sm={10}
-            xs={12}
-            className="d-flex justify-content-sm-end justify-content-center"
-          >
-            {checkedTasks.size ? (
-              <div>
+        <Container fluid className="pt-3">
+          <Row className="mb-4 align-items-center">
+            <Col className="d-flex justify-content-center">
+              {checkedTasks.size ? (
+                <div className={styles.buttonsContainerThenTaskSelected}>
+                  <Button
+                    className={styles.buttonsThenTaskSelected}
+                    onClick={this.handleUnselect}
+                    variant="warning"
+                  >
+                    Unselect all
+                  </Button>
+
+                  <Button
+                    className={styles.buttonsThenTaskSelected}
+                    onClick={this.toggleConfirmForRemove}
+                    variant="danger"
+                  >
+                    Remove selected {checkedTasks.size} tasks
+                  </Button>
+                </div>
+              ) : (
                 <Button
-                  className="mr-2"
-                  onClick={this.handleUnselect}
-                  variant="primary"
+                  onClick={this.toggleNewTaskModal}
+                  className={styles.addButton}
+                  variant="light"
                 >
-                  Unselect all
+                  Add new Task
                 </Button>
+              )}
+            </Col>
+          </Row>
 
-                <Button onClick={this.toggleConfirmForRemove} variant="danger">
-                  Remove selected
-                </Button>
-              </div>
-            ) : (
-              <Button onClick={this.toggleNewTaskModal} variant="primary">
-                Add new Task
-              </Button>
-            )}
-          </Col>
-        </Row>
+          <Row className={styles.taskContainer}>{tasksComponents}</Row>
 
-        <Row>{tasksComponents}</Row>
+          {showConfirm && (
+            <Confirm
+              count={checkedTasks.size}
+              onSubmit={removeSelectedTasks(checkedTasks)}
+              onCancel={this.toggleConfirmForRemove}
+            />
+          )}
 
-        {/* <Row className="justify-content-center">
-          <Button
-            className={styles.taskButton + ' mb-4'}
-            variant="danger"
-            disabled={!checkedTasks.size}
-            onClick={this.toggleConfirmForRemove}
-          >
-            <span>Remove selected</span>
-          </Button>
-        </Row> */}
+          {!!editTask && (
+            <EditTaskModal data={editTask} onCancel={this.handleEdit(null)} />
+          )}
 
-        {showConfirm && (
-          <Confirm
-            count={checkedTasks.size}
-            onSubmit={removeSelectedTasks(checkedTasks)}
-            onCancel={this.toggleConfirmForRemove}
-          />
-        )}
-
-        {!!editTask && (
-          <EditTaskModal data={editTask} onCancel={this.handleEdit(null)} />
-        )}
-
-        {openNewTaskModal && <NewTask onCancel={this.toggleNewTaskModal} />}
-      </Container>
+          {openNewTaskModal && <NewTask onCancel={this.toggleNewTaskModal} />}
+        </Container>
+      </>
     );
   }
 }
@@ -163,6 +153,7 @@ const mapStateToProps = (state) => ({
   addTaskSuccess: state.task.addTaskSuccess,
   editTaskSuccess: state.task.editTaskSuccess,
   removeTasksSuccess: state.task.removeTasksSuccess,
+  isAuth: state.auth.isAuth,
 });
 
 const mapDispatchToProps = {
