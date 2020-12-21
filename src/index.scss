@@ -18,9 +18,9 @@ body {
 }
 
 main {
-  padding: 62px 0 10px;
+  padding: 0 0 10px;
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 62px);
 }
 
 // ::-webkit-scrollbar {

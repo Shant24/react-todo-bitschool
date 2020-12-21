@@ -6,10 +6,18 @@ const apiUrl = isMobile
   ? process.env.REACT_APP_API_MOBILE_URL
   : process.env.REACT_APP_API_WEB_URL;
 
-export const getTasks = () => (dispatch) => {
+export const getTasks = (params = null) => (dispatch) => {
+  let url = `${apiUrl}/task`;
+
+  !params && (url += '?sort=creation_date_newest');
+
+  for (const key in params) {
+    params[key] && (url += `?${key}=${params[key]}`);
+  }
+
   dispatch({ type: actionTypes.LOADING });
 
-  request(`${apiUrl}/task`)
+  request(url)
     .then((tasks) => dispatch({ type: actionTypes.GET_TASKS_SUCCESS, tasks }))
     .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
 };

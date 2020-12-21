@@ -7,7 +7,7 @@ import store from './store/redux-store';
 import 'typeface-roboto';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './global.scss';
+import './index.scss';
 import App from './App';
 
 ReactDOM.render(
