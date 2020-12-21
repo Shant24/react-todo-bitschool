@@ -2,18 +2,29 @@ import { isMobile } from 'react-device-detect';
 import request from '../../helpers/request';
 import * as actionTypes from '../actionTypes';
 
-const apiUrl = isMobile
-  ? process.env.REACT_APP_API_MOBILE_URL
-  : process.env.REACT_APP_API_WEB_URL;
+let apiUrl;
+
+if (process.env.NODE_ENV === 'development') {
+  apiUrl = isMobile
+    ? process.env.REACT_APP_API_MOBILE_URL
+    : process.env.REACT_APP_API_WEB_URL;
+} else {
+  apiUrl = process.env.REACT_APP_API_URL;
+}
 
 export const getTasks = (params = null) => (dispatch) => {
   let url = `${apiUrl}/task`;
+  let query = '?';
+  let i = 0;
 
-  !params && (url += '?sort=creation_date_newest');
-
-  for (const key in params) {
-    params[key] && (url += `?${key}=${params[key]}`);
+  for (let key in params) {
+    i++;
+    query += `${key}=${params[key]}${
+      i !== Object.keys(params).length ? '&' : ''
+    }`;
   }
+
+  query !== '?' ? (url += query) : (url += '?sort=creation_date_newest');
 
   dispatch({ type: actionTypes.LOADING });
 
@@ -45,6 +56,20 @@ export const addTask = (data) => (dispatch) => {
 
   request(`${apiUrl}/task`, 'POST', data)
     .then((task) => dispatch({ type: actionTypes.ADD_TASK_SUCCESS, task }))
+    .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
+};
+
+export const changeTaskStatus = (taskId, status, from) => (dispatch) => {
+  dispatch({ type: actionTypes.LOADING });
+
+  request(`${apiUrl}/task/${taskId}`, 'PUT', { status })
+    .then((editedTask) =>
+      dispatch({
+        type: actionTypes.CHANGE_TASK_STATUS_SUCCESS,
+        editedTask,
+        from,
+      })
+    )
     .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
 };
 

@@ -22,7 +22,7 @@ class ToDo extends PureComponent {
   };
 
   componentDidMount() {
-    this.props.getTasks();
+    this.props.isAuth && this.props.getTasks();
   }
 
   componentDidUpdate(prevProps) {
@@ -101,7 +101,7 @@ class ToDo extends PureComponent {
               <Search />
             </Col>
 
-            <Col className="d-flex justify-content-center">
+            <Col className="d-flex justify-content-center mb-4 mb-md-0">
               {checkedTasks.size ? (
                 <div className={styles.buttonsContainerThenTaskSelected}>
                   <Button
