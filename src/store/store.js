@@ -14,14 +14,16 @@ const reducers = combineReducers({
   auth: authReducer,
 });
 
-let middlewares;
+const middlewaresArr = [thunk];
+
+const middlewares = applyMiddleware(...middlewaresArr);
+
 let store;
 
 if (process.env.NODE_ENV === 'development') {
-  middlewares = applyMiddleware(thunk, logger);
+  middlewaresArr.push(logger);
   store = createStore(reducers, composeWithDevTools(middlewares));
 } else {
-  middlewares = applyMiddleware(thunk);
   store = createStore(reducers, middlewares);
 }
 
