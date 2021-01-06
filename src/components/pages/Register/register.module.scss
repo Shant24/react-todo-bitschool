@@ -1,0 +1,48 @@
+.container {
+  width: 100%;
+  height: calc(100vh - 72px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+
+    @media (min-width: 576px) {
+      color: #007bff;
+    }
+  }
+
+  .invalid {
+    border: 1px solid rgb(233, 0, 0);
+  }
+
+  .formContainer {
+    @media (min-width: 576px) {
+      padding: 20px 30px;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.435);
+    }
+  }
+
+  .submitContainer {
+    margin-top: 10px;
+    text-align: center;
+
+    button {
+      width: 50%;
+    }
+  }
+
+  small {
+    height: 19px;
+    color: rgb(233, 0, 0);
+    text-align: end;
+  }
+
+  .formGroup {
+    margin-bottom: 10px;
+  }
+}

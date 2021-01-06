@@ -1,21 +1,29 @@
 import request from '../../helpers/request';
 import * as actionTypes from '../actionTypes';
+import { isMobile } from 'react-device-detect';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+let apiUrl = process.env.REACT_APP_API_URL;
 
-export const getTasks = (params = null) => (dispatch) => {
+if (process.env.NODE_ENV === 'development' && isMobile) {
+  apiUrl = process.env.REACT_APP_API_MOBILE_URL;
+}
+
+export const getTasks = (params = {}) => (dispatch) => {
   let url = `${apiUrl}/task`;
   let query = '?';
   let i = 0;
 
+  !params?.sort && (params['sort'] = 'creation_date_newest');
+
   for (let key in params) {
     i++;
-    query += `${key}=${params[key]}${
-      i !== Object.keys(params).length ? '&' : ''
-    }`;
+    params[key] &&
+      (query += `${key}=${params[key]}${
+        i !== Object.keys(params).length ? '&' : ''
+      }`);
   }
 
-  query !== '?' ? (url += query) : (url += '?sort=creation_date_newest');
+  query !== '?' && (url += query);
 
   dispatch({ type: actionTypes.LOADING });
 

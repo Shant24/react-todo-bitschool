@@ -7,7 +7,8 @@ import SingleTask from './components/pages/SingleTask/SingleTask';
 import NotFound from './components/pages/NotFound/NotFound';
 import NavMenu from './components/NavMenu/NavMenu';
 import Loading from './components/Loading/Loading';
-import SignIn from './components/pages/SignIn/SignIn';
+import Login from './components/pages/Login/Login';
+import Register from './components/pages/Register/Register';
 
 class App extends PureComponent {
   componentDidUpdate(prevProps) {
@@ -24,13 +25,14 @@ class App extends PureComponent {
       <>
         <NavMenu />
 
-        {!isAuth && <Redirect to="/sign-in" />}
+        {!isAuth && <Redirect to="/login" />}
 
         <main>
           <Switch>
             <Route path="/" exact component={ToDo} />
             <Route path="/task/:taskId" exact component={SingleTask} />
-            <Route path="/sign-in" exact component={SignIn} />
+            <Route path="/login" exact component={Login} />
+            <Route path="/register" exact component={Register} />
             <Route path="/not-found" exact component={NotFound} />
             <Redirect to="/not-found" />
           </Switch>

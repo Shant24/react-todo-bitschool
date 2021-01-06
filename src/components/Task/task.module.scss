@@ -30,7 +30,7 @@
       justify-content: space-between;
 
       h3 {
-        font-size: 24px;
+        font-size: 22px;
       }
 
       .titleLink {
@@ -71,8 +71,16 @@
       }
     }
 
-    .date {
-      margin-right: 24px;
+    .created {
+      margin-right: 30px;
+    }
+
+    .deadline {
+      margin-right: 20px;
+    }
+
+    .status {
+      margin-right: 40px;
     }
 
     .buttonContainer {

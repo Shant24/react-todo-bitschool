@@ -1,48 +1,98 @@
 .singleTaskContainer {
+  padding: 30px 0;
   width: 100%;
-  min-height: calc(100vh - 72px);
-  padding: 10px 20px;
-  font-size: 18px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  b {
-    font-style: italic;
-    min-width: 120px;
+  .singleTaskWrapper {
+    padding: 20px 30px;
+    width: 80%;
+    font-size: 18px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
   }
 
-  .dateAndButtons {
+  .taskInformationAndButtons {
     margin-bottom: 20px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    .dateContainer {
+    @media (max-width: 768px) {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+
+    .datesAndStatsContainer {
       display: flex;
-    }
+      justify-content: center;
+      align-items: center;
 
-    button:last-child {
-      margin-right: 0;
-    }
+      @media (max-width: 768px) {
+        flex-wrap: wrap;
+      }
 
-    @media (max-width: 480px) {
-      div {
+      .informationContainer {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        margin-right: 20px;
 
-        button {
-          width: 100%;
+        @media (max-width: 768px) {
+          margin: 0 10px 5px;
+        }
 
-          &:first-child {
-            margin-bottom: 5px;
+        .date,
+        .status {
+          padding: 5px 15px;
+          color: #fff;
+          border-radius: 4px;
+          user-select: none;
+        }
+
+        .date {
+          background-color: #007bff;
+
+          &:hover {
+            background-color: #0069d9;
+          }
+        }
+
+        .status {
+          min-width: 80px;
+          text-align: center;
+          background-color: #28a745;
+
+          &:hover {
+            background-color: #178731;
+          }
+        }
+
+        .active {
+          color: black;
+          background-color: #ffc107;
+
+          &:hover {
+            background-color: #dca500;
           }
         }
       }
+    }
 
-      .dateContainer {
-        flex-direction: column;
+    .buttonContainer {
+      display: flex;
+      flex-wrap: nowrap;
 
-        b {
-          width: 100%;
+      .taskButtons {
+        margin-left: 10px;
+        width: 40px;
+        height: 40px;
+
+        @media (max-width: 768px) {
+          margin: 0 5px 10px 5px;
         }
       }
     }
@@ -54,14 +104,14 @@
     width: 100%;
     display: flex;
 
-    b {
-      min-width: 120px;
-    }
-
     @media (max-width: 480px) {
       flex-direction: column;
+    }
 
-      b {
+    b {
+      min-width: 120px;
+
+      @media (max-width: 480px) {
         min-width: 100%;
       }
     }
@@ -70,17 +120,8 @@
   .titleContainer {
     .title {
       font-weight: 600;
-    }
-  }
-
-  .descriptionContainer {
-  }
-
-  .taskButtons {
-    margin-right: 10px;
-
-    span {
-      margin-left: 20px;
+      font-size: 25px;
+      text-align: center;
     }
   }
 }
@@ -92,4 +133,5 @@
   justify-content: center;
   align-items: center;
   font-size: 40px;
+  color: #fff;
 }

@@ -28,7 +28,7 @@ class NewTask extends PureComponent {
 
   validationErrors = {
     requiredError: 'The field is required!',
-    lengthError: 'The Title length should be less then 50 characters',
+    lengthError: 'Title length must be less than 50 characters',
   };
 
   handleChange = (type, value) => {

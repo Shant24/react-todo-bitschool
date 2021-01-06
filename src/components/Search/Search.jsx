@@ -6,7 +6,13 @@ import {
   Button,
   DropdownButton,
   Dropdown,
+  FormGroup,
+  Form,
+  OverlayTrigger,
+  Tooltip,
 } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './search.module.scss';
@@ -80,6 +86,7 @@ const dateOptions = [
 ];
 
 const Search = (props) => {
+  const [showSearch, setShowSearch] = useState(false);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState({
     label: '',
@@ -120,9 +127,21 @@ const Search = (props) => {
     }
   };
 
+  const handleReset = () => {
+    setSearch('');
+    setStatus({ label: '', value: '' });
+    setSort({ label: '', value: '' });
+    setDates({
+      create_lte: null,
+      create_gte: null,
+      complete_lte: null,
+      complete_gte: null,
+    });
+  };
+
   return (
     <div className={styles.search}>
-      <InputGroup className="mb-3">
+      <InputGroup className="mb-2">
         <FormControl
           placeholder="Search for a task..."
           aria-describedby="basic-addon2"
@@ -131,39 +150,52 @@ const Search = (props) => {
           value={search}
         />
 
-        <DropdownButton
-          as={InputGroup.Append}
-          variant="secondary"
-          title={status.value ? status.label : 'Status'}
-          id="input-group-dropdown-2"
-        >
-          {statusOptions.map((option) => (
-            <Dropdown.Item
-              key={idGenerator()}
-              active={status.value === option.value}
-              onClick={() => setStatus(option)}
-            >
-              {option.label}
-            </Dropdown.Item>
-          ))}
-        </DropdownButton>
+        {(search ||
+          status.value ||
+          sort.value ||
+          dates.complete_gte ||
+          dates.complete_lte ||
+          dates.create_gte ||
+          dates.create_lte) && (
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip>
+                <strong>Reset</strong>
+              </Tooltip>
+            }
+          >
+            <InputGroup.Append>
+              <Button
+                className={styles.searchButtons}
+                onClick={handleReset}
+                variant="danger"
+              >
+                &times;
+              </Button>
+            </InputGroup.Append>
+          </OverlayTrigger>
+        )}
 
-        <DropdownButton
-          as={InputGroup.Append}
-          variant="secondary"
-          title={sort.value ? shortStr(sort.label, 5) : 'Sort'}
-          id="input-group-dropdown-2"
+        <OverlayTrigger
+          placement="bottom"
+          overlay={
+            <Tooltip>
+              <strong>Advanced search</strong>
+            </Tooltip>
+          }
         >
-          {sortOptions.map((option) => (
-            <Dropdown.Item
-              key={idGenerator()}
-              active={sort.value === option.value}
-              onClick={() => setSort(option)}
+          <InputGroup.Append>
+            <Button
+              className={styles.searchButtons}
+              onClick={() => setShowSearch(!showSearch)}
+              variant="success"
             >
-              {option.label}
-            </Dropdown.Item>
-          ))}
-        </DropdownButton>
+              {/* Advanced */}
+              <FontAwesomeIcon icon={showSearch ? faCaretUp : faCaretDown} />
+            </Button>
+          </InputGroup.Append>
+        </OverlayTrigger>
 
         <InputGroup.Append>
           <Button variant="primary" onClick={handleSubmit}>
@@ -172,21 +204,71 @@ const Search = (props) => {
         </InputGroup.Append>
       </InputGroup>
 
-      {dateOptions.map((option) => (
-        <div key={idGenerator()}>
-          <span>{option.label}</span>
-          <DatePicker
-            dateFormat="dd.MM.yyyy"
-            selected={dates[option.value]}
-            onChange={(value) =>
-              setDates({
-                ...dates,
-                [option.value]: value,
-              })
-            }
-          />
+      {showSearch && (
+        <div className={styles.advancedSearch}>
+          <div className={styles.dropDown}>
+            <label htmlFor="input-group-dropdown-1">Status</label>
+
+            <DropdownButton
+              as={InputGroup.Append}
+              variant="primary"
+              title={status.value ? status.label : 'Unset'}
+              id="input-group-dropdown-1"
+            >
+              {statusOptions.map((option) => (
+                <Dropdown.Item
+                  key={idGenerator()}
+                  active={status.value === option.value}
+                  onClick={() => setStatus(option)}
+                >
+                  {option.label}
+                </Dropdown.Item>
+              ))}
+            </DropdownButton>
+          </div>
+
+          <div className={styles.dropDown}>
+            <label htmlFor="input-group-dropdown-2">Sort</label>
+
+            <DropdownButton
+              as={InputGroup.Append}
+              variant="primary"
+              title={sort.value ? shortStr(sort.label, 10) : 'Unset'}
+              id="input-group-dropdown-2"
+            >
+              {sortOptions.map((option) => (
+                <Dropdown.Item
+                  key={idGenerator()}
+                  active={sort.value === option.value}
+                  onClick={() => setSort(option)}
+                >
+                  {option.label}
+                </Dropdown.Item>
+              ))}
+            </DropdownButton>
+          </div>
+
+          {dateOptions.map((option, i) => (
+            <FormGroup key={idGenerator()} className={`${styles.datePicker}`}>
+              <Form.Label htmlFor={`searchDate${i + 1}`}>
+                {option.label}
+              </Form.Label>
+              <DatePicker
+                id={`searchDate${i + 1}`}
+                dateFormat="dd.MM.yyyy"
+                selected={dates[option.value]}
+                onChange={(value) =>
+                  setDates({
+                    ...dates,
+                    [option.value]: value,
+                  })
+                }
+                placeholderText="Set Date"
+              />
+            </FormGroup>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 };
