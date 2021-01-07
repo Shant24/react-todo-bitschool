@@ -46,7 +46,6 @@ class SingleTask extends Component {
   render() {
     const { isEdit } = this.state;
     const { task, removeTask, isAuth, changeTaskStatus } = this.props;
-    console.log('🚀 ~ SingleTask ~ render ~ task', task?.status);
 
     return (
       <>
