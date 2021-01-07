@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { Button } from 'react-bootstrap';
+import {
+  faTrash,
+  faEdit,
+  faCheck,
+  faHistory,
+} from '@fortawesome/free-solid-svg-icons';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import styles from './singleTask.module.scss';
 import EditTaskModal from '../../EditTaskModal/EditTaskModal';
-import { getSingleTask, removeTask } from '../../../store/actions/taskActions';
+import {
+  changeTaskStatus,
+  getSingleTask,
+  removeTask,
+} from '../../../store/actions/taskActions';
 import { formatDate } from '../../../helpers/utils';
 import { Redirect } from 'react-router';
 
@@ -36,65 +45,131 @@ class SingleTask extends Component {
 
   render() {
     const { isEdit } = this.state;
-    const { task, removeTask, isAuth } = this.props;
+    const { task, removeTask, isAuth, changeTaskStatus } = this.props;
 
     return (
       <>
-        {!isAuth && <Redirect to="/sign-in" />}
+        {!isAuth && <Redirect to="/login" />}
 
         {task ? (
           <div className={styles.singleTaskContainer}>
-            <div className={styles.dateAndButtons}>
-              <div className={styles.dateContainer}>
-                <b>Date: </b>
-                <div>{formatDate(task.date, 10)}</div>
+            <div className={styles.singleTaskWrapper}>
+              <div className={styles.taskInformationAndButtons}>
+                <div className={styles.datesAndStatsContainer}>
+                  <div className={styles.informationContainer}>
+                    <b>Created</b>
+                    <div className={styles.date}>
+                      {formatDate(task.created_at, 10)}
+                    </div>
+                  </div>
+
+                  <div className={styles.informationContainer}>
+                    <b>Deadline</b>
+                    <div className={styles.date}>
+                      {formatDate(task.date, 10)}
+                    </div>
+                  </div>
+
+                  <div className={styles.informationContainer}>
+                    <b>Status</b>
+                    <div
+                      className={`${styles.status} ${
+                        task.status === 'active' && styles.active
+                      }`}
+                    >
+                      {task?.status?.charAt(0).toUpperCase() +
+                        task?.status?.slice(1)}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.buttonContainer}>
+                  <OverlayTrigger
+                    placement="bottom"
+                    overlay={
+                      <Tooltip>
+                        <strong>
+                          {task.status === 'active'
+                            ? 'Mark as done'
+                            : 'Mark as active'}
+                        </strong>
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      onClick={() =>
+                        changeTaskStatus(
+                          task._id,
+                          task.status === 'active' ? 'done' : 'active',
+                          'single'
+                        )
+                      }
+                      className={styles.taskButtons}
+                      variant={task.status === 'active' ? 'success' : 'warning'}
+                    >
+                      <FontAwesomeIcon
+                        icon={task.status === 'active' ? faCheck : faHistory}
+                      />
+                    </Button>
+                  </OverlayTrigger>
+
+                  <OverlayTrigger
+                    placement="bottom"
+                    overlay={
+                      <Tooltip>
+                        <strong>Edit</strong>
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      onClick={this.toggleEditModal}
+                      className={styles.taskButtons}
+                      variant="info"
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Button>
+                  </OverlayTrigger>
+
+                  <OverlayTrigger
+                    placement="bottom"
+                    overlay={
+                      <Tooltip>
+                        <strong>Remove</strong>
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      onClick={removeTask(task._id, 'single')}
+                      className={styles.taskButtons}
+                      variant="danger"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </OverlayTrigger>
+                </div>
               </div>
 
-              <div className={styles.dateContainer}>
-                <b>Created: </b>
-                <div>{formatDate(task.created_at, 10)}</div>
+              <div className={styles.titleContainer}>
+                <b>Title:</b>
+                <div className={styles.title}>{task.title}</div>
               </div>
 
-              <div>
-                <Button
-                  className={styles.taskButtons}
-                  variant="info"
-                  onClick={this.toggleEditModal}
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                  <span>Edit</span>
-                </Button>
-                <Button
-                  className={styles.taskButtons}
-                  variant="danger"
-                  onClick={removeTask(task._id, 'single')}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                  <span>Delete</span>
-                </Button>
+              <div className={styles.descriptionContainer}>
+                <b>Description:</b>
+                <div className={styles.description}>{task.description}</div>
               </div>
-            </div>
 
-            <div className={styles.titleContainer}>
-              <b>Title:</b>
-              <div className={styles.title}>{task.title}</div>
+              {isEdit && (
+                <EditTaskModal
+                  data={task}
+                  onCancel={this.toggleEditModal}
+                  from="single"
+                />
+              )}
             </div>
-
-            <div className={styles.descriptionContainer}>
-              <b>Description:</b>
-              <div className={styles.description}>{task.description}</div>
-            </div>
-
-            {isEdit && (
-              <EditTaskModal
-                data={task}
-                onCancel={this.toggleEditModal}
-                from="single"
-              />
-            )}
           </div>
         ) : (
-          <div className={styles.noTask}>This task not found!</div>
+          <div className={styles.noTask}>This task is not found!</div>
         )}
       </>
     );
@@ -108,6 +183,6 @@ const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,
 });
 
-const mapDispatchToProps = { getSingleTask, removeTask };
+const mapDispatchToProps = { getSingleTask, removeTask, changeTaskStatus };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleTask);

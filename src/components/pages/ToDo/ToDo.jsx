@@ -93,7 +93,7 @@ class ToDo extends PureComponent {
 
     return (
       <>
-        {!isAuth && <Redirect to="/sign-in" />}
+        {!isAuth && <Redirect to="/login" />}
 
         <Container fluid className="pt-3">
           <Row className="mb-4 flex-column">

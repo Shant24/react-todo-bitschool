@@ -61,15 +61,17 @@ const Task = (props) => {
         </Card.Text>
 
         <Card.Text>
-          <b className={styles.date}>Date:</b> {formatDate(date, 10)}
+          <b className={styles.created}>Created:</b>
+          {formatDate(created_at, 10)}
         </Card.Text>
 
         <Card.Text>
-          <b>Created:</b> {formatDate(created_at, 10)}
+          <b className={styles.deadline}>Deadline:</b> {formatDate(date, 10)}
         </Card.Text>
 
         <Card.Text>
-          <b>Status:</b> {status.charAt(0).toUpperCase() + status.slice(1)}
+          <b className={styles.status}>Status:</b>
+          {status.charAt(0).toUpperCase() + status.slice(1)}
         </Card.Text>
 
         <div className={styles.buttonContainer}>
