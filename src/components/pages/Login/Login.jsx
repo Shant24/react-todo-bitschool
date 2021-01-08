@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styles from '../Register/register.module.scss';
@@ -22,16 +22,6 @@ const Login = () => {
 
   const [passwordIsShow, setPasswordIsShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (values.email && !fieldIsActive.email) {
-      setFieldIsActive({ ...fieldIsActive, email: true });
-    }
-
-    if (values.password && !fieldIsActive.password) {
-      setFieldIsActive({ ...fieldIsActive, password: true });
-    }
-  }, [fieldIsActive, values]);
 
   const handleChangeValue = ({ target: { name, value } }) => {
     setValues({ ...values, [name]: value });

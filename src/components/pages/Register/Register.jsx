@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styles from './register.module.scss';
@@ -21,20 +21,6 @@ const Register = () => {
     password: false,
     confirmPassword: false,
   });
-
-  useEffect(() => {
-    if (values.email && !fieldIsActive.email) {
-      setFieldIsActive({ ...fieldIsActive, email: true });
-    }
-
-    if (values.password && !fieldIsActive.password) {
-      setFieldIsActive({ ...fieldIsActive, password: true });
-    }
-
-    if (values.confirmPassword && !fieldIsActive.confirmPassword) {
-      setFieldIsActive({ ...fieldIsActive, confirmPassword: true });
-    }
-  }, [fieldIsActive, values]);
 
   const handleChangeValue = ({ target: { name, value } }) => {
     setValues({ ...values, [name]: value });
@@ -109,6 +95,7 @@ const Register = () => {
                   Password
                 </label>
                 <input
+                  autoComplete="new-password"
                   id="registerPagePassword"
                   className={errors.password && styles.invalid}
                   type="password"
