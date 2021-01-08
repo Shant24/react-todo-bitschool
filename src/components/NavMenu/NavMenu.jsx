@@ -39,14 +39,25 @@ const NavMenu = (props) => {
             </div>
           </div>
         ) : (
-          <NavLink
-            to="/sign-in"
-            exact
-            className={styles.link}
-            activeClassName={styles.active}
-          >
-            Sign in
-          </NavLink>
+          <>
+            <NavLink
+              to="/login"
+              exact
+              className={styles.link}
+              activeClassName={styles.active}
+            >
+              Login
+            </NavLink>
+
+            <NavLink
+              to="/register"
+              exact
+              className={styles.link}
+              activeClassName={styles.active}
+            >
+              Register
+            </NavLink>
+          </>
         )}
       </Navbar>
     </header>

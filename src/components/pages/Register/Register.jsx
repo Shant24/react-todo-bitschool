@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Form, Container, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Button, Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import styles from './register.module.scss';
 
 const Register = () => {
@@ -14,6 +15,26 @@ const Register = () => {
     password: null,
     confirmPassword: null,
   });
+
+  const [fieldIsActive, setFieldIsActive] = useState({
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+
+  useEffect(() => {
+    if (values.email && !fieldIsActive.email) {
+      setFieldIsActive({ ...fieldIsActive, email: true });
+    }
+
+    if (values.password && !fieldIsActive.password) {
+      setFieldIsActive({ ...fieldIsActive, password: true });
+    }
+
+    if (values.confirmPassword && !fieldIsActive.confirmPassword) {
+      setFieldIsActive({ ...fieldIsActive, confirmPassword: true });
+    }
+  }, [fieldIsActive, values]);
 
   const handleChangeValue = ({ target: { name, value } }) => {
     setValues({ ...values, [name]: value });
@@ -47,65 +68,91 @@ const Register = () => {
     });
   };
 
+  const handleChangeFocus = (e, bool) => {
+    const { name, value } = e.currentTarget;
+    !value && setFieldIsActive({ ...fieldIsActive, [name]: bool });
+  };
+
   return (
     <div className={styles.container}>
-      <Container>
-        <Row className="justify-content-center">
+      <Container className="h-100">
+        <Row className={styles.row}>
           <Col xs={12} sm={8} md={6} className={styles.formContainer}>
-            <Form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <h1>Register</h1>
 
-              <Form.Group
-                className={styles.formGroup}
-                controlId="registerEmail"
-              >
-                <Form.Control
+              <div className={styles.inputContainer}>
+                <label
+                  className={`${fieldIsActive['email'] && styles.active}`}
+                  htmlFor="registerPageEmail"
+                >
+                  Email
+                </label>
+                <input
+                  id="registerPageEmail"
                   className={errors.email && styles.invalid}
                   type="email"
-                  placeholder="Enter email"
                   name="email"
                   value={values.email}
                   onChange={handleChangeValue}
+                  onFocus={(e) => handleChangeFocus(e, true)}
+                  onBlur={(e) => handleChangeFocus(e, false)}
                 />
-                <Form.Text>{errors.email}</Form.Text>
-              </Form.Group>
+                <small>{errors.email}</small>
+              </div>
 
-              <Form.Group
-                className={styles.formGroup}
-                controlId="registerPassword"
-              >
-                <Form.Control
+              <div className={styles.inputContainer}>
+                <label
+                  className={`${fieldIsActive['password'] && styles.active}`}
+                  htmlFor="registerPagePassword"
+                >
+                  Password
+                </label>
+                <input
+                  id="registerPagePassword"
                   className={errors.password && styles.invalid}
                   type="password"
-                  placeholder="Password"
                   name="password"
                   value={values.password}
                   onChange={handleChangeValue}
+                  onFocus={(e) => handleChangeFocus(e, true)}
+                  onBlur={(e) => handleChangeFocus(e, false)}
                 />
-                <Form.Text>{errors.password}</Form.Text>
-              </Form.Group>
+                <small>{errors.password}</small>
+              </div>
 
-              <Form.Group
-                className={styles.formGroup}
-                controlId="registerConfirmPassword"
-              >
-                <Form.Control
+              <div className={styles.inputContainer}>
+                <label
+                  className={`${
+                    fieldIsActive['confirmPassword'] && styles.active
+                  }`}
+                  htmlFor="registerPageConfirmPassword"
+                >
+                  Confirm Password
+                </label>
+                <input
+                  id="registerPageConfirmPassword"
                   className={errors.confirmPassword && styles.invalid}
                   type="password"
-                  placeholder="Confirm Password"
                   name="confirmPassword"
                   value={values.confirmPassword}
                   onChange={handleChangeValue}
+                  onFocus={(e) => handleChangeFocus(e, true)}
+                  onBlur={(e) => handleChangeFocus(e, false)}
                 />
-                <Form.Text>{errors.confirmPassword}</Form.Text>
-              </Form.Group>
+                <small>{errors.confirmPassword}</small>
+              </div>
 
               <div className={styles.submitContainer}>
                 <Button variant="primary" type="submit">
                   Register
                 </Button>
               </div>
-            </Form>
+
+              <div className={styles.linkContainer}>
+                Are you already registered? <Link to="/login">Login</Link>
+              </div>
+            </form>
           </Col>
         </Row>
       </Container>

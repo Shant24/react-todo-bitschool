@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Button, Form, Container, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Button, Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import styles from '../Register/register.module.scss';
+import Loading from '../../Loading/Loading';
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -13,9 +15,26 @@ const Login = () => {
     password: null,
   });
 
+  const [fieldIsActive, setFieldIsActive] = useState({
+    email: false,
+    password: false,
+  });
+
+  const [passwordIsShow, setPasswordIsShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (values.email && !fieldIsActive.email) {
+      setFieldIsActive({ ...fieldIsActive, email: true });
+    }
+
+    if (values.password && !fieldIsActive.password) {
+      setFieldIsActive({ ...fieldIsActive, password: true });
+    }
+  }, [fieldIsActive, values]);
+
   const handleChangeValue = ({ target: { name, value } }) => {
     setValues({ ...values, [name]: value });
-
     setErrors({ ...errors, [name]: null });
   };
 
@@ -23,64 +42,96 @@ const Login = () => {
     e.preventDefault();
     const { email, password } = values;
 
-    let passwordMessage = null;
+    if (email && !passwordIsShow) {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        setPasswordIsShow(true);
+      }, 300);
+    } else {
+      let passwordErrorMessage = null;
 
-    if (!password) {
-      passwordMessage = 'Password is required!';
-    } else if (password.length < 6) {
-      passwordMessage = 'Password length must be 6 characters or more!';
+      if (!password) {
+        passwordErrorMessage = 'Password is required!';
+      } else if (password.length < 6) {
+        passwordErrorMessage = 'Password length must be 6 characters or more!';
+      }
+
+      setErrors({
+        email: email ? null : 'Email is required!',
+        password: passwordErrorMessage,
+      });
     }
+  };
 
-    setErrors({
-      email: email ? null : 'Email is required!',
-      password: passwordMessage,
-    });
+  const handleChangeFocus = (e, bool) => {
+    const { name, value } = e.currentTarget;
+    !value && setFieldIsActive({ ...fieldIsActive, [name]: bool });
   };
 
   return (
     <div className={styles.container}>
-      <Container>
-        <Row className="justify-content-center">
+      {isLoading && <Loading />}
+
+      <Container className="h-100">
+        <Row className={styles.row}>
           <Col xs={12} sm={8} md={6} className={styles.formContainer}>
-            <Form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <h1>Login</h1>
 
-              <Form.Group
-                className={styles.formGroup}
-                controlId="registerEmail"
-              >
-                <Form.Control
+              <div className={styles.inputContainer}>
+                <label
+                  className={`${fieldIsActive['email'] && styles.active}`}
+                  htmlFor="loginPageEmail"
+                >
+                  Email
+                </label>
+                <input
+                  id="loginPageEmail"
                   className={errors.email && styles.invalid}
                   type="email"
-                  placeholder="Enter email"
                   name="email"
                   value={values.email}
                   onChange={handleChangeValue}
+                  onFocus={(e) => handleChangeFocus(e, true)}
+                  onBlur={(e) => handleChangeFocus(e, false)}
                 />
-                <Form.Text>{errors.email}</Form.Text>
-              </Form.Group>
+                <small>{errors.email}</small>
+              </div>
 
-              <Form.Group
-                className={styles.formGroup}
-                controlId="registerPassword"
-              >
-                <Form.Control
-                  className={errors.password && styles.invalid}
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  value={values.password}
-                  onChange={handleChangeValue}
-                />
-                <Form.Text>{errors.password}</Form.Text>
-              </Form.Group>
+              {passwordIsShow && (
+                <div className={styles.inputContainer}>
+                  <label
+                    className={`${fieldIsActive['password'] && styles.active}`}
+                    htmlFor="loginPagePassword"
+                  >
+                    Password
+                  </label>
+                  <input
+                    autoFocus={true}
+                    id="loginPagePassword"
+                    className={errors.password && styles.invalid}
+                    type="password"
+                    name="password"
+                    value={values.password}
+                    onChange={handleChangeValue}
+                    onFocus={(e) => handleChangeFocus(e, true)}
+                    onBlur={(e) => handleChangeFocus(e, false)}
+                  />
+                  <small>{errors.password}</small>
+                </div>
+              )}
 
               <div className={styles.submitContainer}>
                 <Button variant="primary" type="submit">
-                  Login
+                  {passwordIsShow ? 'Login' : 'Continue'}
                 </Button>
               </div>
-            </Form>
+
+              <div className={styles.linkContainer}>
+                Are not you registered yet? <Link to="/register">Register</Link>
+              </div>
+            </form>
           </Col>
         </Row>
       </Container>
