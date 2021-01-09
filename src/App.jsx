@@ -11,15 +11,22 @@ import Login from './components/pages/Login/Login';
 import Register from './components/pages/Register/Register';
 
 class App extends PureComponent {
-  componentDidUpdate(prevProps) {
-    const { successMessage, errorMessage } = this.props;
+  componentDidUpdate() {
+    const {
+      successMessage,
+      errorMessage,
+      authSuccessMessage,
+      authErrorMessage,
+    } = this.props;
 
     successMessage && toast.success(successMessage);
     errorMessage && toast.error(errorMessage);
+    authSuccessMessage && toast.success(authSuccessMessage);
+    authErrorMessage && toast.error(authErrorMessage);
   }
 
   render() {
-    const { showSpinner, isAuth } = this.props;
+    const { showSpinner, showAuthSpinner, isAuth } = this.props;
 
     return (
       <>
@@ -50,7 +57,7 @@ class App extends PureComponent {
           pauseOnHover
         />
 
-        {showSpinner && <Loading />}
+        {(showSpinner || showAuthSpinner) && <Loading />}
       </>
     );
   }
@@ -59,7 +66,10 @@ class App extends PureComponent {
 const mapStateToProps = (state) => ({
   errorMessage: state.task.errorMessage,
   successMessage: state.task.successMessage,
+  authErrorMessage: state.auth.errorMessage,
+  authSuccessMessage: state.auth.successMessage,
   showSpinner: state.task.loading,
+  showAuthSpinner: state.auth.loading,
   isAuth: state.auth.isAuth,
 });
 
