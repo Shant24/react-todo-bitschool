@@ -1,5 +1,5 @@
 import request from '../../helpers/request';
-import * as actionTypes from '../actionTypes';
+import * as actionTypes from '../types/taskTypes';
 import { isMobile } from 'react-device-detect';
 
 let apiUrl = process.env.REACT_APP_API_URL;

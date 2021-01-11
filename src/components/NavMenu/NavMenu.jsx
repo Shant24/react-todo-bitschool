@@ -4,10 +4,9 @@ import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import styles from './navMenu.module.scss';
 import UserAvatar from '../../assets/images/svg/UserAvatar';
-import { signOut } from '../../store/actions/authActions';
 
 const NavMenu = (props) => {
-  const { user, isAuth, signOut } = props;
+  const { user, isAuth } = props;
   const { name, surname, avatar } = user;
 
   return (
@@ -35,7 +34,8 @@ const NavMenu = (props) => {
             </div>
             <div className={styles.userMenu}>
               <Link to="user-settings">Settings</Link>
-              <div onClick={signOut}>Sign out</div>
+              <div>Sign out</div>
+              {/* <div onClick={signOut}>Sign out</div> */}
             </div>
           </div>
         ) : (
@@ -69,4 +69,4 @@ const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,
 });
 
-export default connect(mapStateToProps, { signOut })(NavMenu);
+export default connect(mapStateToProps)(NavMenu);

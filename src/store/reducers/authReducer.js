@@ -1,6 +1,11 @@
-import * as actionTypes from '../actionTypes';
+import * as actionTypes from '../types/authTypes';
 
 const defaultState = {
+  loading: false,
+  errorMessage: null,
+  successMessage: null,
+  registerSuccess: false,
+  userId: null,
   user: {
     name: 'Shant',
     surname: 'Sargsyan',
@@ -12,11 +17,28 @@ const defaultState = {
 
 const authReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case actionTypes.SIGN_IN:
-      return { ...state, user: action.user, isAuth: true };
+    case actionTypes.AUTH_LOADING:
+      return {
+        ...state,
+        loading: true,
+        errorMessage: null,
+        successMessage: null,
+      };
 
-    case actionTypes.SIGN_OUT:
-      return { ...state, isAuth: false };
+    case actionTypes.AUTH_ERROR:
+      return { ...state, errorMessage: action.error, loading: false };
+
+    case actionTypes.REGISTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        registerSuccess: true,
+        userId: action.userId,
+        successMessage: 'You have successfully registered!!!',
+      };
+
+    case actionTypes.RESET_REGISTER_SUCCESS:
+      return { ...state, registerSuccess: false };
 
     default:
       return state;
