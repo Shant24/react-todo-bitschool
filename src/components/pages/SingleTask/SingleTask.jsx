@@ -16,7 +16,6 @@ import {
   removeTask,
 } from '../../../store/actions/taskActions';
 import { formatDate } from '../../../helpers/utils';
-import { Redirect } from 'react-router';
 
 class SingleTask extends Component {
   state = {
@@ -45,12 +44,10 @@ class SingleTask extends Component {
 
   render() {
     const { isEdit } = this.state;
-    const { task, removeTask, isAuth, changeTaskStatus } = this.props;
+    const { task, removeTask, changeTaskStatus } = this.props;
 
     return (
       <>
-        {!isAuth && <Redirect to="/login" />}
-
         {task ? (
           <div className={styles.singleTaskContainer}>
             <div className={styles.singleTaskWrapper}>
@@ -180,7 +177,6 @@ const mapStateToProps = (state) => ({
   task: state.task.task,
   editTaskSuccess: state.task.editTaskSuccess,
   removeTaskSuccess: state.task.removeTaskSuccess,
-  isAuth: state.auth.isAuth,
 });
 
 const mapDispatchToProps = { getSingleTask, removeTask, changeTaskStatus };

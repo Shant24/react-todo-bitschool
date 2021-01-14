@@ -10,7 +10,6 @@ import {
   getTasks,
   removeSelectedTasks,
 } from '../../../store/actions/taskActions';
-import { Redirect } from 'react-router';
 import Search from '../../Search/Search';
 
 class ToDo extends PureComponent {
@@ -22,7 +21,7 @@ class ToDo extends PureComponent {
   };
 
   componentDidMount() {
-    this.props.isAuth && this.props.getTasks();
+    this.props.isAuthenticated && this.props.getTasks();
   }
 
   componentDidUpdate(prevProps) {
@@ -69,7 +68,7 @@ class ToDo extends PureComponent {
   };
 
   render() {
-    const { tasks, removeSelectedTasks, isAuth } = this.props;
+    const { tasks, removeSelectedTasks } = this.props;
     const {
       editTask,
       openNewTaskModal,
@@ -93,8 +92,6 @@ class ToDo extends PureComponent {
 
     return (
       <>
-        {!isAuth && <Redirect to="/login" />}
-
         <Container fluid className="pt-3">
           <Row className="mb-4 flex-column">
             <Col className="mb-3">
@@ -158,7 +155,7 @@ const mapStateToProps = (state) => ({
   addTaskSuccess: state.task.addTaskSuccess,
   editTaskSuccess: state.task.editTaskSuccess,
   removeTasksSuccess: state.task.removeTasksSuccess,
-  isAuth: state.auth.isAuth,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 const mapDispatchToProps = {

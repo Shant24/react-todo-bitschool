@@ -4,9 +4,9 @@ import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import styles from './navMenu.module.scss';
 import UserAvatar from '../../assets/images/svg/UserAvatar';
+import { logout } from '../../store/actions/authActions';
 
-const NavMenu = (props) => {
-  const { user, isAuth } = props;
+const NavMenu = ({ user, isAuthenticated, logout }) => {
   const { name, surname, avatar } = user;
 
   return (
@@ -20,7 +20,7 @@ const NavMenu = (props) => {
 
         <Nav className="mr-auto"></Nav>
 
-        {isAuth ? (
+        {isAuthenticated ? (
           <div className={styles.userContainer}>
             <div className={styles.userInformation}>
               {avatar ? (
@@ -34,8 +34,7 @@ const NavMenu = (props) => {
             </div>
             <div className={styles.userMenu}>
               <Link to="user-settings">Settings</Link>
-              <div>Sign out</div>
-              {/* <div onClick={signOut}>Sign out</div> */}
+              <div onClick={logout}>Log out</div>
             </div>
           </div>
         ) : (
@@ -66,7 +65,7 @@ const NavMenu = (props) => {
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
-  isAuth: state.auth.isAuth,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps)(NavMenu);
+export default connect(mapStateToProps, { logout })(NavMenu);

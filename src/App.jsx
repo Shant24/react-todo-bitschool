@@ -26,13 +26,11 @@ class App extends PureComponent {
   }
 
   render() {
-    const { showSpinner, showAuthSpinner, isAuth } = this.props;
+    const { showSpinner, showAuthSpinner } = this.props;
 
     return (
       <>
         <NavMenu />
-
-        {!isAuth && <Redirect to="/login" />}
 
         <main>
           <Switch>
@@ -70,7 +68,6 @@ const mapStateToProps = (state) => ({
   authSuccessMessage: state.auth.successMessage,
   showSpinner: state.task.loading,
   showAuthSpinner: state.auth.loading,
-  isAuth: state.auth.isAuth,
 });
 
 export default connect(mapStateToProps, null)(App);
