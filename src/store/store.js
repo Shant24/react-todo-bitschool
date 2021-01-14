@@ -16,12 +16,13 @@ const reducers = combineReducers({
 
 const middlewaresArr = [thunk];
 
+process.env.NODE_ENV === 'development' && middlewaresArr.push(logger);
+
 const middlewares = applyMiddleware(...middlewaresArr);
 
 let store;
 
 if (process.env.NODE_ENV === 'development') {
-  middlewaresArr.push(logger);
   store = createStore(reducers, composeWithDevTools(middlewares));
 } else {
   store = createStore(reducers, middlewares);

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styles from '../Register/register.module.scss';
 import Loading from '../../Loading/Loading';
+import { login } from '../../../store/actions/authActions';
 
-const Login = () => {
+const Login = ({ login }) => {
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -51,6 +53,8 @@ const Login = () => {
         email: email ? null : 'Email is required!',
         password: passwordErrorMessage,
       });
+
+      email && password.length >= 6 && login(values);
     }
   };
 
@@ -64,7 +68,7 @@ const Login = () => {
       {isLoading && <Loading />}
 
       <Container className="h-100">
-        <Row className={styles.row}>
+        <Row className={`${styles.row} ${styles.loginRow}`}>
           <Col xs={12} sm={8} md={6} className={styles.formContainer}>
             <form onSubmit={handleSubmit}>
               <h1>Login</h1>
@@ -129,4 +133,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default connect(null, { login })(Login);

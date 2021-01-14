@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
+// import {createBrowserHistory} from 'history'
 import { Provider } from 'react-redux';
 import store from './store/store';
 import 'typeface-roboto';
