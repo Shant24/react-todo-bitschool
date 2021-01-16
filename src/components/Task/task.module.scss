@@ -10,7 +10,7 @@
   }
 
   &.done {
-    border: 2px solid black;
+    border: 2px solid #ffc107;
     background-color: rgba(#ffffff, 0.1);
 
     p {
@@ -42,31 +42,28 @@
         }
       }
 
-      .selectContainer {
-        margin: -10px -10px 0 0;
+      .label {
+        margin: -10px -5px 0 0;
+        padding: 10px 5px;
         height: max-content;
         display: flex;
-        flex-wrap: nowrap;
         align-items: center;
+        flex-wrap: nowrap;
+        user-select: none;
+        cursor: pointer;
+
+        @media (max-width: 767px) {
+          margin: -10px -10px 0 0;
+          padding: 10px;
+        }
 
         &:hover {
           background-color: rgba(#ffffff, 0.3);
           border-radius: 5px;
         }
 
-        label,
-        .checkbox {
-          cursor: pointer;
-        }
-
-        label {
-          margin: 0;
-          padding: 10px 5px 10px 10px;
-          user-select: none;
-        }
-
-        .checkbox {
-          margin-right: 10px;
+        span {
+          margin-right: 5px;
         }
       }
     }

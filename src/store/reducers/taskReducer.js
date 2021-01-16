@@ -1,4 +1,5 @@
 import * as actionTypes from '../types/taskTypes';
+import { AUTH_LOADING, LOGOUT_SUCCESS } from '../types/authTypes';
 
 const defaultState = {
   tasks: [],
@@ -130,6 +131,20 @@ const taskReducer = (state = defaultState, action) => {
         successMessage: 'Tasks removed successfully!',
         removeTasksSuccess: true,
       };
+
+    case AUTH_LOADING:
+      return {
+        ...state,
+        errorMessage: null,
+        successMessage: null,
+        addTaskSuccess: false,
+        editTaskSuccess: false,
+        removeTaskSuccess: false,
+        removeTasksSuccess: false,
+      };
+
+    case LOGOUT_SUCCESS:
+      return defaultState;
 
     default:
       return state;

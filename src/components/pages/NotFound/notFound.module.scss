@@ -5,6 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: white;
 
   h1 {
     font-size: 50px;
@@ -14,5 +15,15 @@
   div {
     font-size: 20px;
     font-weight: 500;
+  }
+
+  a {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #002144;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 }

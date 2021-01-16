@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { register, reset } from '../../../store/actions/authActions';
+import { register } from '../../../store/actions/authActions';
 import styles from './register.module.scss';
 
-const Register = (props) => {
-  const { register, reset, registerSuccess, history } = props;
-
+const Register = ({ register }) => {
   const [values, setValues] = useState({
     name: '',
     surname: '',
@@ -31,12 +29,6 @@ const Register = (props) => {
     password: false,
     confirmPassword: false,
   });
-
-  useEffect(() => {
-    registerSuccess && history.push('/login');
-
-    return reset();
-  }, [history, registerSuccess, reset]);
 
   const handleChangeValue = ({ target: { name, value } }) => {
     setValues({ ...values, [name]: value });
@@ -225,8 +217,4 @@ const Register = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  registerSuccess: state.auth.registerSuccess,
-});
-
-export default connect(mapStateToProps, { register, reset })(Register);
+export default connect(null, { register })(Register);

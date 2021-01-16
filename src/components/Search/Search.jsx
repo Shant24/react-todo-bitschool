@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import {
   InputGroup,
@@ -85,7 +85,7 @@ const dateOptions = [
   },
 ];
 
-const Search = (props) => {
+const Search = ({ getTasks }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState({
@@ -104,9 +104,27 @@ const Search = (props) => {
     complete_gte: null,
   });
 
-  const handleInputChange = (e) => setSearch(e.target.value);
+  const [reseted, setReseted] = useState(false);
 
-  const handleSubmit = () => {
+  const handleInputChange = (e) => {
+    setSearch(e.target.value);
+    setReseted(false);
+  };
+
+  const handleChangeDropdownValue = (option, type) => {
+    type === 'status' ? setStatus(option) : setSort(option);
+    setReseted(false);
+  };
+
+  const handleChangeDate = (name, value) => {
+    setDates({
+      ...dates,
+      [name]: value,
+    });
+    setReseted(false);
+  };
+
+  const handleSubmit = useCallback(() => {
     const searchData = {
       search,
       status: status.value,
@@ -117,8 +135,8 @@ const Search = (props) => {
       dates[key] && (searchData[key] = dates[key].toLocaleDateString());
     }
 
-    props.getTasks(searchData);
-  };
+    getTasks(searchData);
+  }, [search, status.value, sort.value, dates, getTasks]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -137,7 +155,12 @@ const Search = (props) => {
       complete_lte: null,
       complete_gte: null,
     });
+    setReseted(true);
   };
+
+  useEffect(() => {
+    reseted && handleSubmit();
+  }, [handleSubmit, reseted]);
 
   return (
     <div className={styles.search}>
@@ -204,71 +227,68 @@ const Search = (props) => {
         </InputGroup.Append>
       </InputGroup>
 
-      {showSearch && (
-        <div className={styles.advancedSearch}>
-          <div className={styles.dropDown}>
-            <label htmlFor="input-group-dropdown-1">Status</label>
+      <div
+        className={`${styles.advancedSearch}${
+          showSearch ? ` ${styles.opened}` : ''
+        }`}
+      >
+        <div className={styles.dropDown}>
+          <label htmlFor="input-group-dropdown-1">Status</label>
 
-            <DropdownButton
-              as={InputGroup.Append}
-              variant="primary"
-              title={status.value ? status.label : 'Unset'}
-              id="input-group-dropdown-1"
-            >
-              {statusOptions.map((option) => (
-                <Dropdown.Item
-                  key={idGenerator()}
-                  active={status.value === option.value}
-                  onClick={() => setStatus(option)}
-                >
-                  {option.label}
-                </Dropdown.Item>
-              ))}
-            </DropdownButton>
-          </div>
-
-          <div className={styles.dropDown}>
-            <label htmlFor="input-group-dropdown-2">Sort</label>
-
-            <DropdownButton
-              as={InputGroup.Append}
-              variant="primary"
-              title={sort.value ? shortStr(sort.label, 10) : 'Unset'}
-              id="input-group-dropdown-2"
-            >
-              {sortOptions.map((option) => (
-                <Dropdown.Item
-                  key={idGenerator()}
-                  active={sort.value === option.value}
-                  onClick={() => setSort(option)}
-                >
-                  {option.label}
-                </Dropdown.Item>
-              ))}
-            </DropdownButton>
-          </div>
-
-          {dateOptions.map((option, i) => (
-            <FormGroup key={idGenerator()} className={`${styles.datePicker}`}>
-              <Form.Label htmlFor={`searchDate${i + 1}`}>
+          <DropdownButton
+            as={InputGroup.Append}
+            variant="primary"
+            title={status.value ? status.label : 'Unset'}
+            id="input-group-dropdown-1"
+          >
+            {statusOptions.map((option) => (
+              <Dropdown.Item
+                key={idGenerator()}
+                active={status.value === option.value}
+                onClick={() => handleChangeDropdownValue(option, 'status')}
+              >
                 {option.label}
-              </Form.Label>
-              <DatePicker
-                id={`searchDate${i + 1}`}
-                dateFormat="dd.MM.yyyy"
-                selected={dates[option.value]}
-                onChange={(value) =>
-                  setDates({
-                    ...dates,
-                    [option.value]: value,
-                  })
-                }
-                placeholderText="Set Date"
-              />
-            </FormGroup>
-          ))}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
         </div>
-      )}
+
+        <div className={styles.dropDown}>
+          <label htmlFor="input-group-dropdown-2">Sort</label>
+
+          <DropdownButton
+            as={InputGroup.Append}
+            variant="primary"
+            title={sort.value ? shortStr(sort.label, 10) : 'Unset'}
+            id="input-group-dropdown-2"
+          >
+            {sortOptions.map((option) => (
+              <Dropdown.Item
+                key={idGenerator()}
+                active={sort.value === option.value}
+                onClick={() => handleChangeDropdownValue(option, 'sort')}
+              >
+                {option.label}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
+        </div>
+
+        {dateOptions.map((option, i) => (
+          <FormGroup key={idGenerator()} className={`${styles.datePicker}`}>
+            <Form.Label htmlFor={`searchDate${i + 1}`}>
+              {option.label}
+            </Form.Label>
+            <DatePicker
+              id={`searchDate${i + 1}`}
+              dateFormat="dd.MM.yyyy"
+              selected={dates[option.value]}
+              onChange={(value) => handleChangeDate(option.value, value)}
+              placeholderText="Set Date"
+            />
+          </FormGroup>
+        ))}
+      </div>
     </div>
   );
 };

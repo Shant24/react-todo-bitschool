@@ -12,107 +12,124 @@
     font-size: 18px;
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.3);
-  }
 
-  .taskInformationAndButtons {
-    margin-bottom: 20px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    @media (max-width: 768px) {
-      flex-direction: column-reverse;
-      align-items: center;
+    b {
+      color: #002a73;
     }
 
-    .datesAndStatsContainer {
+    .taskInformationAndButtons {
+      margin-bottom: 20px;
+      width: 100%;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
 
       @media (max-width: 768px) {
-        flex-wrap: wrap;
-      }
-
-      .informationContainer {
-        display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: center;
-        margin-right: 20px;
+      }
+
+      .datesAndStatsContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         @media (max-width: 768px) {
-          margin: 0 10px 5px;
+          flex-wrap: wrap;
         }
 
-        .date,
-        .status {
-          padding: 5px 15px;
-          color: #fff;
-          border-radius: 4px;
-          user-select: none;
-        }
+        .informationContainer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-right: 20px;
 
-        .date {
-          background-color: #007bff;
+          @media (max-width: 768px) {
+            margin: 0 10px 5px;
+          }
 
-          &:hover {
-            background-color: #0069d9;
+          .date,
+          .status {
+            padding: 5px 15px;
+            color: #fff;
+            border-radius: 4px;
+            user-select: none;
+          }
+
+          .date {
+            background-color: #007bff;
+
+            &:hover {
+              background-color: #0069d9;
+            }
+          }
+
+          .status {
+            min-width: 80px;
+            text-align: center;
+            background-color: #28a745;
+
+            &:hover {
+              background-color: #178731;
+            }
+          }
+
+          .active {
+            color: black;
+            background-color: #ffc107;
+
+            &:hover {
+              background-color: #dca500;
+            }
+          }
+
+          @media (max-width: 500px) {
+            b,
+            .date,
+            .status {
+              font-size: 14px;
+            }
+
+            .date,
+            .status {
+              padding: 5px 10px;
+            }
           }
         }
+      }
 
-        .status {
-          min-width: 80px;
-          text-align: center;
-          background-color: #28a745;
+      .buttonContainer {
+        display: flex;
+        flex-wrap: nowrap;
 
-          &:hover {
-            background-color: #178731;
-          }
-        }
+        .taskButtons {
+          margin-left: 10px;
+          width: 40px;
+          height: 40px;
 
-        .active {
-          color: black;
-          background-color: #ffc107;
-
-          &:hover {
-            background-color: #dca500;
+          @media (max-width: 768px) {
+            margin: 0 5px 10px 5px;
           }
         }
       }
     }
 
-    .buttonContainer {
+    .titleContainer,
+    .descriptionContainer {
+      margin-bottom: 20px;
+      width: 100%;
       display: flex;
-      flex-wrap: nowrap;
-
-      .taskButtons {
-        margin-left: 10px;
-        width: 40px;
-        height: 40px;
-
-        @media (max-width: 768px) {
-          margin: 0 5px 10px 5px;
-        }
-      }
-    }
-  }
-
-  .titleContainer,
-  .descriptionContainer {
-    margin-bottom: 20px;
-    width: 100%;
-    display: flex;
-
-    @media (max-width: 480px) {
-      flex-direction: column;
-    }
-
-    b {
-      min-width: 120px;
 
       @media (max-width: 480px) {
-        min-width: 100%;
+        flex-direction: column;
+      }
+
+      b {
+        min-width: 120px;
+
+        @media (max-width: 480px) {
+          min-width: 100%;
+        }
       }
     }
   }
