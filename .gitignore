@@ -23,13 +23,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# user settings
-# /video-lessons
-
 .idea
 .vscode
 
-yarn.lock
 *.log
 
 /src/demo

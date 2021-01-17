@@ -2,14 +2,13 @@ import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styles from './navMenu.module.scss';
 import './navMenuGlobal.scss';
 import UserAvatar from '../../assets/images/svg/UserAvatar';
 import { logout } from '../../store/actions/authActions';
 
 const NavMenu = ({ user, isAuthenticated, logout }) => {
-  const { name, surname, avatar } = user;
-
   return (
     <header className={styles.header}>
       <Navbar bg="primary" variant="dark" expand="sm">
@@ -22,9 +21,8 @@ const NavMenu = ({ user, isAuthenticated, logout }) => {
         {isAuthenticated && (
           <UserBlok
             customStyle={styles.mobileWrapper}
-            avatar={avatar}
-            name={name}
-            surname={surname}
+            user={user}
+            logout={logout}
           />
         )}
 
@@ -70,9 +68,8 @@ const NavMenu = ({ user, isAuthenticated, logout }) => {
         {isAuthenticated && (
           <UserBlok
             customStyle={styles.desktopWrapper}
-            avatar={avatar}
-            name={name}
-            surname={surname}
+            user={user}
+            logout={logout}
           />
         )}
       </Navbar>
@@ -87,7 +84,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, { logout })(NavMenu);
 
-function UserBlok({ customStyle, avatar, name, surname }) {
+function UserBlok({ customStyle, user: { name, surname, avatar }, logout }) {
   return (
     <div className={`${styles.userWrapper} ${customStyle}`}>
       <div className={styles.userContainer}>
@@ -109,6 +106,12 @@ function UserBlok({ customStyle, avatar, name, surname }) {
     </div>
   );
 }
+
+UserBlok.propTypes = {
+  customStyle: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
+};
 
 function AuthBlok({ customStyle }) {
   return (
@@ -133,3 +136,7 @@ function AuthBlok({ customStyle }) {
     </>
   );
 }
+
+AuthBlok.propTypes = {
+  customStyle: PropTypes.string.isRequired,
+};
