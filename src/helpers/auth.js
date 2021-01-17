@@ -1,4 +1,13 @@
 import { isMobile } from 'react-device-detect';
+import decode from 'jwt-decode';
+import store from '../store/store';
+import history from './history';
+import { LOGOUT_SUCCESS } from '../store/types/authTypes';
+
+let apiUrl = process.env.REACT_APP_API_URL;
+if (process.env.NODE_ENV === 'development' && isMobile) {
+  apiUrl = process.env.REACT_APP_API_MOBILE_URL;
+}
 
 export const saveJWT = (data) => {
   localStorage.setItem('token', JSON.stringify(data));
@@ -8,14 +17,41 @@ export const removeJWT = () => {
   localStorage.removeItem('token');
 };
 
-export const getJWT = () => {
+export const getJWT = (type) => {
   const token = localStorage.getItem('token');
 
   if (!token) {
-    // throw error
+    logout();
+    return null;
   }
 
-  return JSON.parse(token).jwt;
+  const parsedToken = JSON.parse(token);
+
+  if (type === 'local') return parsedToken.jwt;
+
+  const decodedToken = decode(parsedToken.jwt);
+
+  if (decodedToken.exp - Date.now() / 1000 < 60) {
+    return fetch(`${apiUrl}/user/${decodedToken.userId}/token`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken: parsedToken.refreshToken }),
+    })
+      .then((res) => res.json())
+      .then((newToken) => {
+        if (newToken.error) throw newToken.error;
+
+        saveJWT(newToken);
+
+        return newToken.jwt;
+      })
+      .catch(() => {
+        logout();
+        return null;
+      });
+  }
+
+  return Promise.resolve(parsedToken.jwt);
 };
 
 export const checkLoginStatus = () => !!localStorage.getItem('token');
@@ -31,11 +67,6 @@ function request(data, type) {
     body: JSON.stringify(data),
   };
 
-  let apiUrl = process.env.REACT_APP_API_URL;
-  if (process.env.NODE_ENV === 'development' && isMobile) {
-    apiUrl = process.env.REACT_APP_API_MOBILE_URL;
-  }
-
   const url = `${apiUrl}/user${type === 'login' ? '/sign-in' : ''}`;
 
   return fetch(url, config)
@@ -45,4 +76,10 @@ function request(data, type) {
 
       return result;
     });
+}
+
+function logout() {
+  removeJWT();
+  store.dispatch({ type: LOGOUT_SUCCESS });
+  history.push('/login');
 }
