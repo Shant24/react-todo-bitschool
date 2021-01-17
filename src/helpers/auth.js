@@ -1,8 +1,8 @@
 import { isMobile } from 'react-device-detect';
+import decode from 'jwt-decode';
 import store from '../store/store';
 import history from './history';
 import { LOGOUT_SUCCESS } from '../store/types/authTypes';
-import decode from 'jwt-decode';
 
 let apiUrl = process.env.REACT_APP_API_URL;
 if (process.env.NODE_ENV === 'development' && isMobile) {

@@ -10,53 +10,6 @@ import { logout } from '../../store/actions/authActions';
 const NavMenu = ({ user, isAuthenticated, logout }) => {
   const { name, surname, avatar } = user;
 
-  const userBlok = (customStyle) => {
-    return (
-      <div className={`${styles.userWrapper} ${customStyle}`}>
-        <div className={styles.userContainer}>
-          <div className={styles.userInformation}>
-            {avatar ? (
-              <img src={avatar} alt={`${name}'s avatar`} />
-            ) : (
-              <UserAvatar />
-            )}
-            <div className={styles.userName}>
-              {name} {surname}
-            </div>
-          </div>
-          <div className={styles.userMenu}>
-            <Link to="user-settings">Settings</Link>
-            <div onClick={logout}>Log out</div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const authBlok = (customStyle) => {
-    return (
-      <>
-        <NavLink
-          to="/login"
-          exact
-          className={`${styles.link} ${customStyle}`}
-          activeClassName={styles.active}
-        >
-          Login
-        </NavLink>
-
-        <NavLink
-          to="/register"
-          exact
-          className={`${styles.link} ${customStyle}`}
-          activeClassName={styles.active}
-        >
-          Register
-        </NavLink>
-      </>
-    );
-  };
-
   return (
     <header className={styles.header}>
       <Navbar bg="primary" variant="dark" expand="sm">
@@ -66,7 +19,14 @@ const NavMenu = ({ user, isAuthenticated, logout }) => {
           </Link>
         </Navbar.Brand>
 
-        {isAuthenticated && userBlok(styles.mobileWrapper)}
+        {isAuthenticated && (
+          <UserBlok
+            customStyle={styles.mobileWrapper}
+            avatar={avatar}
+            name={name}
+            surname={surname}
+          />
+        )}
 
         <Navbar.Toggle aria-controls="headerNavbar" />
 
@@ -101,13 +61,20 @@ const NavMenu = ({ user, isAuthenticated, logout }) => {
               Contact
             </NavLink>
 
-            {!isAuthenticated && authBlok(styles.mobileLink)}
+            {!isAuthenticated && <AuthBlok customStyle={styles.mobileLink} />}
           </Nav>
 
-          {!isAuthenticated && authBlok(styles.desktopLink)}
+          {!isAuthenticated && <AuthBlok customStyle={styles.desktopLink} />}
         </Navbar.Collapse>
 
-        {isAuthenticated && userBlok(styles.desktopWrapper)}
+        {isAuthenticated && (
+          <UserBlok
+            customStyle={styles.desktopWrapper}
+            avatar={avatar}
+            name={name}
+            surname={surname}
+          />
+        )}
       </Navbar>
     </header>
   );
@@ -119,3 +86,50 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { logout })(NavMenu);
+
+function UserBlok({ customStyle, avatar, name, surname }) {
+  return (
+    <div className={`${styles.userWrapper} ${customStyle}`}>
+      <div className={styles.userContainer}>
+        <div className={styles.userInformation}>
+          {avatar ? (
+            <img src={avatar} alt={`${name}'s avatar`} />
+          ) : (
+            <UserAvatar />
+          )}
+          <div className={styles.userName}>
+            {name} {surname}
+          </div>
+        </div>
+        <div className={styles.userMenu}>
+          <Link to="user-settings">Settings</Link>
+          <div onClick={logout}>Log out</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AuthBlok({ customStyle }) {
+  return (
+    <>
+      <NavLink
+        to="/login"
+        exact
+        className={`${styles.link} ${customStyle}`}
+        activeClassName={styles.active}
+      >
+        Login
+      </NavLink>
+
+      <NavLink
+        to="/register"
+        exact
+        className={`${styles.link} ${customStyle}`}
+        activeClassName={styles.active}
+      >
+        Register
+      </NavLink>
+    </>
+  );
+}
