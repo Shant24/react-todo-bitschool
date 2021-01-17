@@ -5,7 +5,6 @@ const defaultState = {
   loading: false,
   errorMessage: null,
   successMessage: null,
-  registerSuccess: false,
   isAuthenticated: checkLoginStatus(),
   userId: null,
   user: {
@@ -33,13 +32,9 @@ const authReducer = (state = defaultState, action) => {
       return {
         ...state,
         loading: false,
-        registerSuccess: true,
         userId: action.userId,
         successMessage: 'You have successfully registered!!!',
       };
-
-    case actionTypes.RESET_REGISTER_SUCCESS:
-      return { ...state, registerSuccess: false };
 
     case actionTypes.LOGIN_SUCCESS:
       return { ...state, loading: false, isAuthenticated: true };

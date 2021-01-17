@@ -44,8 +44,8 @@ const Task = (props) => {
             )}
           </Card.Title>
 
-          <div className={styles.selectContainer}>
-            <label htmlFor={_id}>Select</label>
+          <label className={styles.label} htmlFor={_id}>
+            <span>Select</span>{' '}
             <input
               id={_id}
               className={styles.checkbox}
@@ -53,7 +53,7 @@ const Task = (props) => {
               onChange={onCheck}
               checked={checked}
             />
-          </div>
+          </label>
         </div>
 
         <Card.Text>
