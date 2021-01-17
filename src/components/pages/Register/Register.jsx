@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import {
+  nameReqError,
+  surnameReqError,
+  emailReqError,
+  passwordReqError,
+  passwordLengthError,
+  passwordConfirmError,
+  passwordMatchError,
+} from '../../../helpers/errors';
 import { register } from '../../../store/actions/authActions';
 import styles from './register.module.scss';
 
@@ -48,33 +57,33 @@ const Register = ({ register }) => {
     let surnameMessage = null;
 
     if (!password) {
-      passwordMessage = 'Password is required!';
+      passwordMessage = passwordReqError;
       valid = false;
     } else if (password.length < 6) {
-      passwordMessage = 'Password length must be 6 characters or more!';
+      passwordMessage = passwordLengthError;
       valid = false;
     }
 
     if (!confirmPassword) {
-      confirmPasswordMessage = 'Please, confirm password!';
+      confirmPasswordMessage = passwordConfirmError;
       valid = false;
     } else if (password && password !== confirmPassword) {
-      confirmPasswordMessage = "Password didn't match!";
+      confirmPasswordMessage = passwordMatchError;
       valid = false;
     }
 
     if (!name) {
-      nameMessage = 'Name is Required!';
+      nameMessage = nameReqError;
       valid = false;
     }
 
     if (!surname) {
-      surnameMessage = 'Surname is Required!';
+      surnameMessage = surnameReqError;
       valid = false;
     }
 
     setErrors({
-      email: email ? null : 'Email is required!',
+      email: email ? null : emailReqError,
       password: passwordMessage,
       confirmPassword: confirmPasswordMessage,
       name: nameMessage,

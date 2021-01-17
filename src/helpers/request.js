@@ -1,7 +1,10 @@
 import { getJWT } from './auth';
+import { defaultError } from './errors';
 
-const request = (url, method = 'GET', body) => {
-  const jwt = getJWT();
+const request = async (url, method = 'GET', body) => {
+  const jwt = await getJWT();
+
+  if (!jwt) return Promise.reject(defaultError);
 
   const config = {
     method,

@@ -16,6 +16,14 @@ import Settings from './components/pages/Settings/Settings';
 import Footer from './components/Footer/Footer';
 
 class App extends PureComponent {
+  state = {
+    windowHeight: window.innerHeight,
+  };
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+  }
+
   componentDidUpdate() {
     const {
       successMessage,
@@ -30,11 +38,19 @@ class App extends PureComponent {
     authErrorMessage && toast.error(authErrorMessage);
   }
 
+  handleResize = () => {
+    this.setState({ windowHeight: window.innerHeight });
+  };
+
   render() {
     const { showSpinner, showAuthSpinner } = this.props;
+    const { windowHeight } = this.state;
 
     return (
-      <>
+      <div
+        className="toDoApplication"
+        style={{ minHeight: `${windowHeight}px` }}
+      >
         <NavMenu />
 
         <main>
@@ -76,7 +92,7 @@ class App extends PureComponent {
         <Footer />
 
         {(showSpinner || showAuthSpinner) && <Loading />}
-      </>
+      </div>
     );
   }
 }
@@ -90,4 +106,4 @@ const mapStateToProps = (state) => ({
   showAuthSpinner: state.auth.loading,
 });
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps)(App);

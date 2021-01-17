@@ -48,7 +48,7 @@ export const login = (data) => (dispatch) => {
 export const logout = () => (dispatch) => {
   dispatch({ type: actionTypes.AUTH_LOADING });
 
-  request(`${apiUrl}/user/sign-out`, 'POST', { jwt: getJWT() })
+  request(`${apiUrl}/user/sign-out`, 'POST', { jwt: getJWT('local') })
     .then(() => {
       removeJWT();
       dispatch({ type: actionTypes.LOGOUT_SUCCESS });

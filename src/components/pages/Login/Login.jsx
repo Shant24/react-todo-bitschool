@@ -5,6 +5,11 @@ import { Link } from 'react-router-dom';
 import styles from '../Register/register.module.scss';
 import Loading from '../../Loading/Loading';
 import { login } from '../../../store/actions/authActions';
+import {
+  emailReqError,
+  passwordLengthError,
+  passwordReqError,
+} from '../../../helpers/errors';
 
 const Login = ({ login }) => {
   const [values, setValues] = useState({
@@ -44,13 +49,13 @@ const Login = ({ login }) => {
       let passwordErrorMessage = null;
 
       if (!password) {
-        passwordErrorMessage = 'Password is required!';
+        passwordErrorMessage = passwordReqError;
       } else if (password.length < 6) {
-        passwordErrorMessage = 'Password length must be 6 characters or more!';
+        passwordErrorMessage = passwordLengthError;
       }
 
       setErrors({
-        email: email ? null : 'Email is required!',
+        email: email ? null : emailReqError,
         password: passwordErrorMessage,
       });
 
