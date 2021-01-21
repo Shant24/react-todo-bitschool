@@ -22,8 +22,17 @@ body {
   flex-direction: column;
 }
 
-main {
+main,
+.container-fluid {
   flex: auto;
   display: flex;
   flex-direction: column;
+}
+
+.tooltip {
+  transition: opacity 0.15s linear;
+}
+
+.invalid {
+  border: 1px solid #f00;
 }

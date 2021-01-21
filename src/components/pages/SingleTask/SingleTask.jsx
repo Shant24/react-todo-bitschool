@@ -15,7 +15,7 @@ import {
   getSingleTask,
   removeTask,
 } from '../../../store/actions/taskActions';
-import { formatDate } from '../../../helpers/utils';
+import { formatDate, uppercaseFirstLetter } from '../../../helpers/utils';
 
 class SingleTask extends Component {
   state = {
@@ -74,8 +74,7 @@ class SingleTask extends Component {
                         task.status === 'active' && styles.active
                       }`}
                     >
-                      {task?.status?.charAt(0).toUpperCase() +
-                        task?.status?.slice(1)}
+                      {uppercaseFirstLetter(task.status)}
                     </div>
                   </div>
                 </div>
@@ -83,6 +82,7 @@ class SingleTask extends Component {
                 <div className={styles.buttonContainer}>
                   <OverlayTrigger
                     placement="bottom"
+                    transition={false}
                     overlay={
                       <Tooltip>
                         <strong>
@@ -112,6 +112,7 @@ class SingleTask extends Component {
 
                   <OverlayTrigger
                     placement="bottom"
+                    transition={false}
                     overlay={
                       <Tooltip>
                         <strong>Edit</strong>
@@ -129,6 +130,7 @@ class SingleTask extends Component {
 
                   <OverlayTrigger
                     placement="bottom"
+                    transition={false}
                     overlay={
                       <Tooltip>
                         <strong>Remove</strong>

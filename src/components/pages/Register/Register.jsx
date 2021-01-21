@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import styles from './register.module.scss';
 import {
   nameReqError,
   surnameReqError,
@@ -12,7 +13,7 @@ import {
   passwordMatchError,
 } from '../../../helpers/errors';
 import { register } from '../../../store/actions/authActions';
-import styles from './register.module.scss';
+import { uppercaseFirstLetter } from '../../../helpers/utils';
 
 const Register = ({ register }) => {
   const [values, setValues] = useState({
@@ -90,7 +91,12 @@ const Register = ({ register }) => {
       surname: surnameMessage,
     });
 
-    valid && register(values);
+    valid &&
+      register({
+        ...values,
+        name: uppercaseFirstLetter(values.name),
+        surname: uppercaseFirstLetter(values.surname),
+      });
   };
 
   const handleChangeFocus = (e, bool) => {

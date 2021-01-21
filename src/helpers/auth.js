@@ -17,7 +17,7 @@ export const removeJWT = () => {
   localStorage.removeItem('token');
 };
 
-export const getJWT = (type) => {
+export const getJWT = () => {
   const token = localStorage.getItem('token');
 
   if (!token) {
@@ -26,8 +26,6 @@ export const getJWT = (type) => {
   }
 
   const parsedToken = JSON.parse(token);
-
-  if (type === 'local') return parsedToken.jwt;
 
   const decodedToken = decode(parsedToken.jwt);
 

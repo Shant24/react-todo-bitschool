@@ -72,7 +72,7 @@ const Login = ({ login }) => {
     <div className={styles.container}>
       {isLoading && <Loading />}
 
-      <Container className="h-100">
+      <Container className={styles.bootstrapContainer}>
         <Row className={`${styles.row} ${styles.loginRow}`}>
           <Col xs={12} sm={8} md={6} className={styles.formContainer}>
             <form onSubmit={handleSubmit}>

@@ -12,7 +12,6 @@ import Login from './components/pages/Login/Login';
 import Register from './components/pages/Register/Register';
 import About from './components/pages/About/About';
 import Contact from './components/pages/Contact/Contact';
-import Settings from './components/pages/Settings/Settings';
 import Footer from './components/Footer/Footer';
 
 class App extends PureComponent {
@@ -61,12 +60,6 @@ class App extends PureComponent {
               path="/task/:taskId"
               exact
               component={SingleTask}
-            />
-            <CustomRoute
-              type="private"
-              path="/user-settings"
-              exact
-              component={Settings}
             />
             <CustomRoute path="/login" exact component={Login} />
             <CustomRoute path="/register" exact component={Register} />

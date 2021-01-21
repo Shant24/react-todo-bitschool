@@ -13,6 +13,7 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { isMobile } from 'react-device-detect';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './search.module.scss';
@@ -136,6 +137,7 @@ const Search = ({ getTasks }) => {
     }
 
     getTasks(searchData);
+    setShowSearch(false);
   }, [search, status.value, sort.value, dates, getTasks]);
 
   const handleKeyDown = (e) => {
@@ -158,8 +160,13 @@ const Search = ({ getTasks }) => {
     setReseted(true);
   };
 
+  const handleChangeShow = () => setShowSearch(!showSearch);
+
   useEffect(() => {
-    reseted && handleSubmit();
+    if (reseted) {
+      handleSubmit();
+      setReseted(false);
+    }
   }, [handleSubmit, reseted]);
 
   return (
@@ -180,15 +187,16 @@ const Search = ({ getTasks }) => {
           dates.complete_lte ||
           dates.create_gte ||
           dates.create_lte) && (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip>
-                <strong>Reset</strong>
-              </Tooltip>
-            }
-          >
-            <InputGroup.Append>
+          <InputGroup.Append>
+            <OverlayTrigger
+              placement="bottom"
+              transition={false}
+              overlay={
+                <Tooltip>
+                  <strong>Reset</strong>
+                </Tooltip>
+              }
+            >
               <Button
                 className={styles.searchButtons}
                 onClick={handleReset}
@@ -196,29 +204,29 @@ const Search = ({ getTasks }) => {
               >
                 &times;
               </Button>
-            </InputGroup.Append>
-          </OverlayTrigger>
+            </OverlayTrigger>
+          </InputGroup.Append>
         )}
 
-        <OverlayTrigger
-          placement="bottom"
-          overlay={
-            <Tooltip>
-              <strong>Advanced search</strong>
-            </Tooltip>
-          }
-        >
-          <InputGroup.Append>
+        <InputGroup.Append>
+          <OverlayTrigger
+            placement="bottom"
+            transition={false}
+            overlay={
+              <Tooltip>
+                <strong>Advanced search</strong>
+              </Tooltip>
+            }
+          >
             <Button
               className={styles.searchButtons}
-              onClick={() => setShowSearch(!showSearch)}
+              onClick={handleChangeShow}
               variant="success"
             >
-              {/* Advanced */}
               <FontAwesomeIcon icon={showSearch ? faCaretUp : faCaretDown} />
             </Button>
-          </InputGroup.Append>
-        </OverlayTrigger>
+          </OverlayTrigger>
+        </InputGroup.Append>
 
         <InputGroup.Append>
           <Button variant="primary" onClick={handleSubmit}>
@@ -279,13 +287,32 @@ const Search = ({ getTasks }) => {
             <Form.Label htmlFor={`searchDate${i + 1}`}>
               {option.label}
             </Form.Label>
+
             <DatePicker
               id={`searchDate${i + 1}`}
+              style={{ position: 'relative' }}
               dateFormat="dd.MM.yyyy"
               selected={dates[option.value]}
               onChange={(value) => handleChangeDate(option.value, value)}
               placeholderText="Set Date"
+              autoComplete="off"
+              todayButton="Today"
+              showYearDropdown
+              showMonthDropdown
+              strictParsing
+              withPortal={isMobile}
+              popperPlacement="end"
             />
+
+            {dates[option.value] && (
+              <Button
+                className={`${styles.searchButtons} ${styles.dateButtons}`}
+                onClick={() => handleChangeDate(option.value, null)}
+                variant="danger"
+              >
+                &times;
+              </Button>
+            )}
           </FormGroup>
         ))}
       </div>

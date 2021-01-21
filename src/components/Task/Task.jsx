@@ -77,6 +77,7 @@ const Task = (props) => {
         <div className={styles.buttonContainer}>
           <OverlayTrigger
             placement="top"
+            transition={false}
             overlay={
               <Tooltip>
                 <strong>
@@ -101,6 +102,7 @@ const Task = (props) => {
 
           <OverlayTrigger
             placement="top"
+            transition={false}
             overlay={
               <Tooltip>
                 <strong>Edit</strong>
@@ -119,6 +121,7 @@ const Task = (props) => {
 
           <OverlayTrigger
             placement="top"
+            transition={false}
             overlay={
               <Tooltip>
                 <strong>Remove</strong>
