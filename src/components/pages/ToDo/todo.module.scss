@@ -53,3 +53,25 @@
   margin: 0;
   padding: 0;
 }
+
+.noTask {
+  flex: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 2s;
+
+  &.show {
+    opacity: 1;
+  }
+
+  h2 {
+    text-align: center;
+
+    span {
+      color: white;
+      white-space: nowrap;
+    }
+  }
+}

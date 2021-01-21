@@ -20,8 +20,8 @@ export const register = (data) => (dispatch) => {
   dispatch({ type: actionTypes.AUTH_LOADING });
 
   registerRequest(data)
-    .then((userId) => {
-      dispatch({ type: actionTypes.REGISTER_SUCCESS, userId: userId._id });
+    .then(() => {
+      dispatch({ type: actionTypes.REGISTER_SUCCESS });
       history.push('/login');
     })
     .catch((err) =>
@@ -45,14 +45,49 @@ export const login = (data) => (dispatch) => {
     });
 };
 
-export const logout = () => (dispatch) => {
+export const logout = () => async (dispatch) => {
   dispatch({ type: actionTypes.AUTH_LOADING });
 
-  request(`${apiUrl}/user/sign-out`, 'POST', { jwt: getJWT('local') })
-    .then(() => {
-      removeJWT();
-      dispatch({ type: actionTypes.LOGOUT_SUCCESS });
-      history.push('/login');
+  const jwt = await getJWT();
+
+  if (jwt) {
+    request(`${apiUrl}/user/sign-out`, 'POST', { jwt })
+      .then(() => {
+        removeJWT();
+        dispatch({ type: actionTypes.LOGOUT_SUCCESS });
+        history.push('/login');
+      })
+      .catch((err) =>
+        dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
+      );
+  } else {
+    dispatch({ type: actionTypes.LOGOUT_SUCCESS });
+    history.push('/login');
+  }
+};
+
+export const getUserInfo = () => (dispatch) => {
+  dispatch({ type: actionTypes.AUTH_LOADING });
+
+  request(`${apiUrl}/user`)
+    .then((userInfo) => {
+      dispatch({ type: actionTypes.GET_USER_INFO_SUCCESS, userInfo });
+    })
+    .catch((err) =>
+      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
+    );
+};
+
+export const toggleUserModal = () => (dispatch) => {
+  dispatch({ type: actionTypes.TOGGLE_USER_SETTINGS_MODAL });
+};
+
+export const updateUserInfo = (name, surname) => (dispatch) => {
+  dispatch({ type: actionTypes.AUTH_LOADING });
+
+  request(`${apiUrl}/user`, 'PUT', { name, surname })
+    .then((userInfo) => {
+      dispatch({ type: actionTypes.UPDATE_USER_INFO_SUCCESS, userInfo });
     })
     .catch((err) =>
       dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })

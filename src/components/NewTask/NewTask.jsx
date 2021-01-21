@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './newTask.module.scss';
 import { addTask } from '../../store/actions/taskActions';
+import { isMobile } from 'react-device-detect';
 
 class NewTask extends PureComponent {
   constructor(props) {
@@ -95,7 +96,7 @@ class NewTask extends PureComponent {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Add new task
+            Add new Task
           </Modal.Title>
         </Modal.Header>
 
@@ -150,6 +151,12 @@ class NewTask extends PureComponent {
               minDate={new Date()}
               onChange={(date) => this.handleChange('date', date)}
               dateFormat="dd.MM.yyyy"
+              autoComplete="off"
+              todayButton="Today"
+              showYearDropdown
+              showMonthDropdown
+              withPortal={isMobile}
+              popperPlacement="top"
             />
           </Form.Group>
         </Modal.Body>

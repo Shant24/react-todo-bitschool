@@ -1,18 +1,14 @@
-import { checkLoginStatus } from '../../helpers/auth';
 import * as actionTypes from '../types/authTypes';
+import { LOADING } from '../types/taskTypes';
+import { checkLoginStatus } from '../../helpers/auth';
 
 const defaultState = {
+  userInfo: null,
   loading: false,
   errorMessage: null,
   successMessage: null,
   isAuthenticated: checkLoginStatus(),
-  userId: null,
-  user: {
-    name: 'Shant',
-    surname: 'Sargsyan',
-    avatar:
-      'https://scontent.fevn1-4.fna.fbcdn.net/v/t1.0-1/c16.71.256.256a/p320x320/93404452_2966084290148011_477263264217038848_o.jpg?_nc_cat=106&ccb=2&_nc_sid=7206a8&_nc_ohc=LEhnmAyYXq0AX83jbou&_nc_ht=scontent.fevn1-4.fna&tp=27&oh=bc5fc5cdb93f8a3fea7e4ddfa5b6cef7&oe=6024FB6E',
-  },
+  isUserModalOpen: false,
 };
 
 const authReducer = (state = defaultState, action) => {
@@ -32,7 +28,6 @@ const authReducer = (state = defaultState, action) => {
       return {
         ...state,
         loading: false,
-        userId: action.userId,
         successMessage: 'You have successfully registered!!!',
       };
 
@@ -40,7 +35,25 @@ const authReducer = (state = defaultState, action) => {
       return { ...state, loading: false, isAuthenticated: true };
 
     case actionTypes.LOGOUT_SUCCESS:
-      return { ...state, loading: false, isAuthenticated: false };
+      return { ...defaultState, isAuthenticated: false };
+
+    case actionTypes.GET_USER_INFO_SUCCESS:
+      return { ...state, loading: false, userInfo: action.userInfo };
+
+    case actionTypes.TOGGLE_USER_SETTINGS_MODAL:
+      return { ...state, isUserModalOpen: !state.isUserModalOpen };
+
+    case actionTypes.UPDATE_USER_INFO_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUserModalOpen: false,
+        userInfo: action.userInfo,
+        successMessage: 'Your information is successfully updated!!!',
+      };
+
+    case LOADING:
+      return { ...state, errorMessage: null, successMessage: null };
 
     default:
       return state;

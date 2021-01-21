@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import styles from './navMenu.module.scss';
 import './navMenuGlobal.scss';
-import UserAvatar from '../../assets/images/svg/UserAvatar';
-import { logout } from '../../store/actions/authActions';
+import {
+  getUserInfo,
+  logout,
+  toggleUserModal,
+} from '../../store/actions/authActions';
+import UserSettingsModal from '../UserSettingsModal/UserSettingsModal';
 
-const NavMenu = ({ user, isAuthenticated, logout }) => {
+const NavMenu = (props) => {
+  const {
+    user,
+    isAuthenticated,
+    isUserModalOpen,
+    logout,
+    getUserInfo,
+    toggleUserModal,
+  } = props;
+
+  useEffect(() => {
+    !user && isAuthenticated && getUserInfo();
+  }, [user, isAuthenticated, getUserInfo]);
+
   return (
     <header className={styles.header}>
       <Navbar bg="primary" variant="dark" expand="sm">
@@ -23,6 +42,7 @@ const NavMenu = ({ user, isAuthenticated, logout }) => {
             customStyle={styles.mobileWrapper}
             user={user}
             logout={logout}
+            toggleModal={toggleUserModal}
           />
         )}
 
@@ -70,37 +90,59 @@ const NavMenu = ({ user, isAuthenticated, logout }) => {
             customStyle={styles.desktopWrapper}
             user={user}
             logout={logout}
+            toggleModal={toggleUserModal}
           />
         )}
       </Navbar>
+
+      {isUserModalOpen && <UserSettingsModal onCancel={toggleUserModal} />}
     </header>
   );
 };
 
 const mapStateToProps = (state) => ({
-  user: state.auth.user,
+  user: state.auth.userInfo,
   isAuthenticated: state.auth.isAuthenticated,
+  isUserModalOpen: state.auth.isUserModalOpen,
 });
 
-export default connect(mapStateToProps, { logout })(NavMenu);
+const mapDispatchToProps = { logout, toggleUserModal, getUserInfo };
 
-function UserBlok({ customStyle, user: { name, surname, avatar }, logout }) {
+export default connect(mapStateToProps, mapDispatchToProps)(NavMenu);
+
+function UserBlok({ customStyle, user, logout, toggleModal }) {
   return (
     <div className={`${styles.userWrapper} ${customStyle}`}>
       <div className={styles.userContainer}>
         <div className={styles.userInformation}>
-          {avatar ? (
-            <img src={avatar} alt={`${name}'s avatar`} />
-          ) : (
-            <UserAvatar />
+          <FontAwesomeIcon icon={faUserCircle} />
+
+          {user && (
+            <div className={styles.userName}>
+              {user.name} {user.surname}
+            </div>
           )}
-          <div className={styles.userName}>
-            {name} {surname}
-          </div>
         </div>
+
         <div className={styles.userMenu}>
-          <Link to="user-settings">Settings</Link>
-          <div onClick={logout}>Log out</div>
+          {customStyle === styles.mobileWrapper && user && (
+            <div className={styles.userName}>
+              {user.name} {user.surname}
+            </div>
+          )}
+
+          <div
+            className={`${styles.buttons}${
+              customStyle === styles.desktopWrapper ? ` ${styles.first}` : ''
+            }`}
+            onClick={toggleModal}
+          >
+            Settings
+          </div>
+
+          <div className={styles.buttons} onClick={logout}>
+            Log out
+          </div>
         </div>
       </div>
     </div>
@@ -111,6 +153,7 @@ UserBlok.propTypes = {
   customStyle: PropTypes.string.isRequired,
   user: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired,
 };
 
 function AuthBlok({ customStyle }) {

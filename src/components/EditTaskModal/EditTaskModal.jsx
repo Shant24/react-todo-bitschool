@@ -2,6 +2,7 @@ import React, { PureComponent, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, FormControl, Modal } from 'react-bootstrap';
+import { isMobile } from 'react-device-detect';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../NewTask/newTask.module.scss';
@@ -147,6 +148,12 @@ class EditTaskModal extends PureComponent {
               minDate={new Date()}
               onChange={(date) => this.handleChange('date', date)}
               dateFormat="dd.MM.yyyy"
+              autoComplete="off"
+              todayButton="Today"
+              showYearDropdown
+              showMonthDropdown
+              withPortal={isMobile}
+              popperPlacement="top"
             />
           </Form.Group>
         </Modal.Body>

@@ -63,6 +63,8 @@
 }
 
 .userWrapper {
+  margin-left: 20px;
+
   @media (min-width: 576px) {
     &.mobileWrapper {
       display: none;
@@ -90,14 +92,10 @@
       display: flex;
       align-items: center;
 
-      img,
       svg {
         width: 35px;
         height: 35px;
-        border-radius: 100%;
-      }
 
-      svg {
         path {
           fill: white;
         }
@@ -106,6 +104,7 @@
       .userName {
         margin: 0 0 0 5px;
         color: white;
+        text-align: center;
 
         @media (max-width: 575px) {
           display: none;
@@ -119,6 +118,7 @@
 
     &:hover {
       .userMenu {
+        width: 167px;
         display: flex;
         flex-direction: column;
         position: absolute;
@@ -150,28 +150,38 @@
           left: 0;
         }
 
-        a,
-        div {
-          padding: 5px 30px;
+        .userName {
+          padding: 20px 0;
+          text-align: center;
           color: white;
+          background-color: #1c7fe9;
+          border-bottom: 1px solid white;
+          cursor: context-menu;
+        }
+
+        .buttons {
+          padding: 8px 0;
+          color: white;
+          text-align: center;
+          cursor: pointer;
+
+          &.first {
+            border-radius: 5px 5px 0 0;
+          }
+
+          &:first-child,
+          &:nth-child(2) {
+            border-bottom: 1px solid white;
+          }
+
+          &:last-child {
+            border: 0;
+            border-radius: 0 0 5px 5px;
+          }
 
           &:hover {
             background-color: rgba(#fff, 0.2);
-            // color: black;
           }
-        }
-
-        a {
-          border-radius: 5px 5px 0 0;
-
-          &:hover {
-            text-decoration: none;
-          }
-        }
-
-        div {
-          border-radius: 0 0 5px 5px;
-          cursor: pointer;
         }
       }
     }

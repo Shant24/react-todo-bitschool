@@ -6,19 +6,30 @@
     justify-content: center;
     align-items: center;
     font-size: 25px;
+
+    &.dateButtons {
+      width: 28px;
+      height: 28px;
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+    }
   }
 
   .advancedSearch {
     max-height: 0;
-    transition: all 0.5s;
+    transition: all 0.25s;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    opacity: 0;
     overflow: hidden;
 
     &.opened {
       max-height: 500px;
-      transition: all 1s;
+      opacity: 1;
+      overflow: visible;
+      transition: all 0.5s;
     }
 
     label {
@@ -39,6 +50,8 @@
     }
 
     .datePicker {
+      position: relative;
+
       @media (min-width: 1038px) {
         margin-bottom: 0;
       }
