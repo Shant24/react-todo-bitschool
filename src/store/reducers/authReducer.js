@@ -76,8 +76,7 @@ const authReducer = (state = defaultState, action) => {
         ...state,
         loading: false,
         isContactSanded: true,
-        successMessage:
-          'Your message is successfully send. We contact to you as soon as we can!',
+        successMessage: 'Your message is successfully sent!',
       };
 
     case actionTypes.RESET_CONTACT_SENDED:

@@ -9,6 +9,7 @@ import {
   registerRequest,
 } from '../../helpers/auth';
 import history from '../../helpers/history';
+import sendFeedbackToEmail from '../../helpers/sendFeedbackToEmail';
 
 let apiUrl = process.env.REACT_APP_API_URL;
 
@@ -98,18 +99,10 @@ export const passwordIsEditMode = (bool) => (dispatch) => {
   dispatch({ type: actionTypes.TOGGLE_PASSWORD_EDIT_MODE, bool });
 };
 
-export const updateUserPassword = (
-  oldPassword,
-  newPassword,
-  confirmNewPassword
-) => (dispatch) => {
+export const updateUserPassword = (data) => (dispatch) => {
   dispatch({ type: actionTypes.AUTH_LOADING });
 
-  request(`${apiUrl}/user/password`, 'PUT', {
-    oldPassword,
-    newPassword,
-    confirmNewPassword,
-  })
+  request(`${apiUrl}/user/password`, 'PUT', data)
     .then(() => dispatch({ type: actionTypes.UPDATE_USER_PASSWORD_SUCCESS }))
     .catch((err) =>
       dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
@@ -120,9 +113,17 @@ export const sendContactForm = (data) => (dispatch) => {
   dispatch({ type: actionTypes.AUTH_LOADING });
 
   request(`${apiUrl}/form`, 'POST', data)
-    .then((data) => {
-      console.log(data);
+    .then(() => {
       dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS });
+
+      if (
+        process.env.REACT_APP_YOUR_NAME_FOR_EMAIL_TEMPLATE &&
+        process.env.REACT_APP_EMAIL_SERVICE_ID &&
+        process.env.REACT_APP_EMAIL_TEMPLATE_ID &&
+        process.env.REACT_APP_EMAIL_USER_ID
+      ) {
+        sendFeedbackToEmail(data);
+      }
     })
     .catch((err) =>
       dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })

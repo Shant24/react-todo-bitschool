@@ -152,7 +152,7 @@ const UserSettingsModal = ({
     return valid;
   };
 
-  const handleUserSave = (type) => {
+  const handleSave = (type) => {
     const {
       name,
       surname,
@@ -168,13 +168,13 @@ const UserSettingsModal = ({
     type === 'user' && updateUserInfo(name.trim(), surname.trim());
 
     type === 'password' &&
-      updateUserPassword(oldPassword, newPassword, confirmNewPassword);
+      updateUserPassword({ oldPassword, newPassword, confirmNewPassword });
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handleUserSave('user');
+      handleSave('user');
     }
   };
 
@@ -386,7 +386,7 @@ const UserSettingsModal = ({
         {isUserEditMode && (
           <>
             <Button
-              onClick={() => handleUserSave('user')}
+              onClick={() => handleSave('user')}
               variant="success"
               disabled={buttonDisabled}
             >
@@ -404,10 +404,7 @@ const UserSettingsModal = ({
 
         {isPasswordEditMode && (
           <>
-            <Button
-              onClick={() => handleUserSave('password')}
-              variant="success"
-            >
+            <Button onClick={() => handleSave('password')} variant="success">
               Save
             </Button>
 
