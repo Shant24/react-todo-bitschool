@@ -78,8 +78,8 @@ export const getUserInfo = () => (dispatch) => {
     );
 };
 
-export const toggleUserModal = () => (dispatch) => {
-  dispatch({ type: actionTypes.TOGGLE_USER_SETTINGS_MODAL });
+export const userIsEditMode = (bool) => (dispatch) => {
+  dispatch({ type: actionTypes.TOGGLE_USER_EDIT_MODE, bool });
 };
 
 export const updateUserInfo = (name, surname) => (dispatch) => {
@@ -89,6 +89,28 @@ export const updateUserInfo = (name, surname) => (dispatch) => {
     .then((userInfo) => {
       dispatch({ type: actionTypes.UPDATE_USER_INFO_SUCCESS, userInfo });
     })
+    .catch((err) =>
+      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
+    );
+};
+
+export const passwordIsEditMode = (bool) => (dispatch) => {
+  dispatch({ type: actionTypes.TOGGLE_PASSWORD_EDIT_MODE, bool });
+};
+
+export const updateUserPassword = (
+  oldPassword,
+  newPassword,
+  confirmNewPassword
+) => (dispatch) => {
+  dispatch({ type: actionTypes.AUTH_LOADING });
+
+  request(`${apiUrl}/user/password`, 'PUT', {
+    oldPassword,
+    newPassword,
+    confirmNewPassword,
+  })
+    .then(() => dispatch({ type: actionTypes.UPDATE_USER_PASSWORD_SUCCESS }))
     .catch((err) =>
       dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
     );

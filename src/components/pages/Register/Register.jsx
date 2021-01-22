@@ -41,7 +41,11 @@ const Register = ({ register }) => {
   });
 
   const handleChangeValue = ({ target: { name, value } }) => {
-    setValues({ ...values, [name]: value });
+    if (name === 'name' || name === 'surname') {
+      setValues({ ...values, [name]: uppercaseFirstLetter(value) });
+    } else {
+      setValues({ ...values, [name]: value });
+    }
 
     setErrors({ ...errors, [name]: null });
   };

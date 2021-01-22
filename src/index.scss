@@ -36,3 +36,9 @@ main,
 .invalid {
   border: 1px solid #f00;
 }
+
+.modal-header {
+  button {
+    outline: none;
+  }
+}

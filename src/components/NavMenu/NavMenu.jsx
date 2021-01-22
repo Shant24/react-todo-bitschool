@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -7,26 +7,21 @@ import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import styles from './navMenu.module.scss';
 import './navMenuGlobal.scss';
-import {
-  getUserInfo,
-  logout,
-  toggleUserModal,
-} from '../../store/actions/authActions';
+import { getUserInfo, logout } from '../../store/actions/authActions';
 import UserSettingsModal from '../UserSettingsModal/UserSettingsModal';
 
 const NavMenu = (props) => {
-  const {
-    user,
-    isAuthenticated,
-    isUserModalOpen,
-    logout,
-    getUserInfo,
-    toggleUserModal,
-  } = props;
+  const { user, isAuthenticated, logout, getUserInfo } = props;
+
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
     !user && isAuthenticated && getUserInfo();
   }, [user, isAuthenticated, getUserInfo]);
+
+  const toggleModal = () => {
+    user && setIsSettingsOpen(!isSettingsOpen);
+  };
 
   return (
     <header className={styles.header}>
@@ -42,7 +37,7 @@ const NavMenu = (props) => {
             customStyle={styles.mobileWrapper}
             user={user}
             logout={logout}
-            toggleModal={toggleUserModal}
+            toggleModal={toggleModal}
           />
         )}
 
@@ -90,12 +85,12 @@ const NavMenu = (props) => {
             customStyle={styles.desktopWrapper}
             user={user}
             logout={logout}
-            toggleModal={toggleUserModal}
+            toggleModal={toggleModal}
           />
         )}
       </Navbar>
 
-      {isUserModalOpen && <UserSettingsModal onCancel={toggleUserModal} />}
+      {isSettingsOpen && user && <UserSettingsModal onCancel={toggleModal} />}
     </header>
   );
 };
@@ -103,10 +98,9 @@ const NavMenu = (props) => {
 const mapStateToProps = (state) => ({
   user: state.auth.userInfo,
   isAuthenticated: state.auth.isAuthenticated,
-  isUserModalOpen: state.auth.isUserModalOpen,
 });
 
-const mapDispatchToProps = { logout, toggleUserModal, getUserInfo };
+const mapDispatchToProps = { logout, getUserInfo };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavMenu);
 
@@ -151,7 +145,7 @@ function UserBlok({ customStyle, user, logout, toggleModal }) {
 
 UserBlok.propTypes = {
   customStyle: PropTypes.string.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   logout: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired,
 };
