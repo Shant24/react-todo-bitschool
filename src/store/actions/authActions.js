@@ -1,4 +1,4 @@
-import request from '../../helpers/request';
+import request, { requestWithoutToken } from '../../helpers/request';
 import * as actionTypes from '../types/authTypes';
 import { isMobile } from 'react-device-detect';
 import {
@@ -112,7 +112,7 @@ export const updateUserPassword = (data) => (dispatch) => {
 export const sendContactForm = (data) => (dispatch) => {
   dispatch({ type: actionTypes.AUTH_LOADING });
 
-  request(`${apiUrl}/form`, 'POST', data)
+  requestWithoutToken(`${apiUrl}/form`, 'POST', data)
     .then(() => {
       dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS });
 

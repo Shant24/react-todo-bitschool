@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import TextareaAutosize from 'react-textarea-autosize';
 import styles from '../Register/register.module.scss';
 import { uppercaseFirstLetter } from '../../../helpers/utils';
 import * as globalErrors from '../../../helpers/errors';
@@ -35,6 +36,12 @@ const Contact = ({ isContactSanded, sendContactForm, resetContactSended }) => {
         name: '',
         email: '',
         message: '',
+      });
+
+      setFieldIsActive({
+        name: false,
+        email: false,
+        message: false,
       });
 
       resetContactSended();
@@ -172,22 +179,17 @@ const Contact = ({ isContactSanded, sendContactForm, resetContactSended }) => {
                 >
                   Message
                 </label>
-                <textarea
+                <TextareaAutosize
                   id="contactMessage"
                   className={errors.message && styles.invalid}
                   value={values.message}
-                  rows={
-                    values.message.length > 35
-                      ? values.message.length > 70
-                        ? '3'
-                        : '2'
-                      : '1'
-                  }
                   name="message"
+                  maxRows={3}
                   onChange={handleChangeValue}
                   onFocus={(e) => handleChangeFocus(e, true)}
                   onBlur={(e) => handleChangeFocus(e, false)}
                 />
+
                 <small>{errors.message}</small>
               </div>
 
