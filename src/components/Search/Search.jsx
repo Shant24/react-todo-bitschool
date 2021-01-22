@@ -189,7 +189,7 @@ const Search = ({ getTasks }) => {
           dates.create_lte) && (
           <InputGroup.Append>
             <OverlayTrigger
-              placement="bottom"
+              placement="top"
               transition={false}
               overlay={
                 <Tooltip>
@@ -210,7 +210,7 @@ const Search = ({ getTasks }) => {
 
         <InputGroup.Append>
           <OverlayTrigger
-            placement="bottom"
+            placement="top"
             transition={false}
             overlay={
               <Tooltip>

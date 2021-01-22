@@ -178,6 +178,34 @@ const UserSettingsModal = ({
     }
   };
 
+  const handleEditMode = (type) => {
+    if (type === 'user') {
+      userIsEditMode(true);
+      passwordIsEditMode(false);
+    } else if (type === 'password') {
+      userIsEditMode(false);
+      passwordIsEditMode(true);
+    }
+  };
+
+  const handleCloseEditMode = (type) => {
+    userIsEditMode(false);
+    passwordIsEditMode(false);
+
+    type === 'user' &&
+      setValues({
+        ...values,
+        name: user.name,
+        surname: user.surname,
+      });
+  };
+
+  const handleClose = () => {
+    userIsEditMode(false);
+    passwordIsEditMode(false);
+    onCancel();
+  };
+
   return (
     <Modal
       size="md"
@@ -339,26 +367,17 @@ const UserSettingsModal = ({
         {!isUserEditMode && !isPasswordEditMode && (
           <>
             <Button
-              onClick={() => {
-                passwordIsEditMode(true);
-                userIsEditMode(false);
-              }}
+              onClick={() => handleEditMode('password')}
               variant="warning"
             >
               Change Password
             </Button>
 
-            <Button
-              onClick={() => {
-                passwordIsEditMode(false);
-                userIsEditMode(true);
-              }}
-              variant="info"
-            >
+            <Button onClick={() => handleEditMode('user')} variant="info">
               Edit User
             </Button>
 
-            <Button onClick={onCancel} variant="secondary">
+            <Button onClick={handleClose} variant="secondary">
               Close
             </Button>
           </>
@@ -374,7 +393,10 @@ const UserSettingsModal = ({
               Save
             </Button>
 
-            <Button onClick={() => userIsEditMode(false)} variant="secondary">
+            <Button
+              onClick={() => handleCloseEditMode('user')}
+              variant="secondary"
+            >
               Cancel
             </Button>
           </>
@@ -389,13 +411,7 @@ const UserSettingsModal = ({
               Save
             </Button>
 
-            <Button
-              onClick={() => {
-                passwordIsEditMode();
-                userIsEditMode(false);
-              }}
-              variant="secondary"
-            >
+            <Button onClick={handleCloseEditMode} variant="secondary">
               Cancel
             </Button>
           </>

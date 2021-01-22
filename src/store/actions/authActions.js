@@ -115,3 +115,20 @@ export const updateUserPassword = (
       dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
     );
 };
+
+export const sendContactForm = (data) => (dispatch) => {
+  dispatch({ type: actionTypes.AUTH_LOADING });
+
+  request(`${apiUrl}/form`, 'POST', data)
+    .then((data) => {
+      console.log(data);
+      dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS });
+    })
+    .catch((err) =>
+      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
+    );
+};
+
+export const resetContactSended = () => (dispatch) => {
+  dispatch({ type: actionTypes.RESET_CONTACT_SENDED });
+};

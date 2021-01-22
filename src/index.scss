@@ -31,6 +31,10 @@ main,
 
 .tooltip {
   transition: opacity 0.15s linear;
+
+  &.show {
+    opacity: 1;
+  }
 }
 
 .invalid {
@@ -40,5 +44,16 @@ main,
 .modal-header {
   button {
     outline: none;
+  }
+}
+
+.white-tooltip {
+  .arrow::before {
+    border-top-color: #fff;
+  }
+
+  .tooltip-inner {
+    color: #000;
+    background-color: #fff;
   }
 }

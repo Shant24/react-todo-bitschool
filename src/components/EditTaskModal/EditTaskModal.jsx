@@ -164,7 +164,7 @@ class EditTaskModal extends PureComponent {
           </Button>
 
           <Button onClick={this.props.onCancel} variant="secondary">
-            Close
+            Cancel
           </Button>
         </Modal.Footer>
       </Modal>

@@ -10,6 +10,7 @@ const defaultState = {
   isAuthenticated: checkLoginStatus(),
   isUserEditMode: false,
   isPasswordEditMode: false,
+  isContactSanded: false,
 };
 
 const authReducer = (state = defaultState, action) => {
@@ -69,6 +70,18 @@ const authReducer = (state = defaultState, action) => {
         isPasswordEditMode: false,
         successMessage: 'Your password is successfully updated!!!',
       };
+
+    case actionTypes.SEND_CONTACT_FORM_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isContactSanded: true,
+        successMessage:
+          'Your message is successfully send. We contact to you as soon as we can!',
+      };
+
+    case actionTypes.RESET_CONTACT_SENDED:
+      return { ...state, isContactSanded: false };
 
     case LOADING:
       return { ...state, errorMessage: null, successMessage: null };
