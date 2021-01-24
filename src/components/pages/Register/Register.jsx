@@ -226,7 +226,8 @@ const Register = ({ register }) => {
               </div>
 
               <div className={styles.linkContainer}>
-                Are you already registered? <Link to="/login">Login</Link>
+                Are you already registered?{' '}
+                <Link to="/login">Try to login!</Link>
               </div>
             </form>
           </Col>

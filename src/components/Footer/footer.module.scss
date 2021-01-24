@@ -57,6 +57,16 @@
           fill: white;
         }
       }
+
+      &:last-child {
+        svg {
+          margin-right: 0;
+
+          @media (max-width: 450px) {
+            margin-right: 10px;
+          }
+        }
+      }
     }
   }
 }

@@ -4,6 +4,14 @@
   top: 0;
   z-index: 99;
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+
+  .navbar {
+    padding: 8px 15px;
+  }
+}
+
+a {
+  user-select: none;
 }
 
 .logLink {
@@ -65,6 +73,7 @@
 
 .userWrapper {
   margin-left: 20px;
+  user-select: none;
 
   @media (min-width: 576px) {
     &.mobileWrapper {
@@ -101,6 +110,7 @@
       align-items: center;
 
       svg {
+        user-select: none;
         width: 35px;
         height: 35px;
 
@@ -130,27 +140,29 @@
 
     &:hover {
       .userMenu {
-        width: 167px;
+        min-width: 160px;
         display: flex;
         flex-direction: column;
         position: absolute;
         top: calc(100% + 10px);
-        left: 50%;
-        transform: translateX(-50%);
+        right: 0px;
         background-color: #2990ff;
         border-radius: 5px;
         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
         z-index: 100;
 
-        &::before {
-          content: '';
+        @media (max-width: 575px) {
+          right: -60px;
+        }
+
+        .triangle {
           position: absolute;
           top: -10px;
-          left: 50%;
-          transform: translateX(-50%);
+          transform: translateX(+10px);
           border: 10px solid transparent;
           border-top: 0;
           border-bottom: 10px solid #2990ff;
+
           @media (max-width: 575px) {
             border-bottom: 10px solid #0b6dd5;
           }
@@ -167,10 +179,11 @@
 
         @media (max-width: 576px) {
           .userName {
-            padding: 20px 0;
+            padding: 20px;
             text-align: center;
             color: white;
             background-color: #0b6dd5;
+            border-radius: 5px 5px 0 0;
             border-bottom: 1px solid white;
             cursor: context-menu;
           }
@@ -182,16 +195,15 @@
           text-align: center;
           cursor: pointer;
 
-          &.first {
-            border-radius: 5px 5px 0 0;
-          }
-
-          &:first-child,
-          &:nth-child(2) {
+          &.settingsBtn {
             border-bottom: 1px solid white;
+
+            @media (min-width: 575px) {
+              border-radius: 5px 5px 0 0;
+            }
           }
 
-          &:last-child {
+          &.logoutBtn {
             border: 0;
             border-radius: 0 0 5px 5px;
           }

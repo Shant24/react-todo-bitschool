@@ -1,20 +1,19 @@
-import request, { requestWithoutToken } from '../../helpers/request';
+import request from '../../helpers/request';
 import * as actionTypes from '../types/authTypes';
-import { isMobile } from 'react-device-detect';
 import {
   getJWT,
   saveJWT,
   removeJWT,
   loginRequest,
   registerRequest,
+  contactRequest,
 } from '../../helpers/auth';
 import history from '../../helpers/history';
 import sendFeedbackToEmail from '../../helpers/sendFeedbackToEmail';
 
 let apiUrl = process.env.REACT_APP_API_URL;
-
-if (process.env.NODE_ENV === 'development' && isMobile) {
-  apiUrl = process.env.REACT_APP_API_MOBILE_URL;
+if (process.env.NODE_ENV === 'development') {
+  apiUrl = `http://${window.location.hostname}:3001`;
 }
 
 export const register = (data) => (dispatch) => {
@@ -112,17 +111,24 @@ export const updateUserPassword = (data) => (dispatch) => {
 export const sendContactForm = (data) => (dispatch) => {
   dispatch({ type: actionTypes.AUTH_LOADING });
 
-  requestWithoutToken(`${apiUrl}/form`, 'POST', data)
-    .then(() => {
-      dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS });
-
-      if (
-        process.env.REACT_APP_YOUR_NAME_FOR_EMAIL_TEMPLATE &&
-        process.env.REACT_APP_EMAIL_SERVICE_ID &&
-        process.env.REACT_APP_EMAIL_TEMPLATE_ID &&
-        process.env.REACT_APP_EMAIL_USER_ID
-      ) {
-        sendFeedbackToEmail(data);
+  contactRequest(data)
+    .then(async () => {
+      try {
+        if (
+          process.env.REACT_APP_YOUR_NAME_FOR_EMAIL_TEMPLATE &&
+          process.env.REACT_APP_EMAIL_SERVICE_ID &&
+          process.env.REACT_APP_EMAIL_TEMPLATE_ID &&
+          process.env.REACT_APP_EMAIL_USER_ID
+        ) {
+          await sendFeedbackToEmail(data).then(() =>
+            dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS })
+          );
+        } else {
+          dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS });
+        }
+      } catch (err) {
+        const errText = { message: err.text || 'Failed to fetch!' };
+        throw errText;
       }
     })
     .catch((err) =>

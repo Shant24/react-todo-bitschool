@@ -13,16 +13,18 @@ import {
 } from '../../store/actions/authActions';
 import * as err from '../../helpers/errors';
 
-const UserSettingsModal = ({
-  user,
-  onCancel,
-  isUserEditMode,
-  isPasswordEditMode,
-  userIsEditMode,
-  passwordIsEditMode,
-  updateUserInfo,
-  updateUserPassword,
-}) => {
+const UserSettingsModal = (props) => {
+  const {
+    user,
+    onCancel,
+    isUserEditMode,
+    isPasswordEditMode,
+    userIsEditMode,
+    passwordIsEditMode,
+    updateUserInfo,
+    updateUserPassword,
+  } = props;
+
   const [values, setValues] = useState({
     name: user.name,
     surname: user.surname,
@@ -178,7 +180,7 @@ const UserSettingsModal = ({
     }
   };
 
-  const handleEditMode = (type) => {
+  const handleOpenEditMode = (type) => {
     if (type === 'user') {
       userIsEditMode(true);
       passwordIsEditMode(false);
@@ -211,7 +213,7 @@ const UserSettingsModal = ({
       size="md"
       aria-labelledby="contained-modal-title-vcenter"
       show={true}
-      onHide={onCancel}
+      onHide={handleClose}
       centered
     >
       <Modal.Header closeButton>
@@ -220,160 +222,166 @@ const UserSettingsModal = ({
         </Modal.Title>
       </Modal.Header>
 
-      {!isPasswordEditMode && (
-        <Modal.Body>
-          <Form.Group>
-            <Form.Label
-              htmlFor="settingsName"
-              className="d-flex justify-content-between align-items-center"
-            >
-              <b>Name</b>
-              {errors.name && (
-                <span className={`text-danger ${styles.invalidText}`}>
-                  {errors.name}
-                </span>
-              )}
-            </Form.Label>
-            <FormControl
-              ref={nameRef}
-              id="settingsName"
-              name="name"
-              className={errors.name ? 'invalid' : ''}
-              placeholder="Name"
-              aria-label="Name"
-              aria-describedby="basic-addon2"
-              value={values.name}
-              onChange={({ target }) =>
-                handleChange(target.name, target.value, 'user')
-              }
-              onKeyDown={handleKeyDown}
-              readOnly={!isUserEditMode}
-            />
-          </Form.Group>
+      <Modal.Body>
+        {isPasswordEditMode ? (
+          <>
+            <Form.Group>
+              <Form.Label
+                htmlFor="settingsOldPassword"
+                className="d-flex justify-content-between align-items-center"
+              >
+                <b>Old password</b>
+                {errors.oldPassword && (
+                  <span className={`text-danger ${styles.invalidText}`}>
+                    {errors.oldPassword}
+                  </span>
+                )}
+              </Form.Label>
+              <FormControl
+                ref={oldPasswordRef}
+                id="settingsOldPassword"
+                className={errors.oldPassword ? 'invalid' : ''}
+                type="password"
+                name="oldPassword"
+                placeholder="Old password"
+                aria-label="oldPassword"
+                aria-describedby="basic-addon2"
+                value={values.oldPassword}
+                onChange={({ target }) =>
+                  handleChange(target.name, target.value)
+                }
+              />
+            </Form.Group>
 
-          <Form.Group>
-            <Form.Label
-              htmlFor="settingsSurname"
-              className="d-flex justify-content-between align-items-center"
-            >
-              <b>Surname</b>
-              {errors.surname && (
-                <span className={`text-danger ${styles.invalidText}`}>
-                  {errors.surname}
-                </span>
-              )}
-            </Form.Label>
-            <FormControl
-              id="settingsSurname"
-              className={errors.surname ? 'invalid' : ''}
-              name="surname"
-              placeholder="Surname"
-              aria-label="Surname"
-              aria-describedby="basic-addon2"
-              value={values.surname}
-              onChange={({ target }) =>
-                handleChange(target.name, target.value, 'user')
-              }
-              onKeyDown={handleKeyDown}
-              readOnly={!isUserEditMode}
-            />
-          </Form.Group>
-        </Modal.Body>
-      )}
+            <Form.Group>
+              <Form.Label
+                htmlFor="settingsNewPassword"
+                className="d-flex justify-content-between align-items-center"
+              >
+                <b>New password</b>
+                {errors.newPassword && (
+                  <span className={`text-danger ${styles.invalidText}`}>
+                    {errors.newPassword}
+                  </span>
+                )}
+              </Form.Label>
+              <FormControl
+                id="settingsNewPassword"
+                className={errors.newPassword ? 'invalid' : ''}
+                type="password"
+                autoComplete="new-password"
+                name="newPassword"
+                placeholder="New password"
+                aria-label="newPassword"
+                aria-describedby="basic-addon2"
+                value={values.newPassword}
+                onChange={({ target }) =>
+                  handleChange(target.name, target.value)
+                }
+              />
+            </Form.Group>
 
-      {isPasswordEditMode && (
-        <Modal.Body>
-          <Form.Group>
-            <Form.Label
-              htmlFor="settingsOldPassword"
-              className="d-flex justify-content-between align-items-center"
-            >
-              <b>Old password</b>
-              {errors.oldPassword && (
-                <span className={`text-danger ${styles.invalidText}`}>
-                  {errors.oldPassword}
-                </span>
-              )}
-            </Form.Label>
-            <FormControl
-              ref={oldPasswordRef}
-              id="settingsOldPassword"
-              className={errors.oldPassword ? 'invalid' : ''}
-              type="password"
-              name="oldPassword"
-              placeholder="Old password"
-              aria-label="oldPassword"
-              aria-describedby="basic-addon2"
-              value={values.oldPassword}
-              onChange={({ target }) => handleChange(target.name, target.value)}
-            />
-          </Form.Group>
+            <Form.Group>
+              <Form.Label
+                htmlFor="settingsConfirmNewPassword"
+                className="d-flex justify-content-between align-items-center"
+              >
+                <b>Confirm new password</b>
+                {errors.confirmNewPassword && (
+                  <span className={`text-danger ${styles.invalidText}`}>
+                    {errors.confirmNewPassword}
+                  </span>
+                )}
+              </Form.Label>
+              <FormControl
+                id="settingsConfirmNewPassword"
+                className={errors.confirmNewPassword ? 'invalid' : ''}
+                type="password"
+                autoComplete="new-password"
+                name="confirmNewPassword"
+                placeholder="Confirm new password"
+                aria-label="confirmNewPassword"
+                aria-describedby="basic-addon2"
+                value={values.confirmNewPassword}
+                onChange={({ target }) =>
+                  handleChange(target.name, target.value)
+                }
+              />
+            </Form.Group>
+          </>
+        ) : (
+          <>
+            <Form.Group>
+              <Form.Label
+                htmlFor="settingsName"
+                className="d-flex justify-content-between align-items-center"
+              >
+                <b>Name</b>
+                {errors.name && (
+                  <span className={`text-danger ${styles.invalidText}`}>
+                    {errors.name}
+                  </span>
+                )}
+              </Form.Label>
+              <FormControl
+                ref={nameRef}
+                id="settingsName"
+                name="name"
+                className={errors.name ? 'invalid' : ''}
+                placeholder="Name"
+                aria-label="Name"
+                aria-describedby="basic-addon2"
+                value={values.name}
+                onChange={({ target }) =>
+                  handleChange(target.name, target.value, 'user')
+                }
+                onKeyDown={handleKeyDown}
+                readOnly={!isUserEditMode}
+              />
+            </Form.Group>
 
-          <Form.Group>
-            <Form.Label
-              htmlFor="settingsNewPassword"
-              className="d-flex justify-content-between align-items-center"
-            >
-              <b>New password</b>
-              {errors.newPassword && (
-                <span className={`text-danger ${styles.invalidText}`}>
-                  {errors.newPassword}
-                </span>
-              )}
-            </Form.Label>
-            <FormControl
-              id="settingsNewPassword"
-              className={errors.newPassword ? 'invalid' : ''}
-              type="password"
-              autoComplete="new-password"
-              name="newPassword"
-              placeholder="New password"
-              aria-label="newPassword"
-              aria-describedby="basic-addon2"
-              value={values.newPassword}
-              onChange={({ target }) => handleChange(target.name, target.value)}
-            />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label
-              htmlFor="settingsConfirmNewPassword"
-              className="d-flex justify-content-between align-items-center"
-            >
-              <b>Confirm new password</b>
-              {errors.confirmNewPassword && (
-                <span className={`text-danger ${styles.invalidText}`}>
-                  {errors.confirmNewPassword}
-                </span>
-              )}
-            </Form.Label>
-            <FormControl
-              id="settingsConfirmNewPassword"
-              className={errors.confirmNewPassword ? 'invalid' : ''}
-              type="password"
-              autoComplete="new-password"
-              name="confirmNewPassword"
-              placeholder="Confirm new password"
-              aria-label="confirmNewPassword"
-              aria-describedby="basic-addon2"
-              value={values.confirmNewPassword}
-              onChange={({ target }) => handleChange(target.name, target.value)}
-            />
-          </Form.Group>
-        </Modal.Body>
-      )}
+            <Form.Group>
+              <Form.Label
+                htmlFor="settingsSurname"
+                className="d-flex justify-content-between align-items-center"
+              >
+                <b>Surname</b>
+                {errors.surname && (
+                  <span className={`text-danger ${styles.invalidText}`}>
+                    {errors.surname}
+                  </span>
+                )}
+              </Form.Label>
+              <FormControl
+                id="settingsSurname"
+                className={errors.surname ? 'invalid' : ''}
+                name="surname"
+                placeholder="Surname"
+                aria-label="Surname"
+                aria-describedby="basic-addon2"
+                value={values.surname}
+                onChange={({ target }) =>
+                  handleChange(target.name, target.value, 'user')
+                }
+                onKeyDown={handleKeyDown}
+                readOnly={!isUserEditMode}
+              />
+            </Form.Group>
+          </>
+        )}
+      </Modal.Body>
 
       <Modal.Footer>
         {!isUserEditMode && !isPasswordEditMode && (
           <>
             <Button
-              onClick={() => handleEditMode('password')}
+              onClick={() => handleOpenEditMode('password')}
               variant="warning"
             >
               Change Password
             </Button>
 
-            <Button onClick={() => handleEditMode('user')} variant="info">
+            <Button onClick={() => handleOpenEditMode('user')} variant="info">
               Edit User
             </Button>
 

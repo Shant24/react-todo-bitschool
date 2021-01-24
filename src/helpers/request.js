@@ -26,21 +26,3 @@ const request = async (url, method = 'GET', body) => {
 };
 
 export default request;
-
-export const requestWithoutToken = (url, method = 'GET', body) => {
-  const config = {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  };
-
-  return fetch(url, config)
-    .then((response) => response.json())
-    .then((result) => {
-      if (result.error) throw result.error;
-
-      return result;
-    });
-};

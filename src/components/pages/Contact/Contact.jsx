@@ -132,6 +132,10 @@ const Contact = ({ isContactSanded, sendContactForm, resetContactSended }) => {
             <form onSubmit={handleSubmit}>
               <h1>Contact us</h1>
 
+              <p className={styles.question}>
+                <b>If you have any questions feel free to ask them!</b>
+              </p>
+
               <div className={styles.inputContainer}>
                 <label
                   className={`${fieldIsActive['name'] && styles.active}`}

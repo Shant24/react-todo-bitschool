@@ -1,11 +1,9 @@
 import request from '../../helpers/request';
 import * as actionTypes from '../types/taskTypes';
-import { isMobile } from 'react-device-detect';
 
 let apiUrl = process.env.REACT_APP_API_URL;
-
-if (process.env.NODE_ENV === 'development' && isMobile) {
-  apiUrl = process.env.REACT_APP_API_MOBILE_URL;
+if (process.env.NODE_ENV === 'development') {
+  apiUrl = `http://${window.location.hostname}:3001`;
 }
 
 export const getTasks = (params = {}) => (dispatch) => {

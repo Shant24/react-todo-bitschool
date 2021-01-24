@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useRef, useCallback } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -14,30 +14,43 @@ const NavMenu = (props) => {
   const { user, isAuthenticated, logout, getUserInfo } = props;
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 575);
 
   useEffect(() => {
     !user && isAuthenticated && getUserInfo();
   }, [user, isAuthenticated, getUserInfo]);
 
-  const toggleModal = () => {
+  const HandleToggleModal = () => {
     user && setIsSettingsOpen(!isSettingsOpen);
   };
 
+  const handleResize = useCallback(() => {
+    if (window.innerWidth <= 575) {
+      !isMobile && setIsMobile(true);
+    } else if (window.innerWidth > 575) {
+      isMobile && setIsMobile(false);
+    }
+  }, [isMobile]);
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+  }, [handleResize]);
+
   return (
     <header className={styles.header}>
-      <Navbar bg="primary" variant="dark" expand="sm">
+      <Navbar className={styles.navbar} bg="primary" variant="dark" expand="sm">
         <Navbar.Brand>
           <Link to="/" className={styles.logLink}>
             ToDo App
           </Link>
         </Navbar.Brand>
 
-        {isAuthenticated && (
-          <UserBlok
+        {isAuthenticated && isMobile && (
+          <UserBlock
             customStyle={styles.mobileWrapper}
             user={user}
             logout={logout}
-            toggleModal={toggleModal}
+            onToggleModal={HandleToggleModal}
           />
         )}
 
@@ -74,23 +87,25 @@ const NavMenu = (props) => {
               Contact
             </NavLink>
 
-            {!isAuthenticated && <AuthBlok customStyle={styles.mobileLink} />}
+            {!isAuthenticated && <AuthBlock customStyle={styles.mobileLink} />}
           </Nav>
 
-          {!isAuthenticated && <AuthBlok customStyle={styles.desktopLink} />}
+          {!isAuthenticated && <AuthBlock customStyle={styles.desktopLink} />}
         </Navbar.Collapse>
 
-        {isAuthenticated && (
-          <UserBlok
+        {isAuthenticated && !isMobile && (
+          <UserBlock
             customStyle={styles.desktopWrapper}
             user={user}
             logout={logout}
-            toggleModal={toggleModal}
+            onToggleModal={HandleToggleModal}
           />
         )}
       </Navbar>
 
-      {isSettingsOpen && user && <UserSettingsModal onCancel={toggleModal} />}
+      {isSettingsOpen && user && (
+        <UserSettingsModal onCancel={HandleToggleModal} />
+      )}
     </header>
   );
 };
@@ -102,23 +117,58 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = { logout, getUserInfo };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(NavMenu));
 
-function UserBlok({ customStyle, user, logout, toggleModal }) {
+function UserBlock({ customStyle, user, logout, onToggleModal }) {
+  const [desktopTriangleWidth, setDesktopTriangleWidth] = useState('83.5px');
+
+  const userDesktopWrapperRef = useRef();
+  const userMobileWrapperRef = useRef();
+
+  useEffect(() => {
+    let setDeskTriangleWidth;
+    if (customStyle === styles.desktopWrapper) {
+      setDeskTriangleWidth =
+        user &&
+        setTimeout(() => {
+          setDesktopTriangleWidth(
+            `${userDesktopWrapperRef.current.offsetWidth / 2}px`
+          );
+        }, 100);
+    }
+    return () => {
+      if (customStyle === styles.desktopWrapper) {
+        clearTimeout(setDeskTriangleWidth);
+      }
+    };
+  }, [customStyle, user]);
+
   return (
-    <div className={`${styles.userWrapper} ${customStyle}`}>
+    <div
+      ref={
+        customStyle === styles.desktopWrapper
+          ? userDesktopWrapperRef
+          : userMobileWrapperRef
+      }
+      className={`${styles.userWrapper} ${customStyle}`}
+    >
       <div className={styles.userContainer}>
         <div className={styles.userInformation}>
           <FontAwesomeIcon icon={faUserCircle} />
 
           {user && (
             <div className={styles.userName}>
-              {user.name} {user.surname}
+              {user?.name} {user?.surname}
             </div>
           )}
         </div>
 
         <div className={styles.userMenu}>
+          <span
+            className={styles.triangle}
+            style={{ right: desktopTriangleWidth }}
+          ></span>
+
           {customStyle === styles.mobileWrapper && user && (
             <div className={styles.userName}>
               {user.name} {user.surname}
@@ -126,15 +176,16 @@ function UserBlok({ customStyle, user, logout, toggleModal }) {
           )}
 
           <div
-            className={`${styles.buttons}${
-              customStyle === styles.desktopWrapper ? ` ${styles.first}` : ''
-            }`}
-            onClick={toggleModal}
+            className={`${styles.buttons} ${styles.settingsBtn}`}
+            onClick={onToggleModal}
           >
             Settings
           </div>
 
-          <div className={styles.buttons} onClick={logout}>
+          <div
+            className={`${styles.buttons} ${styles.logoutBtn}`}
+            onClick={logout}
+          >
             Log out
           </div>
         </div>
@@ -143,14 +194,7 @@ function UserBlok({ customStyle, user, logout, toggleModal }) {
   );
 }
 
-UserBlok.propTypes = {
-  customStyle: PropTypes.string.isRequired,
-  user: PropTypes.object,
-  logout: PropTypes.func.isRequired,
-  toggleModal: PropTypes.func.isRequired,
-};
-
-function AuthBlok({ customStyle }) {
+function AuthBlock({ customStyle }) {
   return (
     <>
       <NavLink
@@ -174,6 +218,13 @@ function AuthBlok({ customStyle }) {
   );
 }
 
-AuthBlok.propTypes = {
+UserBlock.propTypes = {
+  customStyle: PropTypes.string.isRequired,
+  user: PropTypes.object,
+  logout: PropTypes.func.isRequired,
+  onToggleModal: PropTypes.func.isRequired,
+};
+
+AuthBlock.propTypes = {
   customStyle: PropTypes.string.isRequired,
 };
