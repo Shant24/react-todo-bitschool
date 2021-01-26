@@ -10,7 +10,8 @@ See [Demo](https://nervous-perlman-4b274d.netlify.app) page.
 ---
 ## Requirements
 
-You will need install `Node.js`, `npm` and `MongoDB`  in your environnement.
+You will need install `Node.js` and `npm`  in your environnement.
+You will need install [todo-list-api-bitschool](https://github.com/Shant24/todo-list-api-bitschool) and view the instructions in this repository.
 
 ### Node
 - #### Node installation on Windows
@@ -40,9 +41,6 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
     $ npm install npm -g
 
-### MongoDB
- Install MongoDb [Guide](https://docs.mongodb.com/manual/administration/install-community/)
-
 ## Project installation and usage
 
 If you use `npm`
@@ -57,7 +55,7 @@ If you use `yarn`
     $ cd react-todo-bitschool
     $ yarn install
 
-Remove `.sample` extension from configuration files located in direct folder
+Remove `.sample` extension from configuration files located in PATH
     ```
     .env.sample -> .env
     ```
@@ -65,14 +63,16 @@ Remove `.sample` extension from configuration files located in direct folder
 ## Running the project
 
     $ npm start
-    or
+
+or
+
     $ yarn start
 
 ## Application capabilities
 
 - Create tasks
 - Set a deadline for your task
-- Mark the ՝status՝ of your task as ՝Done՝ or ՝active՝
+- Mark the `status` of your task as `Done` or `Active`
 - Edit task
 - Delete task
 - Delete multiple tasks at once
