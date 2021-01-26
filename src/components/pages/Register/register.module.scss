@@ -16,20 +16,14 @@
   }
 
   .row {
+    width: 100%;
+    flex: auto;
     justify-content: center;
     align-items: center;
 
     @media (max-width: 575px) {
       padding: 16px;
-    }
-
-    &.loginRow {
-      width: 100%;
-      flex: auto;
-
-      @media (max-width: 575px) {
-        flex-direction: column;
-      }
+      flex-direction: column;
     }
 
     .formContainer {
@@ -44,15 +38,19 @@
         margin: 0;
         padding: 20px 0;
         min-height: 100%;
-        background-color: rgba(255, 255, 255, 0.3);
         display: flex;
         justify-content: center;
         align-items: center;
       }
 
       form {
+        @media (max-width: 575px) {
+          padding: 0 25px;
+          width: 100%;
+        }
+
         h1 {
-          margin-bottom: 20px;
+          margin-bottom: 15px;
           text-align: center;
           color: #007bff;
         }
@@ -76,7 +74,8 @@
             }
           }
 
-          input {
+          input,
+          textarea {
             padding: 5px 10px;
             position: relative;
             color: #000;
@@ -89,6 +88,10 @@
             &:-webkit-autofill {
               -webkit-box-shadow: 0 0 0 30px #9acbff inset !important;
             }
+          }
+
+          textarea {
+            resize: none;
           }
 
           small {
@@ -118,6 +121,7 @@
 
           a {
             font-size: 18px;
+            white-space: nowrap;
 
             &:hover {
               text-decoration: none;
@@ -127,4 +131,9 @@
       }
     }
   }
+}
+
+.question {
+  text-align: center;
+  color: #333;
 }

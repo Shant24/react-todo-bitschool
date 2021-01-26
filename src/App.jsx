@@ -58,14 +58,14 @@ class App extends PureComponent {
             <CustomRoute
               type="private"
               path="/task/:taskId"
-              exact
+              exact={false}
               component={SingleTask}
             />
-            <CustomRoute path="/login" exact component={Login} />
-            <CustomRoute path="/register" exact component={Register} />
-            <Route path="/about" exact component={About} />
-            <Route path="/contact" exact component={Contact} />
-            <Route path="/not-found" exact component={NotFound} />
+            <CustomRoute path="/login" exact={false} component={Login} />
+            <CustomRoute path="/register" exact={false} component={Register} />
+            <Route path="/about" component={About} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/not-found" component={NotFound} />
             <Redirect to="/not-found" />
           </Switch>
         </main>

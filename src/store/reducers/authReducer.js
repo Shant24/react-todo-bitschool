@@ -8,7 +8,9 @@ const defaultState = {
   errorMessage: null,
   successMessage: null,
   isAuthenticated: checkLoginStatus(),
-  isUserModalOpen: false,
+  isUserEditMode: false,
+  isPasswordEditMode: false,
+  isContactSanded: false,
 };
 
 const authReducer = (state = defaultState, action) => {
@@ -40,17 +42,46 @@ const authReducer = (state = defaultState, action) => {
     case actionTypes.GET_USER_INFO_SUCCESS:
       return { ...state, loading: false, userInfo: action.userInfo };
 
-    case actionTypes.TOGGLE_USER_SETTINGS_MODAL:
-      return { ...state, isUserModalOpen: !state.isUserModalOpen };
+    case actionTypes.TOGGLE_USER_EDIT_MODE:
+      return {
+        ...state,
+        isUserEditMode: action.bool,
+      };
 
     case actionTypes.UPDATE_USER_INFO_SUCCESS:
       return {
         ...state,
         loading: false,
-        isUserModalOpen: false,
+        isUserEditMode: false,
         userInfo: action.userInfo,
         successMessage: 'Your information is successfully updated!!!',
       };
+
+    case actionTypes.TOGGLE_PASSWORD_EDIT_MODE:
+      return {
+        ...state,
+        isPasswordEditMode: action.bool,
+      };
+
+    case actionTypes.UPDATE_USER_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isPasswordEditMode: false,
+        successMessage: 'Your password is successfully updated!!!',
+      };
+
+    case actionTypes.SEND_CONTACT_FORM_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isContactSanded: true,
+        successMessage:
+          'Your message is successfully sent! We will contact you soon!',
+      };
+
+    case actionTypes.RESET_CONTACT_SENDED:
+      return { ...state, isContactSanded: false };
 
     case LOADING:
       return { ...state, errorMessage: null, successMessage: null };

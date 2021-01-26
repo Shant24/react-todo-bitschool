@@ -31,8 +31,29 @@ main,
 
 .tooltip {
   transition: opacity 0.15s linear;
+
+  &.show {
+    opacity: 1;
+  }
 }
 
 .invalid {
   border: 1px solid #f00;
+}
+
+.modal-header {
+  button {
+    outline: none;
+  }
+}
+
+.white-tooltip {
+  .arrow::before {
+    border-top-color: #fff;
+  }
+
+  .tooltip-inner {
+    color: #333;
+    background-color: #fff;
+  }
 }

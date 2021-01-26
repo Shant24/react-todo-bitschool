@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { isMobile } from 'react-device-detect';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -189,7 +189,7 @@ const Search = ({ getTasks }) => {
           dates.create_lte) && (
           <InputGroup.Append>
             <OverlayTrigger
-              placement="bottom"
+              placement="top"
               transition={false}
               overlay={
                 <Tooltip>
@@ -210,7 +210,7 @@ const Search = ({ getTasks }) => {
 
         <InputGroup.Append>
           <OverlayTrigger
-            placement="bottom"
+            placement="top"
             transition={false}
             overlay={
               <Tooltip>
@@ -223,7 +223,10 @@ const Search = ({ getTasks }) => {
               onClick={handleChangeShow}
               variant="success"
             >
-              <FontAwesomeIcon icon={showSearch ? faCaretUp : faCaretDown} />
+              <FontAwesomeIcon
+                className={showSearch ? styles.svgReveres : ''}
+                icon={faCaretDown}
+              />
             </Button>
           </OverlayTrigger>
         </InputGroup.Append>

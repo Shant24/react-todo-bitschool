@@ -143,7 +143,7 @@ class NewTask extends PureComponent {
 
           <Form.Group className={styles.datePicker}>
             <Form.Label htmlFor="newTaskDate">
-              <div className={styles.date}>Date</div>
+              <div className={styles.date}>Deadline date</div>
             </Form.Label>
             <DatePicker
               id="newTaskDate"
@@ -167,7 +167,7 @@ class NewTask extends PureComponent {
           </Button>
 
           <Button onClick={this.props.onCancel} variant="secondary">
-            Close
+            Cancel
           </Button>
         </Modal.Footer>
       </Modal>

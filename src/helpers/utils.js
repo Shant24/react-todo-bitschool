@@ -7,5 +7,10 @@ export const shortStr = (str = '', length = 0) => {
 };
 
 export const uppercaseFirstLetter = (str) => {
-  return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+  return str
+    ? str
+        .split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+    : '';
 };

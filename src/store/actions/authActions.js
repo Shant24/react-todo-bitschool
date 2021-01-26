@@ -1,19 +1,19 @@
 import request from '../../helpers/request';
 import * as actionTypes from '../types/authTypes';
-import { isMobile } from 'react-device-detect';
 import {
   getJWT,
   saveJWT,
   removeJWT,
   loginRequest,
   registerRequest,
+  contactRequest,
 } from '../../helpers/auth';
 import history from '../../helpers/history';
+import sendFeedbackToEmail from '../../helpers/sendFeedbackToEmail';
 
 let apiUrl = process.env.REACT_APP_API_URL;
-
-if (process.env.NODE_ENV === 'development' && isMobile) {
-  apiUrl = process.env.REACT_APP_API_MOBILE_URL;
+if (process.env.NODE_ENV === 'development') {
+  apiUrl = `http://${window.location.hostname}:3001`;
 }
 
 export const register = (data) => (dispatch) => {
@@ -78,8 +78,8 @@ export const getUserInfo = () => (dispatch) => {
     );
 };
 
-export const toggleUserModal = () => (dispatch) => {
-  dispatch({ type: actionTypes.TOGGLE_USER_SETTINGS_MODAL });
+export const userIsEditMode = (bool) => (dispatch) => {
+  dispatch({ type: actionTypes.TOGGLE_USER_EDIT_MODE, bool });
 };
 
 export const updateUserInfo = (name, surname) => (dispatch) => {
@@ -92,4 +92,50 @@ export const updateUserInfo = (name, surname) => (dispatch) => {
     .catch((err) =>
       dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
     );
+};
+
+export const passwordIsEditMode = (bool) => (dispatch) => {
+  dispatch({ type: actionTypes.TOGGLE_PASSWORD_EDIT_MODE, bool });
+};
+
+export const updateUserPassword = (data) => (dispatch) => {
+  dispatch({ type: actionTypes.AUTH_LOADING });
+
+  request(`${apiUrl}/user/password`, 'PUT', data)
+    .then(() => dispatch({ type: actionTypes.UPDATE_USER_PASSWORD_SUCCESS }))
+    .catch((err) =>
+      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
+    );
+};
+
+export const sendContactForm = (data) => (dispatch) => {
+  dispatch({ type: actionTypes.AUTH_LOADING });
+
+  contactRequest(data)
+    .then(async () => {
+      try {
+        if (
+          process.env.REACT_APP_YOUR_NAME_FOR_EMAIL_TEMPLATE &&
+          process.env.REACT_APP_EMAIL_SERVICE_ID &&
+          process.env.REACT_APP_EMAIL_TEMPLATE_ID &&
+          process.env.REACT_APP_EMAIL_USER_ID
+        ) {
+          await sendFeedbackToEmail(data).then(() =>
+            dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS })
+          );
+        } else {
+          dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS });
+        }
+      } catch (err) {
+        const errText = { message: err.text || 'Failed to fetch!' };
+        throw errText;
+      }
+    })
+    .catch((err) =>
+      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
+    );
+};
+
+export const resetContactSended = () => (dispatch) => {
+  dispatch({ type: actionTypes.RESET_CONTACT_SENDED });
 };

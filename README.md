@@ -1,70 +1,97 @@
-For Demo see the page: https://nervous-perlman-4b274d.netlify.app
+# ToDo App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This application was created while learning `React.js` at [Bitschool](https://bitschool.am/).
+It uses technologies like `React`, `Redux`, `Redux Thunk`, `SASS` and `React Bootstrap`.
 
-## Available Scripts
+See [Demo](https://nervous-perlman-4b274d.netlify.app) page.
 
-In the project directory, you can run:
+### How to use it
 
-### `npm start` or `yarn start`
+---
+## Requirements
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+You will need install `Node.js` and `npm`  in your environnement.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+You will need install [todo-list-api-bitschool](https://github.com/Shant24/todo-list-api-bitschool) and view the instructions in this repository.
 
-### `npm run test` or `yarn test`
+### Node
+- #### Node installation on Windows
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  Just go on [official Node.js website](https://nodejs.org/) and download the installer. 
+Also, be sure to have `git` available in your PATH, `npm` or `yarn` might need it (You can find git [here](https://git-scm.com/)).
 
-### `npm run build` or `yarn build`
+- #### Node installation on Ubuntu
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  You can install nodejs and npm easily with apt install, just run the following commands.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+      $ sudo apt install nodejs
+      $ sudo apt install npm
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- #### Other Operating Systems
+  You can find more information about the installation on the [official Node.js website](https://nodejs.org/) and the [official NPM website](https://npmjs.org/).
 
-### `npm run eject` or `yarn eject`
+If the installation was successful, you should be able to run the following command.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    $ node --version
+    v13.12.0
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    $ npm --version
+    6.14.2
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+If you need to update `npm`, you can make it using `npm`! Cool right? After running the following command, just open again the command line and be happy.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    $ npm install npm -g
 
-## Learn More
+## Project installation and usage
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+If you use `npm`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    $ git clone https://github.com/Shant24/react-todo-bitschool.git
+    $ cd react-todo-bitschool
+    $ npm install
 
-### Code Splitting
+If you use `yarn`
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+    $ git clone https://github.com/Shant24/react-todo-bitschool.git
+    $ cd react-todo-bitschool
+    $ yarn install
 
-### Analyzing the Bundle Size
+Remove `.sample` extension from configuration files located in PATH
+    ```
+    .env.sample -> .env
+    ```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## Running the project
 
-### Making a Progressive Web App
+    $ npm start
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+or
 
-### Advanced Configuration
+    $ yarn start
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+## Application capabilities
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` or `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- Create tasks
+- Set a deadline for your task
+- Mark the `status` of your task as `Done` or `Active`
+- Edit task
+- Delete task
+- Delete multiple tasks at once
+- Search tasks
+- Searching a task using filtering
+  - Filtering by `Status`
+    -  Done
+    -  Active
+  - Filtering by `Sort`
+    - A-Z
+    - Z-A
+    - Creation date oldest
+    - Creation date newest
+    - Completion date oldest
+    - Completion date newest
+  - Filtering by `Date`
+    - Creation before
+    - Creation after
+    - Completion before
+    - Completion after
+- Change User information such as `Name`, `Surname` and `Password`

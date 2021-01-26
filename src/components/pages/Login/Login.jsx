@@ -73,8 +73,8 @@ const Login = ({ login }) => {
       {isLoading && <Loading />}
 
       <Container className={styles.bootstrapContainer}>
-        <Row className={`${styles.row} ${styles.loginRow}`}>
-          <Col xs={12} sm={8} md={6} className={styles.formContainer}>
+        <Row className={styles.row}>
+          <Col xs={12} sm={10} md={8} lg={6} className={styles.formContainer}>
             <form onSubmit={handleSubmit}>
               <h1>Login</h1>
 
@@ -128,7 +128,8 @@ const Login = ({ login }) => {
               </div>
 
               <div className={styles.linkContainer}>
-                Are not you registered yet? <Link to="/register">Register</Link>
+                Don't have an account yet?{' '}
+                <Link to="/register">Register now!</Link>
               </div>
             </form>
           </Col>

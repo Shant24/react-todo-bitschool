@@ -4,6 +4,14 @@
   top: 0;
   z-index: 99;
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+
+  .navbar {
+    padding: 8px 15px;
+  }
+}
+
+a {
+  user-select: none;
 }
 
 .logLink {
@@ -29,6 +37,7 @@
   text-decoration: none;
   color: #fff;
   background-color: rgba(#fff, 0.2);
+  white-space: nowrap;
 
   &:first-child {
     margin-left: 0;
@@ -64,22 +73,18 @@
 
 .userWrapper {
   margin-left: 20px;
+  user-select: none;
 
-  @media (min-width: 576px) {
-    &.mobileWrapper {
-      display: none;
-    }
-  }
-
-  @media (max-width: 575px) {
+  @media (max-width: 576px) {
     margin-right: 10px;
     flex: auto;
     display: flex;
     justify-content: flex-end;
+  }
 
-    &.desktopWrapper {
-      display: none;
-    }
+  @media (width: 576px) {
+    margin-right: 0;
+    display: flex;
   }
 
   .userContainer {
@@ -93,6 +98,7 @@
       align-items: center;
 
       svg {
+        user-select: none;
         width: 35px;
         height: 35px;
 
@@ -106,8 +112,12 @@
         color: white;
         text-align: center;
 
-        @media (max-width: 575px) {
+        @media (max-width: 576px) {
           display: none;
+        }
+
+        @media (width: 576px) {
+          display: block;
         }
       }
     }
@@ -118,27 +128,32 @@
 
     &:hover {
       .userMenu {
-        width: 167px;
+        min-width: 160px;
         display: flex;
         flex-direction: column;
         position: absolute;
         top: calc(100% + 10px);
-        left: 50%;
-        transform: translateX(-50%);
+        right: 0px;
         background-color: #2990ff;
         border-radius: 5px;
         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
         z-index: 100;
 
-        &::before {
-          content: '';
+        @media (max-width: 575px) {
+          right: -60px;
+        }
+
+        .triangle {
           position: absolute;
           top: -10px;
-          left: 50%;
-          transform: translateX(-50%);
+          transform: translateX(+10px);
           border: 10px solid transparent;
           border-top: 0;
           border-bottom: 10px solid #2990ff;
+
+          @media (max-width: 575px) {
+            border-bottom: 10px solid #0b6dd5;
+          }
         }
 
         &::after {
@@ -150,13 +165,16 @@
           left: 0;
         }
 
-        .userName {
-          padding: 20px 0;
-          text-align: center;
-          color: white;
-          background-color: #1c7fe9;
-          border-bottom: 1px solid white;
-          cursor: context-menu;
+        @media (max-width: 576px) {
+          .userName {
+            padding: 20px;
+            text-align: center;
+            color: white;
+            background-color: #0b6dd5;
+            border-radius: 5px 5px 0 0;
+            border-bottom: 1px solid white;
+            cursor: context-menu;
+          }
         }
 
         .buttons {
@@ -165,16 +183,15 @@
           text-align: center;
           cursor: pointer;
 
-          &.first {
-            border-radius: 5px 5px 0 0;
-          }
-
-          &:first-child,
-          &:nth-child(2) {
+          &.settingsBtn {
             border-bottom: 1px solid white;
+
+            @media (min-width: 575px) {
+              border-radius: 5px 5px 0 0;
+            }
           }
 
-          &:last-child {
+          &.logoutBtn {
             border: 0;
             border-radius: 0 0 5px 5px;
           }

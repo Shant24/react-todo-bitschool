@@ -41,7 +41,11 @@ const Register = ({ register }) => {
   });
 
   const handleChangeValue = ({ target: { name, value } }) => {
-    setValues({ ...values, [name]: value });
+    if (name === 'name' || name === 'surname') {
+      setValues({ ...values, [name]: uppercaseFirstLetter(value) });
+    } else {
+      setValues({ ...values, [name]: value });
+    }
 
     setErrors({ ...errors, [name]: null });
   };
@@ -106,9 +110,9 @@ const Register = ({ register }) => {
 
   return (
     <div className={styles.container}>
-      <Container className="h-100">
+      <Container className={styles.bootstrapContainer}>
         <Row className={styles.row}>
-          <Col xs={12} sm={8} md={6} className={styles.formContainer}>
+          <Col xs={12} sm={10} md={8} lg={6} className={styles.formContainer}>
             <form onSubmit={handleSubmit}>
               <h1>Register</h1>
 
@@ -222,7 +226,8 @@ const Register = ({ register }) => {
               </div>
 
               <div className={styles.linkContainer}>
-                Are you already registered? <Link to="/login">Login</Link>
+                Are you already registered?{' '}
+                <Link to="/login">Try to login!</Link>
               </div>
             </form>
           </Col>

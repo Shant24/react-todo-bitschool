@@ -18,7 +18,6 @@ class ToDo extends PureComponent {
     openNewTaskModal: false,
     checkedTasks: new Set(),
     showConfirm: false,
-    noTaskShow: false,
   };
 
   componentDidMount() {
@@ -26,13 +25,7 @@ class ToDo extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      tasks,
-      addTaskSuccess,
-      editTaskSuccess,
-      removeTasksSuccess,
-    } = this.props;
-    const { noTaskShow } = this.state;
+    const { addTaskSuccess, editTaskSuccess, removeTasksSuccess } = this.props;
 
     if (!prevProps.addTaskSuccess && addTaskSuccess) {
       this.setState({ openNewTaskModal: false });
@@ -47,14 +40,6 @@ class ToDo extends PureComponent {
         checkedTasks: new Set(),
         showConfirm: false,
       });
-    }
-
-    if (tasks.length > 0 && noTaskShow) {
-      this.setState({ noTaskShow: false });
-    }
-
-    if (!tasks.length > 0 && !noTaskShow) {
-      setTimeout(() => this.setState({ noTaskShow: true }), 2000);
     }
   }
 
@@ -91,7 +76,6 @@ class ToDo extends PureComponent {
       openNewTaskModal,
       checkedTasks,
       showConfirm,
-      noTaskShow,
     } = this.state;
 
     const tasksComponents = tasks.map((task) => {
@@ -150,9 +134,7 @@ class ToDo extends PureComponent {
           {tasksComponents.length > 0 ? (
             <Row className={styles.taskContainer}>{tasksComponents}</Row>
           ) : (
-            <div
-              className={`${styles.noTask} ${noTaskShow ? styles.show : ''}`}
-            >
+            <div className={styles.noTask}>
               <h2>
                 <span>You haven't Task.</span>{' '}
                 <span>Create your first Task</span>

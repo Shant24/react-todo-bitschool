@@ -1,12 +1,11 @@
-import { isMobile } from 'react-device-detect';
 import decode from 'jwt-decode';
 import store from '../store/store';
 import history from './history';
 import { LOGOUT_SUCCESS } from '../store/types/authTypes';
 
 let apiUrl = process.env.REACT_APP_API_URL;
-if (process.env.NODE_ENV === 'development' && isMobile) {
-  apiUrl = process.env.REACT_APP_API_MOBILE_URL;
+if (process.env.NODE_ENV === 'development') {
+  apiUrl = `http://${window.location.hostname}:3001`;
 }
 
 export const saveJWT = (data) => {
@@ -56,7 +55,9 @@ export const checkLoginStatus = () => !!localStorage.getItem('token');
 
 export const loginRequest = (data) => request(data, 'login');
 
-export const registerRequest = (data) => request(data);
+export const registerRequest = (data) => request(data, 'register');
+
+export const contactRequest = (data) => request(data, 'contact');
 
 function request(data, type) {
   const config = {
@@ -65,7 +66,10 @@ function request(data, type) {
     body: JSON.stringify(data),
   };
 
-  const url = `${apiUrl}/user${type === 'login' ? '/sign-in' : ''}`;
+  let url;
+  type === 'login' && (url = `${apiUrl}/user/sign-in`);
+  type === 'register' && (url = `${apiUrl}/user`);
+  type === 'contact' && (url = `${apiUrl}/form`);
 
   return fetch(url, config)
     .then((response) => response.json())
