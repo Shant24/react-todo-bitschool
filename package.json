@@ -7,7 +7,7 @@
   "scripts": {
     "serve": "npm-run-all --parallel api start",
     "start": "react-scripts start",
-    "api": "cd ../todo-list-api && yarn start",
+    "api": "cd ../todo-list-api-bitschool && yarn start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
