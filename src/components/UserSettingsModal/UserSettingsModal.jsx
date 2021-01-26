@@ -200,6 +200,14 @@ const UserSettingsModal = (props) => {
         name: user.name,
         surname: user.surname,
       });
+
+    setErrors({
+      name: null,
+      surname: null,
+      oldPassword: null,
+      newPassword: null,
+      confirmNewPassword: null,
+    });
   };
 
   const handleClose = () => {
