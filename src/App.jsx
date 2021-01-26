@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -14,80 +14,68 @@ import About from './components/pages/About/About';
 import Contact from './components/pages/Contact/Contact';
 import Footer from './components/Footer/Footer';
 
-class App extends PureComponent {
-  state = {
-    windowHeight: window.innerHeight,
-  };
+const App = (props) => {
+  const { showSpinner, showAuthSpinner } = props;
 
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
-  }
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
-  componentDidUpdate() {
-    const {
-      successMessage,
-      errorMessage,
-      authSuccessMessage,
-      authErrorMessage,
-    } = this.props;
+  const handleResize = () => setWindowHeight(window.innerHeight);
 
-    successMessage && toast.success(successMessage);
-    errorMessage && toast.error(errorMessage);
-    authSuccessMessage && toast.success(authSuccessMessage);
-    authErrorMessage && toast.error(authErrorMessage);
-  }
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+  }, []);
 
-  handleResize = () => {
-    this.setState({ windowHeight: window.innerHeight });
-  };
+  useEffect(() => {
+    props.successMessage && toast.success(props.successMessage);
+    props.errorMessage && toast.error(props.errorMessage);
+    props.authSuccessMessage && toast.success(props.authSuccessMessage);
+    props.authErrorMessage && toast.error(props.authErrorMessage);
+  }, [
+    props.authErrorMessage,
+    props.authSuccessMessage,
+    props.errorMessage,
+    props.successMessage,
+  ]);
 
-  render() {
-    const { showSpinner, showAuthSpinner } = this.props;
-    const { windowHeight } = this.state;
+  return (
+    <div className="toDoApplication" style={{ minHeight: `${windowHeight}px` }}>
+      <NavMenu />
 
-    return (
-      <div
-        className="toDoApplication"
-        style={{ minHeight: `${windowHeight}px` }}
-      >
-        <NavMenu />
+      <main>
+        <Switch>
+          <CustomRoute type="private" path="/" exact component={ToDo} />
+          <CustomRoute
+            type="private"
+            path="/task/:taskId"
+            component={SingleTask}
+          />
+          <CustomRoute path="/login" component={Login} />
+          <CustomRoute path="/register" component={Register} />
+          <Route path="/about" component={About} />
+          <Route path="/contact" component={Contact} />
+          <Route path="/not-found" component={NotFound} />
+          <Redirect to="/not-found" />
+        </Switch>
+      </main>
 
-        <main>
-          <Switch>
-            <CustomRoute type="private" path="/" exact component={ToDo} />
-            <CustomRoute
-              type="private"
-              path="/task/:taskId"
-              component={SingleTask}
-            />
-            <CustomRoute path="/login" component={Login} />
-            <CustomRoute path="/register" component={Register} />
-            <Route path="/about" component={About} />
-            <Route path="/contact" component={Contact} />
-            <Route path="/not-found" component={NotFound} />
-            <Redirect to="/not-found" />
-          </Switch>
-        </main>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
-        <ToastContainer
-          position="bottom-left"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+      <Footer />
 
-        <Footer />
-
-        {(showSpinner || showAuthSpinner) && <Loading />}
-      </div>
-    );
-  }
-}
+      {(showSpinner || showAuthSpinner) && <Loading />}
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => ({
   errorMessage: state.task.errorMessage,
@@ -98,4 +86,4 @@ const mapStateToProps = (state) => ({
   showAuthSpinner: state.auth.loading,
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(memo(App));
