@@ -120,9 +120,8 @@ export const sendContactForm = (data) => (dispatch) => {
           process.env.REACT_APP_EMAIL_TEMPLATE_ID &&
           process.env.REACT_APP_EMAIL_USER_ID
         ) {
-          await sendFeedbackToEmail(data).then(() =>
-            dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS })
-          );
+          await sendFeedbackToEmail(data);
+          dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS });
         } else {
           dispatch({ type: actionTypes.SEND_CONTACT_FORM_SUCCESS });
         }
