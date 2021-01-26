@@ -84,9 +84,6 @@ const Contact = ({ isContactSanded, sendContactForm, resetContactSended }) => {
     if (!message) {
       messageErrText = globalErrors.messageReqError;
       valid = false;
-    } else if (message.length < 10) {
-      messageErrText = globalErrors.messageLengthError;
-      valid = false;
     }
 
     setErrors({

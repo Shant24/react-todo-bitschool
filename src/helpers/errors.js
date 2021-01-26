@@ -13,5 +13,3 @@ export const newPasswordReqError = 'Password is required!';
 export const nameReqError = 'Name is required!';
 export const surnameReqError = 'Surname is required!';
 export const messageReqError = 'Message is required!';
-export const messageLengthError =
-  'Message must contain at least 10 characters!';
