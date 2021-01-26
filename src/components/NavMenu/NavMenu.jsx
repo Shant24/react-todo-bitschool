@@ -20,10 +20,6 @@ const NavMenu = (props) => {
     !user && isAuthenticated && getUserInfo();
   }, [user, isAuthenticated, getUserInfo]);
 
-  const HandleToggleModal = () => {
-    user && setIsSettingsOpen(!isSettingsOpen);
-  };
-
   const handleResize = useCallback(() => {
     if (window.innerWidth <= 575) {
       !isMobile && setIsMobile(true);
@@ -36,6 +32,10 @@ const NavMenu = (props) => {
     window.addEventListener('resize', handleResize);
   }, [handleResize]);
 
+  const HandleToggleModal = () => {
+    user && setIsSettingsOpen(!isSettingsOpen);
+  };
+
   return (
     <header className={styles.header}>
       <Navbar className={styles.navbar} bg="primary" variant="dark" expand="sm">
@@ -47,7 +47,7 @@ const NavMenu = (props) => {
 
         {isAuthenticated && isMobile && (
           <UserBlock
-            customStyle={styles.mobileWrapper}
+            type="mobile"
             user={user}
             logout={logout}
             onToggleModal={HandleToggleModal}
@@ -95,7 +95,7 @@ const NavMenu = (props) => {
 
         {isAuthenticated && !isMobile && (
           <UserBlock
-            customStyle={styles.desktopWrapper}
+            type="desktop"
             user={user}
             logout={logout}
             onToggleModal={HandleToggleModal}
@@ -119,46 +119,40 @@ const mapDispatchToProps = { logout, getUserInfo };
 
 export default connect(mapStateToProps, mapDispatchToProps)(memo(NavMenu));
 
-function UserBlock({ customStyle, user, logout, onToggleModal }) {
-  const [desktopTriangleWidth, setDesktopTriangleWidth] = useState('83.5px');
+function UserBlock({ type, user, logout, onToggleModal }) {
+  const [desktopTriangleRight, setDesktopTriangleRight] = useState('83.5px');
 
   const userDesktopWrapperRef = useRef();
   const userMobileWrapperRef = useRef();
 
   useEffect(() => {
-    let setDeskTriangleWidth;
-    if (customStyle === styles.desktopWrapper) {
-      setDeskTriangleWidth =
-        user &&
-        setTimeout(() => {
-          setDesktopTriangleWidth(
-            `${userDesktopWrapperRef.current.offsetWidth / 2}px`
-          );
-        }, 100);
+    let setDeskTriangleRight;
+    if (type === 'desktop' && user) {
+      setDeskTriangleRight = setTimeout(() => {
+        setDesktopTriangleRight(
+          `${userDesktopWrapperRef.current.offsetWidth / 2}px`
+        );
+      }, 100);
     }
     return () => {
-      if (customStyle === styles.desktopWrapper) {
-        clearTimeout(setDeskTriangleWidth);
+      if (type === 'desktop' && user) {
+        clearTimeout(setDeskTriangleRight);
       }
     };
-  }, [customStyle, user]);
+  }, [type, user]);
 
   return (
     <div
-      ref={
-        customStyle === styles.desktopWrapper
-          ? userDesktopWrapperRef
-          : userMobileWrapperRef
-      }
-      className={`${styles.userWrapper} ${customStyle}`}
+      ref={type === 'desktop' ? userDesktopWrapperRef : userMobileWrapperRef}
+      className={styles.userWrapper}
     >
       <div className={styles.userContainer}>
         <div className={styles.userInformation}>
           <FontAwesomeIcon icon={faUserCircle} />
 
-          {user && (
+          {type === 'desktop' && user && (
             <div className={styles.userName}>
-              {user?.name} {user?.surname}
+              {user.name} {user.surname}
             </div>
           )}
         </div>
@@ -166,10 +160,10 @@ function UserBlock({ customStyle, user, logout, onToggleModal }) {
         <div className={styles.userMenu}>
           <span
             className={styles.triangle}
-            style={{ right: desktopTriangleWidth }}
+            style={{ right: desktopTriangleRight }}
           ></span>
 
-          {customStyle === styles.mobileWrapper && user && (
+          {type === 'mobile' && user && (
             <div className={styles.userName}>
               {user.name} {user.surname}
             </div>
@@ -219,7 +213,7 @@ function AuthBlock({ customStyle }) {
 }
 
 UserBlock.propTypes = {
-  customStyle: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['mobile', 'desktop']).isRequired,
   user: PropTypes.object,
   logout: PropTypes.func.isRequired,
   onToggleModal: PropTypes.func.isRequired,

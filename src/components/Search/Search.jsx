@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { isMobile } from 'react-device-detect';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -225,7 +225,7 @@ const Search = ({ getTasks }) => {
             >
               <FontAwesomeIcon
                 className={showSearch ? styles.svgReveres : ''}
-                icon={faCaretUp}
+                icon={faCaretDown}
               />
             </Button>
           </OverlayTrigger>

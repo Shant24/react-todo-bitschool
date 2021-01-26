@@ -75,28 +75,16 @@ a {
   margin-left: 20px;
   user-select: none;
 
-  @media (min-width: 576px) {
-    &.mobileWrapper {
-      display: none;
-    }
-  }
-
   @media (max-width: 576px) {
     margin-right: 10px;
     flex: auto;
     display: flex;
     justify-content: flex-end;
-
-    &.desktopWrapper {
-      display: none;
-    }
   }
 
   @media (width: 576px) {
-    &.desktopWrapper {
-      margin-right: 0;
-      display: flex;
-    }
+    margin-right: 0;
+    display: flex;
   }
 
   .userContainer {
