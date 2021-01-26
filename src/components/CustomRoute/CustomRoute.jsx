@@ -13,7 +13,7 @@ const CustomRoute = ({
   return type === 'private' ? (
     <Route
       path={path}
-      exact={exact}
+      exact={!!exact}
       render={(props) =>
         isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
       }
@@ -21,7 +21,7 @@ const CustomRoute = ({
   ) : (
     <Route
       path={path}
-      exact={exact}
+      exact={!!exact}
       render={(props) =>
         !isAuthenticated ? <Component {...props} /> : <Redirect to="/" />
       }
