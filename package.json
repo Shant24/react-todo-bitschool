@@ -5,6 +5,7 @@
   "description": "Project for teaching React.js",
   "author": "Shant Sargsyan",
   "scripts": {
+    "prod": "pm2 start 'serve -s build -l 6000' --name todo-front",
     "serve": "npm-run-all --parallel api start",
     "start": "react-scripts start",
     "api": "cd ../todo-list-api-bitschool && yarn start",
