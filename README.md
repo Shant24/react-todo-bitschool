@@ -1,9 +1,11 @@
+# Demo
+
+[http://todo.shant-sargsyan.me](http://todo.shant-sargsyan.me)
+
 # ToDo App
 
 This application was created while learning `React.js` at [Bitschool](https://bitschool.am/).
 It uses technologies like `React`, `Redux`, `Redux Thunk`, `SASS` and `React Bootstrap`.
-
-See [Demo](https://nervous-perlman-4b274d.netlify.app) page.
 
 ### How to use it
 
