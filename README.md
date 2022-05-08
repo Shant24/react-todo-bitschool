@@ -1,6 +1,6 @@
 # Demo
 
-[http://todo.shant-sargsyan.me](http://todo.shant-sargsyan.me)
+[https://todo.shant-dev.com](https://todo.shant-dev.com)
 
 # ToDo App
 
