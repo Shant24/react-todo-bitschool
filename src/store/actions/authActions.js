@@ -1,19 +1,13 @@
 import request from '../../helpers/request';
 import * as actionTypes from '../types/authTypes';
-import {
-  getJWT,
-  saveJWT,
-  removeJWT,
-  loginRequest,
-  registerRequest,
-  contactRequest,
-} from '../../helpers/auth';
+import { getJWT, saveJWT, removeJWT, loginRequest, registerRequest, contactRequest } from '../../helpers/auth';
 import history from '../../helpers/history';
 import sendFeedbackToEmail from '../../helpers/sendFeedbackToEmail';
 
-let apiUrl = process.env.REACT_APP_API_URL;
+let apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 if (process.env.NODE_ENV === 'development') {
-  apiUrl = `http://${window.location.hostname}:3001`;
+  const PORT = apiUrl.split(':').slice(-1)[0];
+  apiUrl = `http://${window.location.hostname}:${PORT}`;
 }
 
 export const register = (data) => (dispatch) => {
@@ -24,9 +18,7 @@ export const register = (data) => (dispatch) => {
       dispatch({ type: actionTypes.REGISTER_SUCCESS });
       history.push('/login');
     })
-    .catch((err) =>
-      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
-    );
+    .catch((err) => dispatch({ type: actionTypes.AUTH_ERROR, error: err.message }));
 };
 
 export const login = (data) => (dispatch) => {
@@ -57,9 +49,7 @@ export const logout = () => async (dispatch) => {
         dispatch({ type: actionTypes.LOGOUT_SUCCESS });
         history.push('/login');
       })
-      .catch((err) =>
-        dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
-      );
+      .catch((err) => dispatch({ type: actionTypes.AUTH_ERROR, error: err.message }));
   } else {
     dispatch({ type: actionTypes.LOGOUT_SUCCESS });
     history.push('/login');
@@ -73,9 +63,7 @@ export const getUserInfo = () => (dispatch) => {
     .then((userInfo) => {
       dispatch({ type: actionTypes.GET_USER_INFO_SUCCESS, userInfo });
     })
-    .catch((err) =>
-      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
-    );
+    .catch((err) => dispatch({ type: actionTypes.AUTH_ERROR, error: err.message }));
 };
 
 export const userIsEditMode = (bool) => (dispatch) => {
@@ -89,9 +77,7 @@ export const updateUserInfo = (name, surname) => (dispatch) => {
     .then((userInfo) => {
       dispatch({ type: actionTypes.UPDATE_USER_INFO_SUCCESS, userInfo });
     })
-    .catch((err) =>
-      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
-    );
+    .catch((err) => dispatch({ type: actionTypes.AUTH_ERROR, error: err.message }));
 };
 
 export const passwordIsEditMode = (bool) => (dispatch) => {
@@ -103,9 +89,7 @@ export const updateUserPassword = (data) => (dispatch) => {
 
   request(`${apiUrl}/user/password`, 'PUT', data)
     .then(() => dispatch({ type: actionTypes.UPDATE_USER_PASSWORD_SUCCESS }))
-    .catch((err) =>
-      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
-    );
+    .catch((err) => dispatch({ type: actionTypes.AUTH_ERROR, error: err.message }));
 };
 
 export const sendContactForm = (data) => (dispatch) => {
@@ -130,9 +114,7 @@ export const sendContactForm = (data) => (dispatch) => {
         throw errText;
       }
     })
-    .catch((err) =>
-      dispatch({ type: actionTypes.AUTH_ERROR, error: err.message })
-    );
+    .catch((err) => dispatch({ type: actionTypes.AUTH_ERROR, error: err.message }));
 };
 
 export const resetContactSended = () => (dispatch) => {

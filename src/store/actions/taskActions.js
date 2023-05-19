@@ -1,34 +1,34 @@
 import request from '../../helpers/request';
 import * as actionTypes from '../types/taskTypes';
 
-let apiUrl = process.env.REACT_APP_API_URL;
+let apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 if (process.env.NODE_ENV === 'development') {
-  apiUrl = `http://${window.location.hostname}:3001`;
+  const PORT = apiUrl.split(':').slice(-1)[0];
+  apiUrl = `http://${window.location.hostname}:${PORT}`;
 }
 
-export const getTasks = (params = {}) => (dispatch) => {
-  let url = `${apiUrl}/task`;
-  let query = '?';
-  let i = 0;
+export const getTasks =
+  (params = {}) =>
+  (dispatch) => {
+    let url = `${apiUrl}/task`;
+    let query = '?';
+    let i = 0;
 
-  !params?.sort && (params['sort'] = 'creation_date_newest');
+    !params?.sort && (params['sort'] = 'creation_date_newest');
 
-  for (let key in params) {
-    i++;
-    params[key] &&
-      (query += `${key}=${params[key]}${
-        i !== Object.keys(params).length ? '&' : ''
-      }`);
-  }
+    for (let key in params) {
+      i++;
+      params[key] && (query += `${key}=${params[key]}${i !== Object.keys(params).length ? '&' : ''}`);
+    }
 
-  query !== '?' && (url += query);
+    query !== '?' && (url += query);
 
-  dispatch({ type: actionTypes.LOADING });
+    dispatch({ type: actionTypes.LOADING });
 
-  request(url)
-    .then((tasks) => dispatch({ type: actionTypes.GET_TASKS_SUCCESS, tasks }))
-    .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
-};
+    request(url)
+      .then((tasks) => dispatch({ type: actionTypes.GET_TASKS_SUCCESS, tasks }))
+      .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
+  };
 
 export const getSingleTask = (taskId) => (dispatch) => {
   dispatch({ type: actionTypes.LOADING });
@@ -42,9 +42,7 @@ export const editTask = (taskId, data, from) => (dispatch) => {
   dispatch({ type: actionTypes.LOADING });
 
   request(`${apiUrl}/task/${taskId}`, 'PUT', data)
-    .then((editedTask) =>
-      dispatch({ type: actionTypes.EDIT_TASK_SUCCESS, editedTask, from })
-    )
+    .then((editedTask) => dispatch({ type: actionTypes.EDIT_TASK_SUCCESS, editedTask, from }))
     .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
 };
 
@@ -65,7 +63,7 @@ export const changeTaskStatus = (taskId, status, from) => (dispatch) => {
         type: actionTypes.CHANGE_TASK_STATUS_SUCCESS,
         editedTask,
         from,
-      })
+      }),
     )
     .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
 };
@@ -74,9 +72,7 @@ export const removeTask = (taskId, from) => (dispatch) => () => {
   dispatch({ type: actionTypes.LOADING });
 
   request(`${apiUrl}/task/${taskId}`, 'DELETE')
-    .then(() =>
-      dispatch({ type: actionTypes.REMOVE_TASK_SUCCESS, taskId, from })
-    )
+    .then(() => dispatch({ type: actionTypes.REMOVE_TASK_SUCCESS, taskId, from }))
     .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
 };
 
@@ -88,7 +84,7 @@ export const removeSelectedTasks = (checkedTasks) => (dispatch) => () => {
       dispatch({
         type: actionTypes.REMOVE_SELECTED_TASKS_SUCCESS,
         checkedTasks,
-      })
+      }),
     )
     .catch((err) => dispatch({ type: actionTypes.ERROR, error: err.message }));
 };

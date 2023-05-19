@@ -3,9 +3,10 @@ import store from '../store/store';
 import history from './history';
 import { LOGOUT_SUCCESS } from '../store/types/authTypes';
 
-let apiUrl = process.env.REACT_APP_API_URL;
+let apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 if (process.env.NODE_ENV === 'development') {
-  apiUrl = `http://${window.location.hostname}:3001`;
+  const PORT = apiUrl.split(':').slice(-1)[0];
+  apiUrl = `http://${window.location.hostname}:${PORT}`;
 }
 
 export const saveJWT = (data) => {

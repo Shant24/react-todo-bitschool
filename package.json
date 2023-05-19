@@ -5,9 +5,7 @@
   "description": "Project for teaching React.js",
   "author": "Shant Sargsyan",
   "scripts": {
-    "serve": "npm-run-all --parallel api start",
     "start": "react-scripts start",
-    "api": "cd ../todo-list-api-bitschool && yarn start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -42,7 +40,6 @@
     "typeface-roboto": "^0.0.75"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5",
     "react-device-detect": "^1.15.0",
     "redux-devtools-extension": "^2.13.8",
     "sass": "^1.30.0"
